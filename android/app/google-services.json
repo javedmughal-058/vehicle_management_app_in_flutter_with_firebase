@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "462272780956",
+    "project_id": "vehicle-maintenance-app-1d1ac",
+    "storage_bucket": "vehicle-maintenance-app-1d1ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462272780956:android:ecdcaa4a570871af242b59",
+        "android_client_info": {
+          "package_name": "com.example.vehicle_maintainance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462272780956-le71tgr5g636fat5nng8jjjmirhufvk7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vehicle_maintainance",
+            "certificate_hash": "aa0977693b3e99904c7f280da33e2d753713b85b"
+          }
+        },
+        {
+          "client_id": "462272780956-2d52loqt9lghkpm6mnk8doubp8c9d4ud.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6nFL-3Py1cEA9GtiYuc3Qpha2CQ9mCHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462272780956-2d52loqt9lghkpm6mnk8doubp8c9d4ud.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
