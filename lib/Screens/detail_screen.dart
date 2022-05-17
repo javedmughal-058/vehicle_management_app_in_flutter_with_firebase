@@ -63,6 +63,7 @@ class _detail_screenState extends State<detail_screen> {
       "reporter_name": reporter_name,
       "reporter_contact": reporter_contact,
       "complainted_shop": shopkey,
+      "Shop Name": singlerecord['Shop Name'],
     };
     dc.set(complaints).whenComplete(() {
       //print("Compliant submitted");
@@ -192,7 +193,7 @@ class _detail_screenState extends State<detail_screen> {
                                       validator: (value) {
                                         if (value!.isEmpty) {
                                           return value.length < 100
-                                              ? 'complaint\'s message must \n minimum 50 characters'
+                                              ? 'complaint\'s message must \n minimum 100 characters'
                                               : null;
                                         }
                                       },

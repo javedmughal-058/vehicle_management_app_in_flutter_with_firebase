@@ -30,27 +30,27 @@ class _homeState extends State<home> {
     await FirebaseFirestore.instance
         .collection("shops")
         .where("Shop status", isEqualTo: true)
-        //.where("Shop Rating", isGreaterThanOrEqualTo: 4)
+        .where("Shop Rating", whereIn: [4, 5])
         //.orderBy("Shop Rating", descending: true)
         .get()
         .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        // print(result.data());
-        lisofitem.add(result);
-        if (lisofitem.isNotEmpty) {
-          if (mounted) {
-            setState(() {
-              shopslist = lisofitem;
-              record = false;
-              first = false;
-              loading = false;
-            });
-          }
-        } else {
-          record = true;
-        }
-      });
-    });
+          querySnapshot.docs.forEach((result) {
+            // print(result.data());
+            lisofitem.add(result);
+            if (lisofitem.isNotEmpty) {
+              if (mounted) {
+                setState(() {
+                  shopslist = lisofitem;
+                  record = false;
+                  first = false;
+                  loading = false;
+                });
+              }
+            } else {
+              record = true;
+            }
+          });
+        });
   }
 
   final List _imagesource = ['images/a.png', 'images/b.png', 'images/c.png'];
@@ -414,7 +414,7 @@ class _homeState extends State<home> {
                                             ),
                                             RatingBar.builder(
                                               //glowColor: Colors.amber,
-                                              unratedColor: Colors.white,
+                                              unratedColor: Colors.amber,
                                               direction: Axis.horizontal,
                                               itemCount: shopslist[index]
                                                   ['Shop Rating'],

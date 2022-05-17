@@ -62,7 +62,7 @@ class categoryState extends State<category> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => detail(type, "Electrical"),
+                      builder: (context) => detail(type, "electrical"),
                     ));
               },
               child: Row(
@@ -126,7 +126,7 @@ class categoryState extends State<category> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => detail(type, "Mechanical"),
+                      builder: (context) => detail(type, "mechanical"),
                     ));
               },
               child: Row(
@@ -188,7 +188,7 @@ class categoryState extends State<category> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => detail(type, "Tire Shop"),
+                      builder: (context) => detail(type, "tire"),
                     ));
               },
               child: Row(
@@ -204,7 +204,7 @@ class categoryState extends State<category> {
                     width: 15,
                   ),
                   const Text(
-                    "Tyres",
+                    "Tire Shops",
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -221,7 +221,7 @@ class categoryState extends State<category> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => detail(type, "Tire Shop"),
+                            builder: (context) => detail(type, "tire"),
                           ));
                     },
                   ),
@@ -253,7 +253,7 @@ class categoryState extends State<category> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          detail(type, "Denting and Painting"),
+                          detail(type, "denting and painting"),
                     ));
               },
               child: Row(
@@ -318,7 +318,7 @@ class categoryState extends State<category> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => detail(type, "Spare Parts"),
+                      builder: (context) => detail(type, "spare parts"),
                     ));
               },
               child: Row(
@@ -382,7 +382,7 @@ class categoryState extends State<category> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => detail(type, "Oil Change"),
+                      builder: (context) => detail(type, "oil change"),
                     ));
               },
               child: Row(
@@ -446,7 +446,7 @@ class categoryState extends State<category> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => detail(type, "Tire Shop"),
+                      builder: (context) => detail(type, "tire"),
                     ));
               },
               child: Row(

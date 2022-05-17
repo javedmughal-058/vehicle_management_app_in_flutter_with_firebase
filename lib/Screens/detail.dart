@@ -2,6 +2,7 @@ import 'package:advance_notification/advance_notification.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vehicle_maintainance/Screens/category.dart';
 import 'package:vehicle_maintainance/Screens/detail_screen.dart';
@@ -111,7 +112,7 @@ class detailState extends State<detail> {
                       padding: const EdgeInsets.all(4),
                       child: Container(
                         margin: const EdgeInsets.only(left: 5, right: 5),
-                        height: 70,
+                        height: 80,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: Colors.white,
@@ -157,7 +158,7 @@ class detailState extends State<detail> {
                                     height: 5,
                                   ),
                                   Text(
-                                    "Rating: ${shopslist[index]["Shop Rating"]}",
+                                    "Affordability: ${shopslist[index]["Shop Affordability"]}",
                                     style: const TextStyle(
                                         fontSize: 12,
                                         color: Colors.green,
@@ -166,12 +167,21 @@ class detailState extends State<detail> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  Text(
-                                    "Affordability: ${shopslist[index]["Shop Affordability"]}",
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold),
+                                  RatingBar.builder(
+                                    //glowColor: Colors.amber,
+                                    unratedColor: Colors.amber,
+                                    direction: Axis.horizontal,
+                                    itemCount: shopslist[index]['Shop Rating'],
+                                    itemSize: 18.0,
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 1.0),
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      print(rating);
+                                    },
                                   ),
                                 ],
                               ),
