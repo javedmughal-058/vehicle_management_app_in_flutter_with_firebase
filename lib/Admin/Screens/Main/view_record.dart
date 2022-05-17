@@ -54,7 +54,9 @@ class _view_recordState extends State<view_record> {
     });
     if (first) {
       first = false;
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 

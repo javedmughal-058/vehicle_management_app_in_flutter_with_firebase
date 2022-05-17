@@ -17,12 +17,14 @@ class reports extends StatefulWidget {
 class _reportsState extends State<reports> {
   bool loading = true;
   List complaintlist = [];
+  List complaintedshoplist = [];
   List<String> shopkeys = [];
 
   @override
   void initState() {
     super.initState();
     complaintshoplist();
+    //complaintedshop(shopkeys);
   }
 
   complaintshoplist() async {
@@ -43,6 +45,7 @@ class _reportsState extends State<reports> {
     } else {
       setState(() {
         complaintlist = lisofcomplaint;
+
         if (complaintlist.length > 9) {
           count = true;
         } else {
@@ -70,6 +73,15 @@ class _reportsState extends State<reports> {
       print("success to accept!");
     }).catchError((error) => print('Acception failed: $error'));
   }
+
+  // void complaintedshop(String shopkey) async {
+  //   List complaintedshoplist = [];
+  //   await FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc(shopkey)
+  //       .get()
+  //       .then((value) => print(value.data()));
+  // }
 
   bool count = true;
   @override
@@ -160,7 +172,7 @@ class _reportsState extends State<reports> {
                         ),
                       )
                     : ListView.builder(
-                        physics: ClampingScrollPhysics(),
+                        physics: const ClampingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: complaintlist.length,
                         itemBuilder: (context, index) {
@@ -190,32 +202,23 @@ class _reportsState extends State<reports> {
                                 child: Column(
                                   children: [
                                     const SizedBox(
-                                      height: 20,
+                                      height: 10,
                                     ),
                                     Text(
-                                      "${complaintlist[index]['reporter_name']}",
+                                      "To: ${complaintlist[index]['Shop Name']}",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       softWrap: false,
                                       textAlign: TextAlign.justify,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: Colors.black87,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
                                         fontFamily: 'Shrikhand',
                                       ),
                                     ),
-                                    Text(
-                                      "Contact: ${complaintlist[index]['reporter_contact']}",
-                                      textAlign: TextAlign.justify,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12,
-                                        fontFamily: 'Shrikhand',
-                                      ),
-                                    ),
                                     const SizedBox(
-                                      height: 10,
+                                      height: 5,
                                     ),
                                     Text(
                                       "Detail: ${complaintlist[index]['complaint']}",
@@ -225,6 +228,22 @@ class _reportsState extends State<reports> {
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 12,
+                                        fontFamily: 'Shrikhand',
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "By: ${complaintlist[index]['reporter_name']}",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      textAlign: TextAlign.justify,
+                                      style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
                                         fontFamily: 'Shrikhand',
                                       ),
                                     ),

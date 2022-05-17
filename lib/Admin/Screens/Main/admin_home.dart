@@ -35,7 +35,7 @@ class _admin_homeState extends State<admin_home> {
     var car_1 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "car")
-        .where("Service", isEqualTo: "Mechanical")
+        .where("Service", isEqualTo: "mechanical")
         .get();
     car_1.docs.forEach((res) {
       // print(res.data());
@@ -45,7 +45,7 @@ class _admin_homeState extends State<admin_home> {
     var car_2 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "car")
-        .where("Service", isEqualTo: "Electrical")
+        .where("Service", isEqualTo: "electrical")
         .get();
     car_2.docs.forEach((res) {
       //print(res.data());
@@ -54,7 +54,7 @@ class _admin_homeState extends State<admin_home> {
     var car_3 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "car")
-        .where("Service", isEqualTo: "Oil Change")
+        .where("Service", isEqualTo: "oil change")
         .get();
     car_3.docs.forEach((res) {
       //print(res.data());
@@ -63,7 +63,7 @@ class _admin_homeState extends State<admin_home> {
     var car_4 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "car")
-        .where("Service", isEqualTo: "Denting and Painting")
+        .where("Service", isEqualTo: "denting and painting")
         .get();
     car_4.docs.forEach((res) {
       //print(res.data());
@@ -72,7 +72,7 @@ class _admin_homeState extends State<admin_home> {
     var car_5 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "car")
-        .where("Service", isEqualTo: "Tire Shop")
+        .where("Service", isEqualTo: "tire")
         .get();
     car_5.docs.forEach((res) {
       //print(res.data());
@@ -81,7 +81,7 @@ class _admin_homeState extends State<admin_home> {
     var car_6 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "car")
-        .where("Service", isEqualTo: "Spare Parts")
+        .where("Service", isEqualTo: "spare parts")
         .get();
     car_6.docs.forEach((res) {
       //print(res.data());
@@ -91,7 +91,7 @@ class _admin_homeState extends State<admin_home> {
     var b_1 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "bike")
-        .where("Service", isEqualTo: "Mechanical")
+        .where("Service", isEqualTo: "mechanical")
         .get();
     b_1.docs.forEach((res) {
       //print(res.data());
@@ -100,7 +100,7 @@ class _admin_homeState extends State<admin_home> {
     var b_2 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "bike")
-        .where("Service", isEqualTo: "Electrical")
+        .where("Service", isEqualTo: "electrical")
         .get();
     b_2.docs.forEach((res) {
       //print(res.data());
@@ -109,7 +109,7 @@ class _admin_homeState extends State<admin_home> {
     var b_3 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "bike")
-        .where("Service", isEqualTo: "Oil Change")
+        .where("Service", isEqualTo: "oil change")
         .get();
     b_3.docs.forEach((res) {
       //print(res.data());
@@ -118,7 +118,7 @@ class _admin_homeState extends State<admin_home> {
     var b_4 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "bike")
-        .where("Service", isEqualTo: "Denting and Painting")
+        .where("Service", isEqualTo: "denting and painting")
         .get();
     b_4.docs.forEach((res) {
       //print(res.data());
@@ -127,7 +127,7 @@ class _admin_homeState extends State<admin_home> {
     var b_5 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "bike")
-        .where("Service", isEqualTo: "Tire Shop")
+        .where("Service", isEqualTo: "tire")
         .get();
     b_5.docs.forEach((res) {
       //print(res.data());
@@ -136,7 +136,7 @@ class _admin_homeState extends State<admin_home> {
     var b_6 = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "bike")
-        .where("Service", isEqualTo: "Spare Parts")
+        .where("Service", isEqualTo: "spare parts")
         .get();
     b_6.docs.forEach((res) {
       //print(res.data());
