@@ -35,18 +35,18 @@ class _carState extends State<car> {
         .collection("shops")
         .where("type", isEqualTo: type)
         .where("Shop status", isEqualTo: true)
-        .where("Shop Rating", isEqualTo: 5)
+        .where("Shop Rating", whereIn: [4, 5])
         .get()
         .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        //print(result.data());
-        lisoftopitem.add(result);
-        setState(() {
-          topshopslist = lisoftopitem;
-          loading = false;
+          querySnapshot.docs.forEach((result) {
+            //print(result.data());
+            lisoftopitem.add(result);
+            setState(() {
+              topshopslist = lisoftopitem;
+              loading = false;
+            });
+          });
         });
-      });
-    });
   }
 
   fetchdataofaffodability() async {
@@ -55,18 +55,20 @@ class _carState extends State<car> {
         .collection("shops")
         .where("type", isEqualTo: type)
         .where("Shop status", isEqualTo: true)
-        .where("Shop Affordability", isEqualTo: 8)
+        .where("Shop Affordability", whereIn: [8, 9, 10])
         .get()
         .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        //print(result.data());
-        lisofaffordableitem.add(result);
-        setState(() {
-          affordableshopslist = lisofaffordableitem;
-          loading = false;
+          querySnapshot.docs.forEach((result) {
+            //print(result.data());f
+            lisofaffordableitem.add(result);
+            if (mounted) {
+              setState(() {
+                affordableshopslist = lisofaffordableitem;
+                loading = false;
+              });
+            }
+          });
         });
-      });
-    });
   }
 
   @override
@@ -159,7 +161,7 @@ class _carState extends State<car> {
                             height: 20,
                           ),
                           const Text(
-                            'HONDA',
+                            'Toyota',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black,

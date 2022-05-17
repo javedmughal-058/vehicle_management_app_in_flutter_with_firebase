@@ -33,19 +33,19 @@ class _bikeState extends State<bike> {
         .collection("shops")
         .where("type", isEqualTo: type)
         .where("Shop status", isEqualTo: true)
-        //.where("Shop Rating", isGreaterThanOrEqualTo: 4)
+        .where("Shop Rating", whereIn: [4, 5])
         //.orderBy("Shop Rating", descending: true)
         .get()
         .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        //print(result.data());
-        lisoftopitem.add(result);
-        setState(() {
-          topshopslist = lisoftopitem;
-          loading = false;
+          querySnapshot.docs.forEach((result) {
+            //print(result.data());
+            lisoftopitem.add(result);
+            setState(() {
+              topshopslist = lisoftopitem;
+              loading = false;
+            });
+          });
         });
-      });
-    });
   }
 
   fetchaffordableshoplist() async {
@@ -53,20 +53,20 @@ class _bikeState extends State<bike> {
     await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: type)
-        //.where("Shop status", isEqualTo: true)
-        .where("Shop Affordability", isEqualTo: 8)
+        .where("Shop status", isEqualTo: true)
+        .where("Shop Affordability", whereIn: [8, 9, 10])
         //.where("Shop Affordability",isEqualTo: 10)
         .get()
         .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        //print(result.data());
-        lisofaffordableitem.add(result);
-        setState(() {
-          affordableshopslist = lisofaffordableitem;
-          loading = false;
+          querySnapshot.docs.forEach((result) {
+            //print(result.data());
+            lisofaffordableitem.add(result);
+            setState(() {
+              affordableshopslist = lisofaffordableitem;
+              loading = false;
+            });
+          });
         });
-      });
-    });
   }
 
   @override
@@ -521,7 +521,7 @@ class _bikeState extends State<bike> {
                                         ),
                                         RatingBar.builder(
                                           //glowColor: Colors.amber,
-                                          unratedColor: Colors.white,
+                                          unratedColor: Colors.amber,
                                           direction: Axis.horizontal,
                                           itemCount: topshopslist[index]
                                               ['Shop Rating'],
@@ -571,7 +571,7 @@ class _bikeState extends State<bike> {
                       padding: const EdgeInsets.all(4),
                       child: Container(
                         margin: const EdgeInsets.only(left: 5, right: 5),
-                        height: 80,
+                        height: 90,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: Colors.white,
@@ -629,6 +629,26 @@ class _bikeState extends State<bike> {
                                         fontSize: 12,
                                         color: Colors.blueGrey,
                                         fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  RatingBar.builder(
+                                    //glowColor: Colors.amber,
+                                    unratedColor: Colors.amber,
+                                    direction: Axis.horizontal,
+                                    itemCount: affordableshopslist[index]
+                                        ['Shop Rating'],
+                                    itemSize: 18.0,
+                                    itemPadding: const EdgeInsets.symmetric(
+                                        horizontal: 1.0),
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      print(rating);
+                                    },
                                   ),
                                 ],
                               ),
