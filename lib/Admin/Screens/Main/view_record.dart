@@ -104,7 +104,7 @@ class _view_recordState extends State<view_record> {
       body: loading == true
           ? tempWidget
           : ListView(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(20),
               children: [
                 Container(
                   padding: const EdgeInsets.all(20),
