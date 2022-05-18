@@ -4,6 +4,7 @@ import 'package:vehicle_maintainance/Screens/searchPage.dart';
 
 import 'bike.dart';
 import 'detail.dart';
+import 'easy_search_bar.dart';
 
 class category extends StatefulWidget {
   String s;
@@ -31,13 +32,14 @@ class categoryState extends State<category> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (c) => SearchPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (c) => easysearchbar()));
               },
               icon: const Icon(Icons.search_outlined)),
         ],
       ),
       body: ListView(
+        padding: EdgeInsets.all(10),
         children: [
           const SizedBox(
             height: 20,
@@ -72,7 +74,7 @@ class categoryState extends State<category> {
                   ),
                   Image.asset(
                     "images/electric.png",
-                    width: 60,
+                    width: 50,
                   ),
                   const SizedBox(
                     width: 15,
@@ -95,7 +97,7 @@ class categoryState extends State<category> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => detail(type, "Electrical"),
+                            builder: (context) => detail(type, "electrical"),
                           ));
                     },
                   ),
@@ -134,7 +136,7 @@ class categoryState extends State<category> {
                   //SizedBox(width: 5,),
                   Image.asset(
                     "images/mechanical.png",
-                    width: 80,
+                    width: 70,
                   ),
                   const SizedBox(
                     width: 15,
@@ -157,7 +159,7 @@ class categoryState extends State<category> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => detail(type, "Mechanical"),
+                            builder: (context) => detail(type, "mechanical"),
                           ));
                     },
                   ),
@@ -198,7 +200,7 @@ class categoryState extends State<category> {
                   ),
                   Image.asset(
                     "images/tyres.png",
-                    width: 70,
+                    width: 60,
                   ),
                   const SizedBox(
                     width: 15,
@@ -263,7 +265,7 @@ class categoryState extends State<category> {
                   ),
                   Image.asset(
                     "images/painting.png",
-                    width: 70,
+                    width: 50,
                   ),
                   const SizedBox(
                     width: 15,
@@ -287,7 +289,7 @@ class categoryState extends State<category> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                detail(type, "Denting and Painting"),
+                                detail(type, "denting and painting"),
                           ));
                     },
                   ),
@@ -328,7 +330,7 @@ class categoryState extends State<category> {
                   ),
                   Image.asset(
                     "images/spare.png",
-                    width: 70,
+                    width: 60,
                   ),
                   const SizedBox(
                     width: 15,
@@ -351,7 +353,7 @@ class categoryState extends State<category> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => detail(type, "Spare Parts"),
+                            builder: (context) => detail(type, "spare parts"),
                           ));
                     },
                   ),
@@ -392,7 +394,7 @@ class categoryState extends State<category> {
                   ),
                   Image.asset(
                     "images/b_oil.png",
-                    width: 70,
+                    width: 60,
                   ),
                   const SizedBox(
                     width: 15,
@@ -415,7 +417,7 @@ class categoryState extends State<category> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => detail(type, "Oil Change"),
+                            builder: (context) => detail(type, "oil change"),
                           ));
                     },
                   ),
@@ -456,7 +458,7 @@ class categoryState extends State<category> {
                   ),
                   Image.asset(
                     "images/bike_wheel.png",
-                    width: 70,
+                    width: 60,
                   ),
                   const SizedBox(
                     width: 15,
@@ -479,7 +481,7 @@ class categoryState extends State<category> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => detail(type, "Tire Shop"),
+                            builder: (context) => detail(type, "tire"),
                           ));
                     },
                   ),

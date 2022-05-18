@@ -8,6 +8,8 @@ import 'package:vehicle_maintainance/Screens/category.dart';
 import 'package:vehicle_maintainance/Screens/detail_screen.dart';
 import 'package:vehicle_maintainance/Screens/searchPage.dart';
 
+import 'easy_search_bar.dart';
+
 class detail extends StatefulWidget {
   String s, str;
   detail(this.s, this.str, {Key? key}) : super(key: key);
@@ -73,8 +75,8 @@ class detailState extends State<detail> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (c) => SearchPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (c) => easysearchbar()));
               },
               icon: const Icon(Icons.search_outlined)),
         ],
@@ -82,6 +84,7 @@ class detailState extends State<detail> {
       ),
       body: loading == true
           ? Center(
+              // child: Text("no record found"),
               child: CircularProgressIndicator(
                 strokeWidth: 3,
                 backgroundColor: Color.fromARGB(255, 247, 121, 3),

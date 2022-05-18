@@ -64,6 +64,12 @@ class _detail_screenState extends State<detail_screen> {
       "reporter_contact": reporter_contact,
       "complainted_shop": shopkey,
       "Shop Name": singlerecord['Shop Name'],
+      "Owner Name": singlerecord['Owner Name'],
+      "Owner Contact": singlerecord['Contact'],
+      "Shop Rating": singlerecord['Shop Rating'],
+      "Shop Affordability": singlerecord['Shop Affordability'],
+      "Shop Type": singlerecord['type'],
+      "Shop Service": singlerecord['Service'],
     };
     dc.set(complaints).whenComplete(() {
       //print("Compliant submitted");

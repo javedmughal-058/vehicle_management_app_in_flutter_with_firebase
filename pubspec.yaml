@@ -41,6 +41,7 @@ dependencies:
   file_picker:
   open_file: ^3.2.1
   excel:
+  easy_search_bar: ^2.3.1
 
   firebase_core:
   cloud_firestore:

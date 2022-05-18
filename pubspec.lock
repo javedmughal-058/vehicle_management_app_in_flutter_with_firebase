@@ -120,6 +120,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  easy_search_bar:
+    dependency: "direct main"
+    description:
+      name: easy_search_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.1"
   equatable:
     dependency: transitive
     description:
