@@ -1,4 +1,3 @@
-
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +10,7 @@ class AddRecord extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: const MyHomePage(),
     );
   }
@@ -28,68 +28,88 @@ class _MyHomePageState extends State<MyHomePage> {
   var fileTypeList = ['json'];
   FilePickerResult? result;
   PlatformFile? file;
-  final String f="";
+  final String f = "";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () { Navigator.push(context,MaterialPageRoute(builder: (context)=> add_car_record())); },
-              // tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            );
-          },
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => add_car_record()));
+                },
+                // tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              );
+            },
+          ),
+          backgroundColor: Colors.indigo,
+          title: Text(
+            'Record',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
-        backgroundColor: Colors.indigo,title: Text('Record',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),),),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Select Excel File ',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                ),
-              ],
-            ),
-            SizedBox(height: 40,),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Select Excel File ',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
+                ],
               ),
-              onPressed: () async {
-                pickFiles(fileType);
-
-
-              },
-              child: Text('Choose file',style: TextStyle(fontSize: 17),),
-            ),
-            if (file != null) fileDetails(file!),
-            if (file != null)
-              ElevatedButton(onPressed: (){
-                SnackBar(content: Text('Successfully uploaded'));
-                Customer.readExcel(file!.path as String);
-                SnackBar(content: Text('Successfully uploaded'));
-              },child: Text('Upload File')),
-          ],
+              SizedBox(
+                height: 40,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.indigo),
+                ),
+                onPressed: () async {
+                  pickFiles(fileType);
+                },
+                child: Text(
+                  'Choose file',
+                  style: TextStyle(fontSize: 17),
+                ),
+              ),
+              if (file != null) fileDetails(file!),
+              if (file != null)
+                ElevatedButton(
+                    onPressed: () {
+                      SnackBar(content: Text('Successfully uploaded'));
+                      Customer.readExcel(file!.path as String);
+                      SnackBar(content: Text('Successfully uploaded'));
+                    },
+                    child: Text('Upload File')),
+            ],
+          ),
         ),
       ),
     );
   }
-  Widget fileDetails(PlatformFile file){
+
+  Widget fileDetails(PlatformFile file) {
     final kb = file.size / 1024;
     final mb = kb / 1024;
-    final size  = (mb>=1)?'${mb.toStringAsFixed(2)} MB' : '${kb.toStringAsFixed(2)} KB';
+    final size = (mb >= 1)
+        ? '${mb.toStringAsFixed(2)} MB'
+        : '${kb.toStringAsFixed(2)} KB';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -103,6 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
   void pickFiles(String? filetype) async {
     switch (filetype) {
       case 'All':

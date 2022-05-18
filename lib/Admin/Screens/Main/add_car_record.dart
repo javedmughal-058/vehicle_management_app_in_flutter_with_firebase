@@ -177,7 +177,8 @@ class _BikeRecordState extends State<BikeRecord> {
     "electrical",
     "denting and painting",
     "tire",
-    "spare parts"
+    "spare parts",
+    "air conditioner"
   ];
   final OutdoorServices = ["Yes", "No"];
   final Rating = ["1", "2", "3", "4", "5"];
