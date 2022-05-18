@@ -6,6 +6,7 @@ import 'package:vehicle_maintainance/Screens/profile.dart';
 import 'package:vehicle_maintainance/Screens/register_shop.dart';
 import 'package:vehicle_maintainance/Screens/searchPage.dart';
 
+import 'easy_search_bar.dart';
 import 'home.dart';
 
 class main_page extends StatefulWidget {
@@ -19,7 +20,7 @@ class main_pageState extends State<main_page> {
   int _currentIndex = 0;
   final screens = [
     const home(),
-    SearchPage(),
+    easysearchbar(),
     const map(),
     const register_shop(),
     const profile(),

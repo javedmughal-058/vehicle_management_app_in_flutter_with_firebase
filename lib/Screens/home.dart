@@ -113,7 +113,7 @@ class _homeState extends State<home> {
                     width: 150,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: Color.fromARGB(255, 2, 145, 170),
+                      color: const Color.fromARGB(255, 2, 145, 170),
                     ),
                     child: Column(
                       children: [
@@ -195,104 +195,168 @@ class _homeState extends State<home> {
         const SizedBox(
           height: 10,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => view("wash")));
-              },
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                // color: Colors.red,
-                height: 100,
-                width: 150,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
+        SizedBox(
+          height: 130,
+          //width: 200,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => view("wash")));
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                  // color: Colors.red,
+                  height: 110,
+                  width: 150,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      color: Colors.white),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Image.asset(
+                        "images/wash.png",
+                        height: 70,
+                        width: 70,
+                      ),
+                      const Text(
+                        'Wash',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 7,
                       ),
                     ],
-                    color: Colors.white),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Image.asset(
-                      "images/wash.png",
-                      height: 70,
-                      width: 70,
-                    ),
-                    const Text(
-                      'Wash',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => view("battery")));
-              },
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                // color: Colors.red,
-                height: 100,
-                width: 150,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
+              const SizedBox(
+                width: 10,
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => view("battery")));
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                  // color: Colors.red,
+                  height: 110,
+                  width: 150,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      color: Colors.white),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Image.asset("images/battery.png", height: 55, width: 70),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Text(
+                        'Battery',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 7,
                       ),
                     ],
-                    color: Colors.white),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Image.asset("images/battery.png", height: 55, width: 70),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    const Text(
-                      'Battery',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(
+                width: 10,
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => view("air conditioner")));
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                  // color: Colors.red,
+                  height: 110,
+                  width: 150,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      color: Colors.white),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Image.asset("images/battery.png", height: 55, width: 70),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Text(
+                        'Air Conditioner',
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        softWrap: false,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(
           height: 10,
@@ -442,7 +506,7 @@ class _homeState extends State<home> {
                           ),
                         ),
                       )),
-        SizedBox(
+        const SizedBox(
           height: 80,
         ),
       ],
