@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class detail_screen extends StatefulWidget {
@@ -49,12 +50,8 @@ class _detail_screenState extends State<detail_screen> {
 
   void initState() {
     super.initState();
-    getData();
   }
 
-  getData() async {
-    //print(singlerecord);
-  }
   submitcomplaint() async {
     DocumentReference dc =
         FirebaseFirestore.instance.collection("complaints").doc(shopkey);
@@ -99,151 +96,273 @@ class _detail_screenState extends State<detail_screen> {
           leading: Image.asset("images/app_icon.png"),
           actions: [
             PopupMenuButton(
-              icon: const Icon(
-                  Icons.more_vert), //don't specify icon if you want 3 dot menu
-              color: Colors.white,
+              //  color: Colors.yellowAccent,
+              elevation: 20,
+
               itemBuilder: (context) => [
-                PopupMenuItem<int>(
-                  value: 0,
+                PopupMenuItem(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      const Icon(
-                        Icons.report_rounded,
-                        color: Color.fromARGB(255, 2, 145, 170),
+                      Icon(
+                        Icons.report_problem,
+                        color: Colors.redAccent,
                       ),
-                      const Text(
-                        "Complaint",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 2, 145, 170),
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Arial"),
+                      SizedBox(
+                        width: 10,
                       ),
+                      Text("Complaint"),
                     ],
                   ),
+                  value: 1,
+                ),
+                PopupMenuItem(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.star_border_outlined,
+                        color: Colors.amber,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text("Rating"),
+                    ],
+                  ),
+                  value: 2,
                 ),
               ],
-              onSelected: (item) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Stack(
-                          overflow: Overflow.visible,
-                          children: <Widget>[
-                            Positioned(
-                              right: -40.0,
-                              top: -40.0,
-                              child: InkResponse(
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const CircleAvatar(
-                                  child: Icon(Icons.close),
-                                  backgroundColor: Colors.red,
+              onSelected: (value) {
+                value == 1
+                    ? showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Stack(
+                              overflow: Overflow.visible,
+                              children: <Widget>[
+                                Positioned(
+                                  right: -40.0,
+                                  top: -40.0,
+                                  child: InkResponse(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const CircleAvatar(
+                                      child: Icon(Icons.close),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            Form(
-                              key: _formKey,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      controller: r_name,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Your Name',
-                                        icon: Icon(Icons.person),
-                                      ),
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Enter Name';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (String repotername) {
-                                        getreporterName(repotername);
-                                      },
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      controller: r_contact,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Contact',
-                                        icon: Icon(Icons.phone),
-                                      ),
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Enter Contact';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (String reportercontact) {
-                                        getreporterContact(reportercontact);
-                                      },
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      controller: r_complaint,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Enter Message',
-                                        icon: Icon(Icons.message_outlined),
-                                      ),
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return value.length < 100
-                                              ? 'complaint\'s message must \n minimum 100 characters'
-                                              : null;
-                                        }
-                                      },
-                                      onChanged: (String complaintdetail) {
-                                        getcomplaint(complaintdetail);
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        RaisedButton(
-                                            child: const Text("Cancel"),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            }),
-                                        const Spacer(),
-                                        RaisedButton(
-                                          child: const Text("Submit"),
-                                          onPressed: () {
-                                            if (_formKey.currentState!
-                                                .validate()) {
-                                              //print(singlerecord.keys);
-                                              submitcomplaint();
-                                              r_name.clear();
-                                              r_contact.clear();
-                                              r_complaint.clear();
+                                Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          controller: r_name,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Your Name',
+                                            icon: Icon(Icons.person),
+                                          ),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Enter Name';
                                             }
+                                            return null;
+                                          },
+                                          onChanged: (String repotername) {
+                                            getreporterName(repotername);
                                           },
                                         ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          controller: r_contact,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Contact',
+                                            icon: Icon(Icons.phone),
+                                          ),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Enter Contact';
+                                            }
+                                            return null;
+                                          },
+                                          onChanged: (String reportercontact) {
+                                            getreporterContact(reportercontact);
+                                          },
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          controller: r_complaint,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Enter Message',
+                                            icon: Icon(Icons.message_outlined),
+                                          ),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return value.length < 100
+                                                  ? 'complaint\'s message must \n minimum 100 characters'
+                                                  : null;
+                                            }
+                                          },
+                                          onChanged: (String complaintdetail) {
+                                            getcomplaint(complaintdetail);
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            RaisedButton(
+                                                child: const Text("Cancel"),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                }),
+                                            const Spacer(),
+                                            RaisedButton(
+                                              child: const Text("Submit"),
+                                              onPressed: () {
+                                                if (_formKey.currentState!
+                                                    .validate()) {
+                                                  //print(singlerecord.keys);
+                                                  submitcomplaint();
+                                                  r_name.clear();
+                                                  r_contact.clear();
+                                                  r_complaint.clear();
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        })
+                    : showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Container(
+                              height: 200,
+                              child: Stack(
+                                overflow: Overflow.visible,
+                                children: <Widget>[
+                                  Positioned(
+                                    right: -40.0,
+                                    top: -40.0,
+                                    child: InkResponse(
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const CircleAvatar(
+                                        child: Icon(Icons.close),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                  Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Text(
+                                          "Rate us",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: RatingBar.builder(
+                                            //glowColor: Colors.amber,
+                                            unratedColor: Colors.grey,
+                                            direction: Axis.horizontal,
+                                            itemCount: 5,
+                                            itemSize: 40.0,
+                                            itemPadding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 1.0),
+                                            itemBuilder: (context, _) =>
+                                                const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                            onRatingUpdate: (rating) {
+                                              rating = (rating +
+                                                      singlerecord[
+                                                          'Shop Rating']) /
+                                                  2;
+                                              int newrating = rating.ceil();
+                                              FirebaseFirestore.instance
+                                                  .collection("shops")
+                                                  .doc(shopkey)
+                                                  .update({
+                                                'Shop Rating': newrating,
+                                              }).then((_) {
+                                                print("successfully update!");
+                                              }).catchError((error) => print(
+                                                      'updation failed: $error'));
+
+                                              // ignore: avoid_print
+                                              print(rating);
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: RaisedButton(
+                                            child: const Text("Submit"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              const AdvanceSnackBar(
+                                                      message:
+                                                          "Successfully submit rating",
+                                                      duration:
+                                                          Duration(seconds: 2),
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: 2),
+                                                        child: Icon(
+                                                          Icons.all_inbox,
+                                                          color: Colors.red,
+                                                          size: 25,
+                                                        ),
+                                                      ),
+                                                      isIcon: true)
+                                                  .show(context);
+                                            },
+                                          ),
+                                        )
                                       ],
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      );
-                    });
+                          );
+                        });
               },
             ),
           ],
@@ -270,7 +389,7 @@ class _detail_screenState extends State<detail_screen> {
                     children: [
                       CircleAvatar(
                         backgroundColor: Colors.grey,
-                        radius: 40.0,
+                        radius: 30.0,
                         child: Image.asset(
                           "images/admin.png",
                           height: 70,
@@ -279,9 +398,15 @@ class _detail_screenState extends State<detail_screen> {
                       const SizedBox(
                         width: 20,
                       ),
-                      Text(
-                        '${singlerecord['Owner Name']}',
-                        style: GoogleFonts.merriweather(fontSize: 20),
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          '${singlerecord['Owner Name']}',
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                          maxLines: 2,
+                          style: GoogleFonts.merriweather(fontSize: 16),
+                        ),
                       ),
                       const Spacer(),
                       IconButton(
@@ -476,13 +601,26 @@ class _detail_screenState extends State<detail_screen> {
                       ),
                       const Spacer(),
                       SizedBox(
-                          width: 170,
-                          child: Text(
-                            '${singlerecord['Shop Rating']}',
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ))
+                        width: 170,
+                        child: RatingBar.builder(
+                          allowHalfRating: true,
+
+                          //glowColor: Colors.amber,
+                          unratedColor: Colors.amber,
+                          direction: Axis.horizontal,
+                          itemCount: singlerecord['Shop Rating'],
+                          itemSize: 18.0,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 1.0),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {
+                            print(rating);
+                          },
+                        ),
+                      )
                     ],
                   ),
                   const SizedBox(
@@ -514,186 +652,6 @@ class _detail_screenState extends State<detail_screen> {
                   ),
                   const Divider(
                     thickness: 1,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          print(shopkey);
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  content: Stack(
-                                    overflow: Overflow.visible,
-                                    children: <Widget>[
-                                      Positioned(
-                                        right: -40.0,
-                                        top: -40.0,
-                                        child: InkResponse(
-                                          onTap: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const CircleAvatar(
-                                            child: Icon(Icons.close),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        ),
-                                      ),
-                                      Form(
-                                        key: _formKey,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: TextFormField(
-                                                controller: r_name,
-                                                decoration:
-                                                    const InputDecoration(
-                                                  labelText: 'Your Name',
-                                                  icon: Icon(Icons.person),
-                                                ),
-                                                validator: (value) {
-                                                  if (value!.isEmpty) {
-                                                    return 'Enter Name';
-                                                  }
-                                                  return null;
-                                                },
-                                                onChanged:
-                                                    (String repotername) {
-                                                  getreporterName(repotername);
-                                                },
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: TextFormField(
-                                                controller: r_contact,
-                                                decoration:
-                                                    const InputDecoration(
-                                                  labelText: 'Contact',
-                                                  icon: Icon(Icons.phone),
-                                                ),
-                                                validator: (value) {
-                                                  if (value!.isEmpty) {
-                                                    return 'Enter Contact';
-                                                  }
-                                                  return null;
-                                                },
-                                                onChanged:
-                                                    (String reportercontact) {
-                                                  getreporterContact(
-                                                      reportercontact);
-                                                },
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: TextFormField(
-                                                controller: r_complaint,
-                                                decoration:
-                                                    const InputDecoration(
-                                                  labelText: 'Enter Message',
-                                                  icon: Icon(
-                                                      Icons.message_outlined),
-                                                ),
-                                                validator: (value) {
-                                                  if (value!.isEmpty) {
-                                                    return value.length < 100
-                                                        ? 'complaint\'s message must \n minimum 50 characters'
-                                                        : null;
-                                                  }
-                                                },
-                                                onChanged:
-                                                    (String complaintdetail) {
-                                                  getcomplaint(complaintdetail);
-                                                },
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  RaisedButton(
-                                                      child:
-                                                          const Text("Cancel"),
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      }),
-                                                  const Spacer(),
-                                                  RaisedButton(
-                                                    child: const Text("Submit"),
-                                                    onPressed: () {
-                                                      if (_formKey.currentState!
-                                                          .validate()) {
-                                                        //print(singlerecord.keys);
-                                                        submitcomplaint();
-                                                        r_name.clear();
-                                                        r_contact.clear();
-                                                        r_complaint.clear();
-                                                      }
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                          height: 100,
-                          width: 80,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                              color: Colors.white30),
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                "images/feedback.png",
-                                height: 60,
-                                width: 60,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Text(
-                                'Complaint',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),
