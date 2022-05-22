@@ -159,40 +159,49 @@ class _easysearchbarState extends State<easysearchbar> {
         body: ListView(
           children: [
             _pressed
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                ? Column(
+                    //mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          _pressed = true;
-                          topshoplist();
-                          setState(() {});
-                        },
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.align_vertical_center_rounded,
-                              color: Color.fromARGB(221, 4, 70, 78),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              _pressed = true;
+                              topshoplist();
+                              setState(() {});
+                            },
+                            child: Row(
+                              children: const [
+                                Icon(
+                                  Icons.align_vertical_center_rounded,
+                                  color: Color.fromARGB(221, 4, 70, 78),
+                                ),
+                                Text("Top Rated"),
+                              ],
                             ),
-                            Text("Top Rated"),
-                          ],
-                        ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              _pressed = true;
+                              affordshoplist();
+                              setState(() {});
+                            },
+                            child: Row(
+                              children: const [
+                                Icon(
+                                  Icons.align_vertical_center_outlined,
+                                  color: Color.fromARGB(221, 4, 70, 78),
+                                ),
+                                Text("Affordable"),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      TextButton(
-                        onPressed: () {
-                          _pressed = true;
-                          affordshoplist();
-                          setState(() {});
-                        },
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.align_vertical_center_outlined,
-                              color: Color.fromARGB(221, 4, 70, 78),
-                            ),
-                            Text("Affordable"),
-                          ],
-                        ),
+                      Text(
+                        '#${searchshopslist.length}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
                   )
