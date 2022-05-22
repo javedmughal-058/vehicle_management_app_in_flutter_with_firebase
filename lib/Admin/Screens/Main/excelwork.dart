@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path/path.dart';
 import 'package:excel/excel.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -22,7 +23,9 @@ class Customer {
             items.add(item!.value);
           } catch (e) {}
         }
-        list.add(items);
+        if (items.isNotEmpty && items[2].toString().length == 10) {
+          list.add(items);
+        }
       }
     }
     upload(list);
@@ -30,22 +33,25 @@ class Customer {
   }
 
   static void upload(var list) async {
-    var contact = [];
-    final ref = FirebaseDatabase.instance.reference();
-    late DataSnapshot ds;
-    ds = await ref.child("User").once().then((value) => value.snapshot);
-    if (ds.exists && ds.value != null) {
-      Map map = ds.value as Map;
-      map.forEach((key, value) {
-        contact.add(value['contact']);
-      });
-    }
+    var existingShops = [];
+    final ref = FirebaseFirestore.instance;
 
-    for (var item in list) {
-      if (contact.isNotEmpty) {
-        if (!contact.contains(item['contact'])) {
+    await ref.collection('shops').get().then((value) {
+      for (var item in value.docs) {
+        String cont = item['Contact'].toString();
+        String service = item['Service'].toString().toLowerCase();
+        existingShops.add(cont + service);
+      }
+    });
+    //print('abc');
+    int count = 0;
+    for (List item in list) {
+      if (existingShops.isNotEmpty) {
+        String cont = item[2].toString();
+        String service = item[4].toString().toLowerCase();
+        if (!existingShops.contains(cont + service)) {
           try {
-            await ref.child("User").push().set({
+            await ref.collection('shops').add({
               'Owner Name': item[0],
               'Shop Name': item[1],
               'Contact': item[2],
@@ -58,11 +64,15 @@ class Customer {
               'Shop status': item[9],
               'type': item[10],
             });
-          } catch (e) {}
+            count++;
+            print(count);
+          } catch (e) {
+            print('Error Occured 1');
+          }
         }
       } else {
         try {
-          await ref.child("User").push().set({
+          await ref.collection('shops').add({
             'Owner Name': item[0],
             'Shop Name': item[1],
             'Contact': item[2],
@@ -75,7 +85,11 @@ class Customer {
             'Shop status': item[9],
             'type': item[10],
           });
-        } catch (e) {}
+          count++;
+          print(count);
+        } catch (e) {
+          print('Error Occured 2');
+        }
       }
     }
   }
