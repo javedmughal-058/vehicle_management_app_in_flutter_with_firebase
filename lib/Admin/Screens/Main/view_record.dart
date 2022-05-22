@@ -29,8 +29,8 @@ class _view_recordState extends State<view_record> {
     car_result.docs.forEach((res) {
       //print(res.data());
       carshops++;
-      loading = false;
     });
+    loading = false;
     var bike_result = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "bike")
@@ -38,6 +38,7 @@ class _view_recordState extends State<view_record> {
     bike_result.docs.forEach((res) {
       bikeshops++;
     });
+    loading = false;
     var wash_result = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "wash")
@@ -45,6 +46,8 @@ class _view_recordState extends State<view_record> {
     wash_result.docs.forEach((res) {
       washshops++;
     });
+    loading = false;
+
     var battery_result = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "battery")
@@ -52,6 +55,8 @@ class _view_recordState extends State<view_record> {
     battery_result.docs.forEach((res) {
       batteryshops++;
     });
+    loading = false;
+
     if (first) {
       first = false;
       if (mounted) {
