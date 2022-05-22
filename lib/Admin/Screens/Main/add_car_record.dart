@@ -63,11 +63,11 @@ class BikeRecord extends StatefulWidget {
 
 class _BikeRecordState extends State<BikeRecord> {
   late PickResult selectedPlace;
-  late String Ownername, shopname, shoplocation;
+  late String Ownername, shopname, shoplocation, ocontact, price_km;
   String shopservice = "mechanical", OServices = "Yes", record_name = "bike";
   int shoprating = 1, shopafffordability = 1;
-  late double ocontact;
-  late double price_km = 0;
+  //late int ocontact;
+  //late int ;
   final bool status = true;
   bool drop = true;
   bool enable = false;
@@ -81,7 +81,7 @@ class _BikeRecordState extends State<BikeRecord> {
   }
 
   getOwnerContact(contact) {
-    this.ocontact = double.parse(contact);
+    this.ocontact = contact;
   }
 
   getLocation(location) {
@@ -89,7 +89,7 @@ class _BikeRecordState extends State<BikeRecord> {
   }
 
   getPrice(rate) {
-    this.price_km = double.parse(rate);
+    this.price_km = rate;
   }
 
   getdropdownValue(service) {
@@ -119,7 +119,7 @@ class _BikeRecordState extends State<BikeRecord> {
       enable = true;
       shopservice = record_name;
       OServices = "No";
-      price_km = 0;
+      price_km = "0";
     } else {
       enable = false;
     }
@@ -203,221 +203,43 @@ class _BikeRecordState extends State<BikeRecord> {
     return Form(
         key: _formKey,
         child: SingleChildScrollView(
-            child: Column(children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: DropdownButtonFormField(
-              value: dropdownValue5,
-              icon: const Icon(Icons.keyboard_arrow_down_sharp),
-              decoration: InputDecoration(
-                labelText: "Category",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              items: categorylist.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? newValueSelected) {
-                getdropdownValue5(newValueSelected);
-                // getService=(service);
-                setState(() {
-                  dropdownValue5 = newValueSelected!;
-                });
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Center(
-              child: TextFormField(
-                controller: ON_Controller,
-                decoration: InputDecoration(
-                    icon: const Icon(Icons.person),
-                    labelText: 'Owner Name',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Colors.black),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Colors.blue),
-                      borderRadius: BorderRadius.circular(15),
-                    )),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Enter Owner Name';
-                  }
-                  return null;
-                },
-                onChanged: (String name) {
-                  getOwnerName(name);
-                },
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Center(
-              child: TextFormField(
-                controller: SN_Controller,
-                decoration: InputDecoration(
-                    icon: const Icon(Icons.account_balance),
-                    labelText: 'Shop Name',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Colors.black),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Colors.blue),
-                      borderRadius: BorderRadius.circular(15),
-                    )),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Enter Shop Name';
-                  }
-                  return null;
-                },
-                onChanged: (String sname) {
-                  getShopName(sname);
-                },
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Center(
-              child: TextFormField(
-                controller: contact_Controller,
-                decoration: InputDecoration(
-                    icon: const Icon(Icons.call),
-                    labelText: 'Contact',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Colors.black),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Colors.blue),
-                      borderRadius: BorderRadius.circular(15),
-                    )),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Enter Contact';
-                  }
-                  return null;
-                },
-                onChanged: (String contact) {
-                  getOwnerContact(contact);
-                },
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Center(
-              child: TextFormField(
-                controller: location_Controller,
-                decoration: InputDecoration(
-                    icon: const Icon(Icons.location_on_outlined),
-                    labelText: 'Location',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Colors.black),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Colors.blue),
-                      borderRadius: BorderRadius.circular(15),
-                    )),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Enter Location';
-                  }
-                  return null;
-                },
-                onChanged: (String location) {
-                  getLocation(location);
-                },
-              ),
-            ),
-          ),
-          IgnorePointer(
-            ignoring: enable,
             child: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Column(children: <Widget>[
+            Padding(
               padding: const EdgeInsets.all(10.0),
               child: DropdownButtonFormField(
-                value: dropdownValue,
+                value: dropdownValue5,
                 icon: const Icon(Icons.keyboard_arrow_down_sharp),
                 decoration: InputDecoration(
-                  labelText: "Select Service Once at a time",
+                  labelText: "Category",
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                items: listOfServices.map((String value) {
+                items: categorylist.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
                   );
                 }).toList(),
-                onChanged: (String? service) {
-                  getdropdownValue(service);
+                onChanged: (String? newValueSelected) {
+                  getdropdownValue5(newValueSelected);
                   // getService=(service);
                   setState(() {
-                    dropdownValue = service!;
+                    dropdownValue5 = newValueSelected!;
                   });
                 },
               ),
             ),
-          ),
-          IgnorePointer(
-            ignoring: enable,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: DropdownButtonFormField(
-                value: dropdownValue2,
-                icon: const Icon(Icons.keyboard_arrow_down_sharp),
-                decoration: InputDecoration(
-                  labelText: "Outdoor Service",
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                items: OutdoorServices.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? Outservice) {
-                  getdropdownValue2(Outservice);
-                  // getService=(service);
-                  setState(() {
-                    dropdownValue2 = Outservice!;
-                  });
-                },
-              ),
-            ),
-          ),
-          IgnorePointer(
-            ignoring: enable,
-            child: Padding(
+            Padding(
               padding: const EdgeInsets.all(10.0),
               child: Center(
                 child: TextFormField(
-                  controller: price_controller,
+                  controller: ON_Controller,
                   decoration: InputDecoration(
-                      icon: const Icon(Icons.currency_rupee),
-                      labelText: 'Rs/km',
+                      icon: const Icon(Icons.person),
+                      labelText: 'Owner Name',
                       enabledBorder: OutlineInputBorder(
                         borderSide:
                             const BorderSide(width: 1, color: Colors.black),
@@ -429,95 +251,276 @@ class _BikeRecordState extends State<BikeRecord> {
                         borderRadius: BorderRadius.circular(15),
                       )),
                   validator: (value) {
-                    if (enable == false && value!.isEmpty) {
-                      return 'Enter Rs/km';
+                    if (value!.isEmpty) {
+                      return 'Enter Owner Name';
                     }
                     return null;
                   },
-                  onChanged: (String rate) {
-                    getPrice(rate);
+                  onChanged: (String name) {
+                    getOwnerName(name);
                   },
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: DropdownButtonFormField(
-              value: dropdownValue3,
-              icon: const Icon(Icons.keyboard_arrow_down_sharp),
-              decoration: InputDecoration(
-                hintText: 'Max. value means Max. afforable',
-                labelText: "Rating",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              items: Rating.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? rating) {
-                getdropdownValue3(rating);
-                setState(() {
-                  dropdownValue3 = rating!;
-                });
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: DropdownButtonFormField(
-              value: dropdownValue4,
-              icon: const Icon(Icons.keyboard_arrow_down_sharp),
-              decoration: InputDecoration(
-                hintText: 'Max. value means Max. afforable',
-                labelText: "Affordability",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              items: Affordability.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? affordability) {
-                getdropdownValue4(affordability);
-                setState(() {
-                  dropdownValue4 = affordability!;
-                });
-              },
-            ),
-          ),
-          Padding(
+            Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        saveCarData();
-                        ON_Controller.clear();
-                        SN_Controller.clear();
-                        contact_Controller.clear();
-                        location_Controller.clear();
-                        price_controller.clear();
-                      }
-                    },
-                    child: const Text('Save Record'),
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.indigo),
+              child: Center(
+                child: TextFormField(
+                  controller: SN_Controller,
+                  decoration: InputDecoration(
+                      icon: const Icon(Icons.account_balance),
+                      labelText: 'Shop Name',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 1, color: Colors.black),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 1, color: Colors.blue),
+                        borderRadius: BorderRadius.circular(15),
+                      )),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Enter Shop Name';
+                    }
+                    return null;
+                  },
+                  onChanged: (String sname) {
+                    getShopName(sname);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Center(
+                child: TextFormField(
+                  controller: contact_Controller,
+                  decoration: InputDecoration(
+                      icon: const Icon(Icons.call),
+                      labelText: 'Contact',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 1, color: Colors.black),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 1, color: Colors.blue),
+                        borderRadius: BorderRadius.circular(15),
+                      )),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Enter Contact';
+                    }
+                    return null;
+                  },
+                  onChanged: (String contact) {
+                    getOwnerContact(contact);
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Center(
+                child: TextFormField(
+                  controller: location_Controller,
+                  decoration: InputDecoration(
+                      icon: const Icon(Icons.location_on_outlined),
+                      labelText: 'Location',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 1, color: Colors.black),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 1, color: Colors.blue),
+                        borderRadius: BorderRadius.circular(15),
+                      )),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Enter Location';
+                    }
+                    return null;
+                  },
+                  onChanged: (String location) {
+                    getLocation(location);
+                  },
+                ),
+              ),
+            ),
+            IgnorePointer(
+              ignoring: enable,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: DropdownButtonFormField(
+                  value: dropdownValue,
+                  icon: const Icon(Icons.keyboard_arrow_down_sharp),
+                  decoration: InputDecoration(
+                    labelText: "Select Service Once at a time",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                ],
-              )),
-        ])));
+                  items: listOfServices.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? service) {
+                    getdropdownValue(service);
+                    // getService=(service);
+                    setState(() {
+                      dropdownValue = service!;
+                    });
+                  },
+                ),
+              ),
+            ),
+            IgnorePointer(
+              ignoring: enable,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: DropdownButtonFormField(
+                  value: dropdownValue2,
+                  icon: const Icon(Icons.keyboard_arrow_down_sharp),
+                  decoration: InputDecoration(
+                    labelText: "Outdoor Service",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  items: OutdoorServices.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? Outservice) {
+                    getdropdownValue2(Outservice);
+                    // getService=(service);
+                    setState(() {
+                      dropdownValue2 = Outservice!;
+                    });
+                  },
+                ),
+              ),
+            ),
+            IgnorePointer(
+              ignoring: enable,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                  child: TextFormField(
+                    controller: price_controller,
+                    decoration: InputDecoration(
+                        icon: const Icon(Icons.currency_rupee),
+                        labelText: 'Rs/km',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 1, color: Colors.black),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 1, color: Colors.blue),
+                          borderRadius: BorderRadius.circular(15),
+                        )),
+                    validator: (value) {
+                      if (enable == false && value!.isEmpty) {
+                        return 'Enter Rs/km';
+                      }
+                      return null;
+                    },
+                    onChanged: (String rate) {
+                      getPrice(rate);
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: DropdownButtonFormField(
+                value: dropdownValue3,
+                icon: const Icon(Icons.keyboard_arrow_down_sharp),
+                decoration: InputDecoration(
+                  // hintText: 'Max. value means Max. afforable',
+                  labelText: "Rating",
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                items: Rating.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? rating) {
+                  getdropdownValue3(rating);
+                  setState(() {
+                    dropdownValue3 = rating!;
+                  });
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: DropdownButtonFormField(
+                value: dropdownValue4,
+                icon: const Icon(Icons.keyboard_arrow_down_sharp),
+                decoration: InputDecoration(
+                  hintText: 'Max. value means Max. afforable',
+                  labelText: "Affordability",
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                items: Affordability.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? affordability) {
+                  getdropdownValue4(affordability);
+                  setState(() {
+                    dropdownValue4 = affordability!;
+                  });
+                },
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          saveCarData();
+                          ON_Controller.clear();
+                          SN_Controller.clear();
+                          contact_Controller.clear();
+                          location_Controller.clear();
+                          price_controller.clear();
+                        }
+                      },
+                      child: const Text('Save Record'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.indigo),
+                      ),
+                    ),
+                  ],
+                )),
+          ]),
+        )));
   }
 
   @override
