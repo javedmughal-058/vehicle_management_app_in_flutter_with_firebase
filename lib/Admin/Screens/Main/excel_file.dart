@@ -1,3 +1,4 @@
+import 'package:advance_notification/advance_notification.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -92,9 +93,33 @@ class _MyHomePageState extends State<MyHomePage> {
               if (file != null)
                 ElevatedButton(
                     onPressed: () {
-                      SnackBar(content: Text('Successfully uploaded'));
+                      const AdvanceSnackBar(
+                              message: "Successfully upload excel record",
+                              duration: Duration(seconds: 5),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 2),
+                                child: Icon(
+                                  Icons.all_inbox,
+                                  color: Colors.red,
+                                  size: 25,
+                                ),
+                              ),
+                              isIcon: true)
+                          .show(context);
                       Customer.readExcel(file!.path as String);
-                      SnackBar(content: Text('Successfully uploaded'));
+                      const AdvanceSnackBar(
+                              message: "Successfully upload excel record",
+                              duration: Duration(seconds: 5),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 2),
+                                child: Icon(
+                                  Icons.all_inbox,
+                                  color: Colors.red,
+                                  size: 25,
+                                ),
+                              ),
+                              isIcon: true)
+                          .show(context);
                     },
                     child: Text('Upload File')),
             ],
