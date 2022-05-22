@@ -40,10 +40,12 @@ class _bikeState extends State<bike> {
           querySnapshot.docs.forEach((result) {
             //print(result.data());
             lisoftopitem.add(result);
-            setState(() {
-              topshopslist = lisoftopitem;
-              loading = false;
-            });
+            if (mounted) {
+              setState(() {
+                topshopslist = lisoftopitem;
+                loading = false;
+              });
+            }
           });
         });
   }
