@@ -211,7 +211,7 @@ class _homeState extends State<home> {
                   padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                   // color: Colors.red,
                   height: 110,
-                  width: 150,
+                  width: 130,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
@@ -249,7 +249,7 @@ class _homeState extends State<home> {
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 5,
               ),
               TextButton(
                 onPressed: () {
@@ -260,7 +260,7 @@ class _homeState extends State<home> {
                   padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                   // color: Colors.red,
                   height: 110,
-                  width: 150,
+                  width: 130,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
@@ -300,7 +300,7 @@ class _homeState extends State<home> {
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 5,
               ),
               TextButton(
                 onPressed: () {
@@ -313,7 +313,7 @@ class _homeState extends State<home> {
                   padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                   // color: Colors.red,
                   height: 110,
-                  width: 150,
+                  width: 130,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
@@ -477,6 +477,7 @@ class _homeState extends State<home> {
                                               height: 4,
                                             ),
                                             RatingBar.builder(
+                                              allowHalfRating: true,
                                               //glowColor: Colors.amber,
                                               unratedColor: Colors.amber,
                                               direction: Axis.horizontal,
