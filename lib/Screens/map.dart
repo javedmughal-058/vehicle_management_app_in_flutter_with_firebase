@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class map extends StatefulWidget {
   const map({Key? key}) : super(key: key);
@@ -8,8 +10,32 @@ class map extends StatefulWidget {
 }
 
 class _mapState extends State<map> {
+  static const _initial = CameraPosition(
+    target: LatLng(30.0309724, 72.3112265),
+    zoom: 11.5,
+  );
+  late GoogleMapController _googlemapcontroller;
+  void dispose() {
+    _googlemapcontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: GoogleMap(
+        myLocationButtonEnabled: false,
+        zoomControlsEnabled: false,
+        initialCameraPosition: _initial,
+        onMapCreated: (controller) => _googlemapcontroller = controller,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromARGB(255, 2, 145, 170),
+        foregroundColor: Colors.white,
+        onPressed: () => _googlemapcontroller
+            .animateCamera(CameraUpdate.newCameraPosition(_initial)),
+        child: const Icon(Icons.center_focus_strong),
+      ),
+    );
   }
 }
