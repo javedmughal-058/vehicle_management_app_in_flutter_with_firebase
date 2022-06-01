@@ -56,7 +56,7 @@ class _bikeState extends State<bike> {
         .collection("shops")
         .where("type", isEqualTo: type)
         .where("Shop status", isEqualTo: true)
-        .where("Shop Affordability", whereIn: [8, 9, 10])
+        .where("Shop Affordability", whereIn: [9, 10])
         //.where("Shop Affordability",isEqualTo: 10)
         .get()
         .then((querySnapshot) {
@@ -537,7 +537,7 @@ class _bikeState extends State<bike> {
                                             color: Colors.amber,
                                           ),
                                           onRatingUpdate: (rating) {
-                                            print(rating);
+                                            //print(rating);
                                           },
                                         ),
                                       ],

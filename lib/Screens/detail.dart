@@ -94,7 +94,7 @@ class detailState extends State<detail> {
           : ListView(
               children: [
                 const SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 Padding(
                     padding: const EdgeInsets.only(left: 10),
@@ -104,7 +104,7 @@ class detailState extends State<detail> {
                           fontSize: 20, fontWeight: FontWeight.bold),
                     )),
                 const SizedBox(
-                  height: 15,
+                  height: 5,
                 ),
                 ListView.builder(
                   physics: const ClampingScrollPhysics(),
@@ -112,7 +112,7 @@ class detailState extends State<detail> {
                   itemCount: shopslist.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                       child: Container(
                         margin: const EdgeInsets.only(left: 5, right: 5),
                         height: 80,
@@ -122,8 +122,8 @@ class detailState extends State<detail> {
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 7,
-                                blurRadius: 9,
+                                spreadRadius: 3,
+                                blurRadius: 5,
                                 offset: const Offset(
                                     0, 3), // changes position of shadow
                               ),

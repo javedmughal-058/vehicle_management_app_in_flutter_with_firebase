@@ -55,7 +55,7 @@ class _carState extends State<car> {
         .collection("shops")
         .where("type", isEqualTo: type)
         .where("Shop status", isEqualTo: true)
-        .where("Shop Affordability", whereIn: [8, 9, 10])
+        .where("Shop Affordability", whereIn: [9, 10])
         .get()
         .then((querySnapshot) {
           querySnapshot.docs.forEach((result) {
@@ -532,34 +532,25 @@ class _carState extends State<car> {
                                         const SizedBox(
                                           height: 4,
                                         ),
-                                        Text(
-                                          'Rating: ${topshopslist[index]['Shop Rating']}',
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                            color: Colors.yellow,
-                                            fontSize: 14,
+                                        RatingBar.builder(
+                                          //glowColor: Colors.amber,
+                                          unratedColor: Colors.amber,
+                                          direction: Axis.horizontal,
+                                          itemCount: topshopslist[index]
+                                              ['Shop Rating'],
+                                          itemSize: 18.0,
+                                          itemPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 1.0),
+                                          itemBuilder: (context, _) =>
+                                              const Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
                                           ),
+                                          onRatingUpdate: (rating) {
+                                            //print(rating);
+                                          },
                                         ),
-                                        const SizedBox(
-                                          height: 4,
-                                        ),
-                                        // RatingBar.builder(
-                                        // initialRating: 5,
-                                        // minRating: 1,
-                                        //direction: Axis.horizontal,
-                                        // allowHalfRating: true,
-                                        //itemCount: 5,
-                                        //itemSize: 20.0,
-
-                                        //itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-                                        //itemBuilder: (context, _) => Icon(
-                                        // Icons.star,
-                                        //color: Colors.amber,
-                                        //),
-                                        //onRatingUpdate: (rating) {
-                                        //print(rating);
-                                        //},
-                                        // ),
                                       ],
                                     ),
                                   ),

@@ -138,7 +138,7 @@ class _BikeRecordState extends State<BikeRecord> {
       "Location": shoplocation,
       "Service": shopservice,
       "Outdoor Services": OServices,
-      "Rs/km": price_km,
+      "Rate": price_km,
       "Shop Rating": shoprating,
       "Shop Affordability": shopafffordability,
       "Shop status": status,
@@ -310,12 +310,10 @@ class _BikeRecordState extends State<BikeRecord> {
                             const BorderSide(width: 1, color: Colors.blue),
                         borderRadius: BorderRadius.circular(15),
                       )),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Enter Contact';
-                    }
-                    return null;
-                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) => value != null && value.length < 11
+                      ? 'Enter atlest 11 characters'
+                      : null,
                   onChanged: (String contact) {
                     getOwnerContact(contact);
                   },
