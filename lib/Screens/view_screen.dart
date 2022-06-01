@@ -31,7 +31,7 @@ class viewState extends State<view> {
     dynamic newresult = await FirebaseFirestore.instance
         .collection("shops")
         //.orderBy("Shop Rating",descending: true)
-        .where("Service", isEqualTo: shoptype)
+        .where("type", isEqualTo: shoptype)
         .where("Shop status", isEqualTo: true)
         .get()
         .then((querySnapshot) {
@@ -99,7 +99,7 @@ class viewState extends State<view> {
                           fontSize: 20, fontWeight: FontWeight.bold),
                     )),
                 const SizedBox(
-                  height: 15,
+                  height: 5,
                 ),
                 ListView.builder(
                   physics: const ClampingScrollPhysics(),
@@ -107,7 +107,7 @@ class viewState extends State<view> {
                   itemCount: shopslist.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                       child: Container(
                         margin: const EdgeInsets.only(left: 5, right: 5),
                         height: 80,
@@ -117,8 +117,8 @@ class viewState extends State<view> {
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 7,
-                                blurRadius: 9,
+                                spreadRadius: 3,
+                                blurRadius: 5,
                                 offset: const Offset(
                                     0, 3), // changes position of shadow
                               ),

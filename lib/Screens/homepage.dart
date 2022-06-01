@@ -40,7 +40,7 @@ class main_pageState extends State<main_page> {
         top: false,
         child: ClipRect(
           child: Scaffold(
-              extendBody: true,
+              //extendBody: true,
               // backgroundColor: Colors.blue,
               appBar: AppBar(
                   title: const Text('Vehicle Maintenance'),
