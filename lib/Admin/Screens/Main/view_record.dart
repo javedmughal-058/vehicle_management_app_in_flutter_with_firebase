@@ -111,6 +111,13 @@ class _view_recordState extends State<view_record> {
           : ListView(
               padding: const EdgeInsets.all(20),
               children: [
+                Text(
+                  "Total Shops: ${carshops + bikeshops + batteryshops + washshops}",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Container(
                   padding: const EdgeInsets.all(20),
                   // color: Colors.black12,
@@ -119,8 +126,8 @@ class _view_recordState extends State<view_record> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(1),
-                          spreadRadius: 7,
-                          blurRadius: 9,
+                          spreadRadius: 4,
+                          blurRadius: 3,
                           offset:
                               const Offset(3, 5), // changes position of shadow
                         ),
@@ -172,8 +179,8 @@ class _view_recordState extends State<view_record> {
                     ],
                   ),
                 ),
-                const Divider(
-                  thickness: 1,
+                const SizedBox(
+                  height: 20,
                 ),
                 Container(
                   padding: const EdgeInsets.all(20),
@@ -182,8 +189,8 @@ class _view_recordState extends State<view_record> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(1),
-                          spreadRadius: 7,
-                          blurRadius: 9,
+                          spreadRadius: 4,
+                          blurRadius: 3,
                           offset:
                               const Offset(3, 5), // changes position of shadow
                         ),
@@ -235,8 +242,8 @@ class _view_recordState extends State<view_record> {
                     ],
                   ),
                 ),
-                const Divider(
-                  thickness: 1,
+                const SizedBox(
+                  height: 20,
                 ),
                 Container(
                   padding: const EdgeInsets.all(20),
@@ -245,8 +252,8 @@ class _view_recordState extends State<view_record> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(1),
-                          spreadRadius: 7,
-                          blurRadius: 9,
+                          spreadRadius: 4,
+                          blurRadius: 3,
                           offset:
                               const Offset(3, 5), // changes position of shadow
                         ),
@@ -301,8 +308,8 @@ class _view_recordState extends State<view_record> {
                     ],
                   ),
                 ),
-                const Divider(
-                  thickness: 1,
+                const SizedBox(
+                  height: 20,
                 ),
                 Container(
                   padding: const EdgeInsets.all(20),
@@ -311,8 +318,8 @@ class _view_recordState extends State<view_record> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(1),
-                          spreadRadius: 7,
-                          blurRadius: 9,
+                          spreadRadius: 4,
+                          blurRadius: 3,
                           offset:
                               const Offset(3, 5), // changes position of shadow
                         ),
@@ -366,9 +373,6 @@ class _view_recordState extends State<view_record> {
                       )
                     ],
                   ),
-                ),
-                const Divider(
-                  thickness: 1,
                 ),
               ],
             ),

@@ -22,6 +22,24 @@ class _view_full_recordState extends State<view_full_record> {
   _view_full_recordState(this.record_name) {}
   bool loading = true;
   late String record_name;
+  late String shopstatus;
+  final shop_status = ["true", "false"];
+  String dropdownValue2 = 'true';
+  getdropdownValue2(Outservice) {
+    this.shopstatus = Outservice;
+  }
+
+  String shopname = "",
+      ownername = "",
+      contact = "",
+      location = "",
+      type = "",
+      service = "",
+      outservice = "",
+      price = "";
+  int rating = 0, affordability = 0;
+  bool status = true;
+
   List shopslist = [];
   List<String> shopkeys = [];
   @override
@@ -30,25 +48,14 @@ class _view_full_recordState extends State<view_full_record> {
     fetchdatalist();
   }
 
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController _shopname = TextEditingController();
-  TextEditingController _ownername = TextEditingController();
-  TextEditingController _contact = TextEditingController();
-  TextEditingController _location = TextEditingController();
-  TextEditingController _shoptype = TextEditingController();
-  TextEditingController _service = TextEditingController();
-  TextEditingController _outdoor = TextEditingController();
-  TextEditingController _rate = TextEditingController();
-  TextEditingController _rating = TextEditingController();
-  TextEditingController _affordability = TextEditingController();
-  TextEditingController _status = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   fetchdatalist() async {
     shopslist = [];
     dynamic newresult = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: record_name)
-        .orderBy("Shop Rating", descending: true)
+        //.orderBy("Shop Rating", descending: true)
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
@@ -98,36 +105,24 @@ class _view_full_recordState extends State<view_full_record> {
     }).catchError((error) => print('Retrieve failed: $error'));
   }
 
-  void _update(String shopkey) {
-    FirebaseFirestore.instance.collection("shops").doc(shopkey).update({
-      "Shop Name": _shopname.text.trim(),
-      "Owner Name": _ownername,
-      "Contact": _contact,
-      "Location": _location,
-      "type": _shoptype,
-      "Service": _service,
-      "Outdoor Services": _outdoor,
-      "Rs/km": _rate,
-      "Shop Rating": _rating,
-      "Shop Affordability": _affordability,
-      "Shop status": _status,
-    }).then((_) {
-      print("successfully update!");
-    }).catchError((error) => print('updation failed: $error'));
+  Map record = {};
+  Future<void> _update(String shopkey) async {
+    Map<String, dynamic> temp = Map.from(record);
+    try {
+      await FirebaseFirestore.instance
+          .collection("shops")
+          .doc(shopkey)
+          .update(Map.from(record))
+          .whenComplete(() {
+        print("successfully update!");
+      });
+    } catch (e) {
+      print(e);
+    }
+    Navigator.of(context).pop();
 
-    _shopname.clear();
-    _ownername.clear();
-    _contact.clear();
-    _location.clear();
-    _shoptype.clear();
-    _service.clear();
-    _outdoor.clear();
-    _rating.clear();
-    _affordability.clear();
-    _rate.clear();
-    _status.clear();
     const AdvanceSnackBar(
-            message: "Successfully added record",
+            message: "Successfully updated record",
             duration: Duration(seconds: 5),
             child: Padding(
               padding: EdgeInsets.only(left: 2),
@@ -139,21 +134,6 @@ class _view_full_recordState extends State<view_full_record> {
             ),
             isIcon: true)
         .show(context);
-  }
-
-  void dispose() {
-    super.dispose();
-    _shopname.dispose();
-    _ownername.dispose();
-    _contact.dispose();
-    _location.dispose();
-    _shoptype.dispose();
-    _service.dispose();
-    _outdoor.dispose();
-    _rating.dispose();
-    _affordability.dispose();
-    _rate.dispose();
-    _status.dispose();
   }
 
   //  Future deleteData(String id) async{
@@ -200,7 +180,7 @@ class _view_full_recordState extends State<view_full_record> {
                     child: Container(
                       height: 14,
                       width: 14,
-                      child: CircularProgressIndicator(
+                      child: const CircularProgressIndicator(
                         strokeWidth: 2,
                         backgroundColor: Color.fromARGB(255, 247, 121, 3),
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
@@ -260,12 +240,13 @@ class _view_full_recordState extends State<view_full_record> {
                   ),
                 ),
                 child: loading == true
-                    ? Center(
+                    ? const Center(
                         child: CircularProgressIndicator(
                           strokeWidth: 3,
-                          backgroundColor: Color.fromARGB(255, 247, 121, 3),
+                          backgroundColor:
+                              const Color.fromARGB(255, 247, 121, 3),
                           valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.blue),
+                              const AlwaysStoppedAnimation<Color>(Colors.blue),
                         ),
                       )
                     : ListView.builder(
@@ -273,7 +254,7 @@ class _view_full_recordState extends State<view_full_record> {
                         itemCount: shopslist.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            margin: const EdgeInsets.fromLTRB(3, 5, 3, 2),
+                            margin: const EdgeInsets.fromLTRB(13, 5, 13, 13),
                             height: 85,
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -302,6 +283,7 @@ class _view_full_recordState extends State<view_full_record> {
                               ),
                               const SizedBox(width: 15),
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(
                                     height: 20,
@@ -315,6 +297,20 @@ class _view_full_recordState extends State<view_full_record> {
                                       fontFamily: 'Shrikhand',
                                     ),
                                   ),
+                                  SizedBox(
+                                    width: 175,
+                                    child: Text(
+                                      "${shopslist[index]['Shop Name']}",
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontFamily: 'Shrikhand',
+                                      ),
+                                    ),
+                                  ),
                                   Text(
                                     "Service: ${shopslist[index]['Service']}",
                                     style: const TextStyle(
@@ -324,30 +320,30 @@ class _view_full_recordState extends State<view_full_record> {
                                     ),
                                   ),
                                   Text(
-                                    "Rs/km: ${shopslist[index]['Rs/km']}",
+                                    "Shop status: ${shopslist[index]['Shop status']}",
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 12,
                                       fontFamily: 'Shrikhand',
                                     ),
                                   ),
-                                  shopslist[index]['Shop status'] == true
-                                      ? const Text(
-                                          "Status: unblocked",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 12,
-                                            fontFamily: 'Shrikhand',
-                                          ),
-                                        )
-                                      : const Text(
-                                          "Status: blocked",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 12,
-                                            fontFamily: 'Shrikhand',
-                                          ),
-                                        )
+                                  // shopslist[index]['Shop status'] == status
+                                  //     ? const Text(
+                                  //         "Status: unblocked",
+                                  //         style: TextStyle(
+                                  //           color: Colors.black,
+                                  //           fontSize: 12,
+                                  //           fontFamily: 'Shrikhand',
+                                  //         ),
+                                  //       )
+                                  //     : const Text(
+                                  //         "Status: blocked",
+                                  //         style: TextStyle(
+                                  //           color: Colors.black,
+                                  //           fontSize: 12,
+                                  //           fontFamily: 'Shrikhand',
+                                  //         ),
+                                  //       )
                                 ],
                               ),
                               const Spacer(),
@@ -359,6 +355,7 @@ class _view_full_recordState extends State<view_full_record> {
                                 color: Colors.indigo,
                                 onPressed: () async {
                                   await singlerecord(shopkeys[index]);
+                                  record = singleshop[0];
 
                                   showDialog(
                                       context: context,
@@ -382,6 +379,9 @@ class _view_full_recordState extends State<view_full_record> {
                                               ),
                                               Form(
                                                 key: _formKey,
+                                                autovalidateMode:
+                                                    AutovalidateMode
+                                                        .onUserInteraction,
                                                 child: ListView(
                                                   // mainAxisSize:
                                                   //     MainAxisSize.min,
@@ -391,229 +391,281 @@ class _view_full_recordState extends State<view_full_record> {
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextFormField(
-                                                        controller: _shopname,
-                                                        initialValue:
-                                                            '${singleshop[index]['Shop Name']}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText:
-                                                              'Shop Name',
-                                                          icon: Icon(
-                                                              Icons.person),
-                                                        ),
-
-                                                        // onChanged: (String
-                                                        //     repotername) {
-                                                        //   getreporterName(
-                                                        //       repotername);
-                                                        // },
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: TextFormField(
-                                                        //controller: _ownername,
-                                                        initialValue:
-                                                            '${singleshop[index]['Owner Name']}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText:
-                                                              'Owner Name',
-                                                          icon:
-                                                              Icon(Icons.phone),
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Enter Name';
+                                                          //controller: _shopname,
+                                                          initialValue:
+                                                              '${record["Shop Name"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Shop Name',
+                                                            icon: Icon(
+                                                                Icons.person),
+                                                          ),
+                                                          onSaved: (val) {
+                                                            record["Shop Name"] =
+                                                                val;
+                                                            //print(val);
                                                           }
-                                                          return null;
-                                                        },
-                                                        // onChanged: (String
-                                                        //     reportercontact) {
-                                                        //   getreporterContact(
-                                                        //       reportercontact);
-                                                        // },
-                                                      ),
+
+                                                          // onChanged: (String
+                                                          //     repotername) {
+                                                          //   getreporterName(
+                                                          //       repotername);
+                                                          // },
+                                                          ),
                                                     ),
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextFormField(
-                                                        // controller: _contact,
-                                                        initialValue:
-                                                            '${singleshop[index]['Contact']}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText:
-                                                              'Owner Contact',
-                                                          icon: Icon(Icons
-                                                              .message_outlined),
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            if (value.isEmpty) {
-                                                              return 'Enter Contact';
+                                                          //controller: _ownername,
+                                                          initialValue:
+                                                              '${record["Owner Name"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Owner Name',
+                                                            icon: Icon(
+                                                                Icons.phone),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Enter Name';
                                                             }
                                                             return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["Owner Name"] =
+                                                                val;
+                                                            //print(val);
                                                           }
-                                                        },
-                                                        // onChanged: (String
-                                                        //     complaintdetail) {
-                                                        //   getcomplaint(
-                                                        //       complaintdetail);
-                                                        // },
-                                                      ),
+
+                                                          // onChanged: (String
+                                                          //     reportercontact) {
+                                                          //   getreporterContact(
+                                                          //       reportercontact);
+                                                          // },
+                                                          ),
                                                     ),
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextFormField(
-                                                        //controller: _location,
-                                                        initialValue:
-                                                            '${singleshop[index]['Location']}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText: 'Location',
-                                                          icon: Icon(Icons
-                                                              .message_outlined),
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'location';
+
+                                                          // controller: _contact,
+                                                          initialValue:
+                                                              '0${record["Contact"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Owner Contact',
+                                                            icon: Icon(Icons
+                                                                .message_outlined),
+                                                          ),
+                                                          validator: (value) =>
+                                                              value != null &&
+                                                                      value.length <
+                                                                          10
+                                                                  ? 'Enter contact without 0'
+                                                                  : null,
+                                                          onSaved: (val) {
+                                                            record["Contact"] =
+                                                                val;
+                                                            //print(val);
                                                           }
-                                                          return null;
-                                                        },
-                                                        // onChanged: (String
-                                                        //     complaintdetail) {
-                                                        //   getcomplaint(
-                                                        //       complaintdetail);
-                                                        // },
-                                                      ),
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
                                                     ),
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextFormField(
-                                                        //controller: _shoptype,
-                                                        initialValue:
-                                                            '${singleshop[index]['type']}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText:
-                                                              'Shop Type',
-                                                          icon: Icon(Icons
-                                                              .message_outlined),
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Enter type';
+                                                          //controller: _location,
+                                                          initialValue:
+                                                              '${record["Location"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Location',
+                                                            icon: Icon(Icons
+                                                                .message_outlined),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'location';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["Location"] =
+                                                                val;
+                                                            //print(val);
                                                           }
-                                                          return null;
-                                                        },
-                                                        // onChanged: (String
-                                                        //     complaintdetail) {
-                                                        //   getcomplaint(
-                                                        //       complaintdetail);
-                                                        // },
-                                                      ),
+
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
                                                     ),
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextFormField(
-                                                        //controller: _service,
-                                                        initialValue:
-                                                            '${singleshop[index]['Service']}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText:
-                                                              'Shop Service',
-                                                          icon: Icon(Icons
-                                                              .message_outlined),
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Enter Service';
+                                                          //controller: _shoptype,
+                                                          initialValue:
+                                                              '${record["type"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Shop Type',
+                                                            icon: Icon(Icons
+                                                                .message_outlined),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Enter type';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["type"] =
+                                                                val;
+                                                            //print(val);
                                                           }
-                                                          return null;
-                                                        },
-                                                        // onChanged: (String
-                                                        //     complaintdetail) {
-                                                        //   getcomplaint(
-                                                        //       complaintdetail);
-                                                        // },
-                                                      ),
+
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
                                                     ),
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextFormField(
-                                                        //controller: _outdoor,
-                                                        initialValue:
-                                                            '${singleshop[index]['Outdoor Services']}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          hintText: 'yes/no',
-                                                          labelText:
-                                                              'Outdoor Service',
-                                                          icon: Icon(Icons
-                                                              .message_outlined),
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Mention yes/no';
+                                                          //controller: _service,
+                                                          initialValue:
+                                                              '${record["Service"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Shop Service',
+                                                            icon: Icon(Icons
+                                                                .message_outlined),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Enter Service';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["Service"] =
+                                                                val;
+                                                            //print(val);
                                                           }
-                                                          return null;
-                                                        },
-                                                        // onChanged: (String
-                                                        //     complaintdetail) {
-                                                        //   getcomplaint(
-                                                        //       complaintdetail);
-                                                        // },
-                                                      ),
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
                                                     ),
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextFormField(
-                                                        //controller: _rate,
-                                                        initialValue:
-                                                            '${singleshop[index]['Rs/km']}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText: 'Rs/km',
-                                                          icon: Icon(Icons
-                                                              .message_outlined),
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Rs/km';
+                                                          //controller: _outdoor,
+                                                          initialValue:
+                                                              '${record["Outdoor Service"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            hintText: 'yes/no',
+                                                            labelText:
+                                                                'Outdoor Service',
+                                                            icon: Icon(Icons
+                                                                .message_outlined),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Mention yes/no';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["Outdoor Services"] =
+                                                                val;
+                                                            //print(val);
                                                           }
-                                                          return null;
-                                                        },
-                                                        // onChanged: (String
-                                                        //     complaintdetail) {
-                                                        //   getcomplaint(
-                                                        //       complaintdetail);
-                                                        // },
-                                                      ),
+
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
                                                     ),
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextFormField(
+                                                          //controller: _rate,
+                                                          initialValue:
+                                                              '${record["Rate"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText: 'Rs/km',
+                                                            icon: Icon(Icons
+                                                                .message_outlined),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Rs/km';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["Rate"] =
+                                                                val;
+                                                            //print(val);
+                                                          }
+
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: TextFormField(
+                                                        readOnly: true,
                                                         //controller: _rating,
                                                         initialValue:
-                                                            '${singleshop[index]['Shop Rating']}',
+                                                            '${record["Shop Rating"]}',
                                                         decoration:
                                                             const InputDecoration(
                                                           hintText: '(1-5)',
@@ -622,12 +674,7 @@ class _view_full_recordState extends State<view_full_record> {
                                                           icon: Icon(Icons
                                                               .message_outlined),
                                                         ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Enter Rating';
-                                                          }
-                                                          return null;
-                                                        },
+
                                                         // onChanged: (String
                                                         //     complaintdetail) {
                                                         //   getcomplaint(
@@ -640,9 +687,10 @@ class _view_full_recordState extends State<view_full_record> {
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextFormField(
+                                                        readOnly: true,
                                                         //controller:_affordability,
                                                         initialValue:
-                                                            '${singleshop[index]['Shop Affordability']}',
+                                                            '${record['Shop Affordability']}',
                                                         decoration:
                                                             const InputDecoration(
                                                           hintText: '(1-10)',
@@ -651,12 +699,7 @@ class _view_full_recordState extends State<view_full_record> {
                                                           icon: Icon(Icons
                                                               .message_outlined),
                                                         ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Enter Affordability';
-                                                          }
-                                                          return null;
-                                                        },
+
                                                         // onChanged: (String
                                                         //     complaintdetail) {
                                                         //   getcomplaint(
@@ -664,14 +707,55 @@ class _view_full_recordState extends State<view_full_record> {
                                                         // },
                                                       ),
                                                     ),
+                                                    // Padding(
+                                                    //   padding:
+                                                    //       const EdgeInsets.all(
+                                                    //           10.0),
+                                                    //   child:
+                                                    //       DropdownButtonFormField(
+                                                    //     icon: const Icon(Icons
+                                                    //         .keyboard_arrow_down_sharp),
+                                                    //     decoration:
+                                                    //         InputDecoration(
+                                                    //       labelText:
+                                                    //           "Shop Status",
+                                                    //       enabledBorder:
+                                                    //           OutlineInputBorder(
+                                                    //         borderRadius:
+                                                    //             BorderRadius
+                                                    //                 .circular(
+                                                    //                     10.0),
+                                                    //       ),
+                                                    //     ),
+                                                    //     items: shop_status.map(
+                                                    //         (String value) {
+                                                    //       return DropdownMenuItem<
+                                                    //           String>(
+                                                    //         value: value,
+                                                    //         child: Text(value),
+                                                    //       );
+                                                    //     }).toList(),
+                                                    //     onChanged: (String?
+                                                    //         shopstatus) {
+                                                    //       getdropdownValue2(
+                                                    //           shopstatus);
+                                                    //       // getService=(service);
+                                                    //       setState(() {
+                                                    //         record["Shop status"] =
+                                                    //             shopstatus!;
+                                                    //       });
+                                                    //     },
+                                                    //   ),
+                                                    // ),
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextFormField(
+                                                        readOnly: true,
                                                         // controller: _status,
                                                         initialValue:
-                                                            '${singleshop[index]['Shop status']}',
+                                                            '${record['Shop status']}',
                                                         decoration:
                                                             const InputDecoration(
                                                           hintText:
@@ -681,16 +765,16 @@ class _view_full_recordState extends State<view_full_record> {
                                                           icon: Icon(Icons
                                                               .message_outlined),
                                                         ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Enter status';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        // onChanged: (String
-                                                        //     complaintdetail) {
-                                                        //   getcomplaint(
-                                                        //       complaintdetail);
+                                                        // validator: (value) {
+                                                        //   if (value!.isEmpty) {
+                                                        //     return 'Enter status';
+                                                        //   }
+                                                        //   return null;
+                                                        // },
+                                                        // onSaved: (val) {
+                                                        //   record["Shop status"] =
+                                                        //       val;
+                                                        //   //print(val);
                                                         // },
                                                       ),
                                                     ),
@@ -712,33 +796,20 @@ class _view_full_recordState extends State<view_full_record> {
                                                           RaisedButton(
                                                             child: const Text(
                                                                 "Update"),
-                                                            onPressed: () {
-                                                              if (_formKey
-                                                                  .currentState!
+                                                            onPressed:
+                                                                () async {
+                                                              final form = _formKey
+                                                                  .currentState;
+                                                              if (form!
                                                                   .validate()) {
+                                                                form.save();
+
+                                                                await _update(
+                                                                    shopkeys[
+                                                                        index]);
                                                                 //print(singlerecord.keys);
                                                                 setState(() {
-                                                                  loading =
-                                                                      true;
-
-                                                                  _update(
-                                                                      shopkeys[
-                                                                          index]);
-                                                                  loading ==
-                                                                          false
-                                                                      ? Center(
-                                                                          child:
-                                                                              Container(
-                                                                            //width: 120,height: 120,
-                                                                            child:
-                                                                                const CircularProgressIndicator(
-                                                                              // backgroundColor: Colors.grey,
-                                                                              strokeWidth: 7,
-                                                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                                                                            ),
-                                                                          ),
-                                                                        )
-                                                                      : fetchdatalist();
+                                                                  fetchdatalist();
                                                                 });
                                                               }
                                                             },
@@ -794,18 +865,23 @@ class _view_full_recordState extends State<view_full_record> {
               ),
             ),
           ),
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (c) => add_car_record()));
-            },
-            tooltip: 'Add Record',
-            backgroundColor: Colors.white,
-            child: const Icon(
-              Icons.add,
-              size: 25,
-              color: Colors.indigo,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (c) => add_car_record()));
+                },
+                tooltip: 'Add Record',
+                backgroundColor: Colors.white,
+                child: const Icon(
+                  Icons.add,
+                  size: 25,
+                  color: Colors.indigo,
+                ),
+              ),
+            ],
           ),
         ]),
       ),
