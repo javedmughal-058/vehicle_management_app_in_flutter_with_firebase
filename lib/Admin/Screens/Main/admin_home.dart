@@ -1,8 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vehicle_maintainance/Admin/Screens/login/login.dart';
+
+// class adminside extends StatelessWidget {
+//   final navigatorkey = GlobalKey<NavigatorState>();
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return new MaterialApp(
+//       navigatorKey: navigatorkey,
+//       home: const admin_home(),
+//     );
+//   }
+// }
 
 class admin_home extends StatefulWidget {
   const admin_home({Key? key}) : super(key: key);
@@ -191,7 +206,8 @@ class _admin_homeState extends State<admin_home> {
     } else {
       tempWidget = const Center(); //EmptyWidget
     }
-    return Center(
+    return Scaffold(
+        body: Center(
       child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -704,6 +720,6 @@ class _admin_homeState extends State<admin_home> {
                   ),
                 ),
               ])),
-    );
+    ));
   }
 }

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'admin_home.dart';
 import 'admin_profile.dart';
 import 'manage_records.dart';
-class main_page extends StatefulWidget {
 
+class main_page extends StatefulWidget {
   const main_page({Key? key}) : super(key: key);
 
   @override
@@ -12,9 +12,8 @@ class main_page extends StatefulWidget {
 }
 
 class _main_pageState extends State<main_page> {
-
-  int _currentIndex=0;
-  final tabs=[
+  int _currentIndex = 0;
+  final tabs = [
     admin_home(),
     manage_record(),
     admin_profile(),
@@ -25,8 +24,7 @@ class _main_pageState extends State<main_page> {
         appBar: AppBar(
             title: const Text('Vehicle Maintenance'),
             backgroundColor: Colors.indigo,
-            leading: Image.asset("images/main.png")
-        ),
+            leading: Image.asset("images/main.png")),
         body: tabs[_currentIndex],
         bottomNavigationBar: SizedBox(
           height: 60,
@@ -36,7 +34,7 @@ class _main_pageState extends State<main_page> {
             iconSize: 22,
             selectedFontSize: 17,
             currentIndex: _currentIndex,
-            items:[
+            items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
@@ -50,9 +48,9 @@ class _main_pageState extends State<main_page> {
                 label: 'Profile',
               ),
             ],
-            onTap: (index){
+            onTap: (index) {
               setState(() {
-                _currentIndex=index;
+                _currentIndex = index;
               });
             },
           ),

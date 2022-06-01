@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,6 +16,7 @@ class admin_profile extends StatefulWidget {
 }
 
 class _admin_profileState extends State<admin_profile> {
+  final user = FirebaseAuth.instance.currentUser;
   List blockedlist = [];
   List complaintlist = [];
   @override
@@ -98,6 +100,7 @@ class _admin_profileState extends State<admin_profile> {
                   )),
             ),
             Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(
                   height: 30,
@@ -109,11 +112,11 @@ class _admin_profileState extends State<admin_profile> {
                 ),
                 FlatButton(
                   onPressed: () => {},
-                  child: Row(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      const Text("View Profile"),
-                      const Icon(Icons.navigate_next),
+                      Text("Login as"),
                     ],
                   ),
                 ),
@@ -121,6 +124,7 @@ class _admin_profileState extends State<admin_profile> {
             ),
           ],
         ),
+        Text("${user!.email}"),
         const Divider(
           thickness: 2,
         ),
@@ -233,6 +237,7 @@ class _admin_profileState extends State<admin_profile> {
               ),
               FlatButton(
                   onPressed: () => {
+                        FirebaseAuth.instance.signOut(),
                         Navigator.push(
                             context,
                             MaterialPageRoute(
