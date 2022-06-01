@@ -105,14 +105,14 @@ class _detail_screenState extends State<detail_screen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.report_problem,
                         color: Colors.redAccent,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      Text("Complaint"),
+                      const Text("Complaint"),
                     ],
                   ),
                   value: 1,
@@ -120,7 +120,7 @@ class _detail_screenState extends State<detail_screen> {
                 PopupMenuItem(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                    children: const [
                       Icon(
                         Icons.star_border_outlined,
                         color: Colors.amber,
@@ -188,12 +188,12 @@ class _detail_screenState extends State<detail_screen> {
                                             labelText: 'Contact',
                                             icon: Icon(Icons.phone),
                                           ),
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Enter Contact';
-                                            }
-                                            return null;
-                                          },
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+                                          validator: (value) =>
+                                              value != null && value.length < 11
+                                                  ? 'Enter atlest 11 characters'
+                                                  : null,
                                           onChanged: (String reportercontact) {
                                             getreporterContact(reportercontact);
                                           },
@@ -283,7 +283,7 @@ class _detail_screenState extends State<detail_screen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
-                                        Text(
+                                        const Text(
                                           "Rate us",
                                           style: TextStyle(
                                               fontSize: 20,
@@ -468,7 +468,7 @@ class _detail_screenState extends State<detail_screen> {
                       SizedBox(
                           width: 170,
                           child: Text(
-                            '0${singlerecord['Contact']}',
+                            '${singlerecord['Contact']}',
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
@@ -576,7 +576,7 @@ class _detail_screenState extends State<detail_screen> {
                       SizedBox(
                           width: 170,
                           child: Text(
-                            '${singlerecord['Rs/km']}',
+                            '${singlerecord['Rate']}',
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
@@ -603,7 +603,7 @@ class _detail_screenState extends State<detail_screen> {
                       SizedBox(
                         width: 170,
                         child: RatingBar.builder(
-                          allowHalfRating: true,
+                          //allowHalfRating: true,
 
                           //glowColor: Colors.amber,
                           unratedColor: Colors.amber,
@@ -617,7 +617,7 @@ class _detail_screenState extends State<detail_screen> {
                             color: Colors.amber,
                           ),
                           onRatingUpdate: (rating) {
-                            print(rating);
+                            //print(rating);
                           },
                         ),
                       )

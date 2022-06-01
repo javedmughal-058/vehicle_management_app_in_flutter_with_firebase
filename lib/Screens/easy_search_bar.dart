@@ -132,7 +132,8 @@ class _easysearchbarState extends State<easysearchbar> {
     'spare parts',
     'denting and painting',
     'wheel alignment',
-    'air conditioner'
+    'air conditioner',
+    'wash'
   ];
 
   Future<List<String>> _fetchSuggestions(String searchValue) async {

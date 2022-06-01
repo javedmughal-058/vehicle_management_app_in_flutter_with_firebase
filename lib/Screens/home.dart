@@ -493,7 +493,7 @@ class _homeState extends State<home> {
                                                 color: Colors.amber,
                                               ),
                                               onRatingUpdate: (rating) {
-                                                print(rating);
+                                                //print(rating);
                                               },
                                             ),
                                           ],
