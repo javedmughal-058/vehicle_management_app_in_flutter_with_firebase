@@ -319,14 +319,23 @@ class _view_full_recordState extends State<view_full_record> {
                                       fontFamily: 'Shrikhand',
                                     ),
                                   ),
-                                  Text(
-                                    "Shop status: ${shopslist[index]['Shop status']}",
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontFamily: 'Shrikhand',
-                                    ),
-                                  ),
+                                  shopslist[index]["Shop status"] == status
+                                      ? const Text(
+                                          "Shop status: Unblocked",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                            fontFamily: 'Shrikhand',
+                                          ),
+                                        )
+                                      : const Text(
+                                          "Shop status: blocked",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                            fontFamily: 'Shrikhand',
+                                          ),
+                                        ),
                                   // shopslist[index]['Shop status'] == status
                                   //     ? const Text(
                                   //         "Status: unblocked",
@@ -457,7 +466,7 @@ class _view_full_recordState extends State<view_full_record> {
 
                                                           // controller: _contact,
                                                           initialValue:
-                                                              '0${record["Contact"]}',
+                                                              '${record["Contact"]}',
                                                           decoration:
                                                               const InputDecoration(
                                                             labelText:
@@ -465,12 +474,21 @@ class _view_full_recordState extends State<view_full_record> {
                                                             icon: Icon(Icons
                                                                 .message_outlined),
                                                           ),
-                                                          validator: (value) =>
-                                                              value != null &&
-                                                                      value.length <
-                                                                          10
-                                                                  ? 'Enter contact without 0'
-                                                                  : null,
+                                                          validator: (value) {
+                                                            String pattern =
+                                                                r'(^(?:[+0]9)?[0-9]{11}$)';
+                                                            RegExp regExp =
+                                                                RegExp(pattern);
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Please enter mobile number';
+                                                            } else if (!regExp
+                                                                .hasMatch(
+                                                                    value)) {
+                                                              return 'Please enter valid mobile number';
+                                                            }
+                                                            return null;
+                                                          },
                                                           onSaved: (val) {
                                                             record["Contact"] =
                                                                 val;

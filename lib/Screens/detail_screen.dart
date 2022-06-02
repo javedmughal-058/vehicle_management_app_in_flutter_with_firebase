@@ -190,10 +190,18 @@ class _detail_screenState extends State<detail_screen> {
                                           ),
                                           autovalidateMode: AutovalidateMode
                                               .onUserInteraction,
-                                          validator: (value) =>
-                                              value != null && value.length < 11
-                                                  ? 'Enter atlest 11 characters'
-                                                  : null,
+                                          validator: (value) {
+                                            String pattern =
+                                                r'(^(?:[+0]9)?[0-9]{11}$)';
+                                            RegExp regExp = RegExp(pattern);
+                                            if (value!.isEmpty) {
+                                              return 'Please enter mobile number';
+                                            } else if (!regExp
+                                                .hasMatch(value)) {
+                                              return 'Please enter valid mobile number';
+                                            }
+                                            return null;
+                                          },
                                           onChanged: (String reportercontact) {
                                             getreporterContact(reportercontact);
                                           },
@@ -413,7 +421,7 @@ class _detail_screenState extends State<detail_screen> {
                         onPressed: () {
                           //print(shopkey);
                           FlutterPhoneDirectCaller.callNumber(
-                              '0${singlerecord['Contact']}');
+                              '${singlerecord['Contact']}');
                         },
                         icon: const Icon(Icons.call_rounded),
                         color: Colors.green,

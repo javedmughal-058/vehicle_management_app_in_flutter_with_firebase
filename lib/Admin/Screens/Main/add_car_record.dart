@@ -311,9 +311,16 @@ class _BikeRecordState extends State<BikeRecord> {
                         borderRadius: BorderRadius.circular(15),
                       )),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) => value != null && value.length < 11
-                      ? 'Enter atlest 11 characters'
-                      : null,
+                  validator: (value) {
+                    String pattern = r'(^(?:[+0]9)?[0-9]{11}$)';
+                    RegExp regExp = RegExp(pattern);
+                    if (value!.isEmpty) {
+                      return 'Please enter mobile number';
+                    } else if (!regExp.hasMatch(value)) {
+                      return 'Please enter valid mobile number';
+                    }
+                    return null;
+                  },
                   onChanged: (String contact) {
                     getOwnerContact(contact);
                   },
