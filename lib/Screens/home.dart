@@ -31,7 +31,7 @@ class _homeState extends State<home> {
         .collection("shops")
         .where("Shop status", isEqualTo: true)
         .where("Shop Rating", whereIn: [4, 5])
-        //.orderBy("Shop Rating", descending: true)
+        //  .orderBy("Shop Rating", descending: true)
         .get()
         .then((querySnapshot) {
           querySnapshot.docs.forEach((result) {
@@ -508,7 +508,7 @@ class _homeState extends State<home> {
                         ),
                       )),
         const SizedBox(
-          height: 80,
+          height: 10,
         ),
       ],
     );

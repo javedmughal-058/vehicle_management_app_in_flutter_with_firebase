@@ -15,6 +15,7 @@ class easysearchbar extends StatefulWidget {
 class _easysearchbarState extends State<easysearchbar> {
   bool record = false;
   bool _pressed = false;
+  bool _loading = false;
   TextEditingController _searchController = TextEditingController();
   List searchshopslist = [];
 
@@ -29,12 +30,12 @@ class _easysearchbarState extends State<easysearchbar> {
       searchtxt = searchtxt.toLowerCase();
     });
     searchshopslist = [];
+    _loading = true;
     dynamic newresult = await FirebaseFirestore.instance
         .collection("shops")
-        .where("Service", isEqualTo: searchValue)
+        .where("Service", isEqualTo: searchtxt)
         .where("Shop status", isEqualTo: true)
-        //.where("Shop Rating", isGreaterThanOrEqualTo: 4)
-        //.orderBy("Shop Rating", descending: true)
+        .orderBy("Shop Rating", descending: true)
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
@@ -50,7 +51,7 @@ class _easysearchbarState extends State<easysearchbar> {
         } else if (searchshopslist.isNotEmpty) {
           if (mounted) {
             record = false;
-
+            _loading = false;
             setState(() {});
           }
         }
@@ -64,11 +65,14 @@ class _easysearchbarState extends State<easysearchbar> {
       searchtxt = searchtxt.toLowerCase();
     });
     searchshopslist = [];
+    _loading = true;
     dynamic newresult = await FirebaseFirestore.instance
         .collection("shops")
-        .where("Service", isEqualTo: searchValue)
+        .where("Service", isEqualTo: searchtxt)
         .where("Shop status", isEqualTo: true)
         .where("Shop Rating", whereIn: [4, 5])
+        //.orderBy("Shop Rating", descending: true)
+
         //.orderBy("Shop Rating", descending: true)
         .get()
         .then((querySnapshot) {
@@ -83,6 +87,7 @@ class _easysearchbarState extends State<easysearchbar> {
               }
             } else if (searchshopslist.isNotEmpty) {
               if (mounted) {
+                _loading = false;
                 setState(() {});
               }
             }
@@ -96,11 +101,14 @@ class _easysearchbarState extends State<easysearchbar> {
       searchtxt = searchtxt.toLowerCase();
     });
     searchshopslist = [];
+    _loading = true;
     dynamic newresult = await FirebaseFirestore.instance
         .collection("shops")
-        .where("Service", isEqualTo: searchValue)
+        .where("Service", isEqualTo: searchtxt)
         .where("Shop status", isEqualTo: true)
         .where("Shop Affordability", whereIn: [8, 9, 10])
+        //.orderBy("Shop Affordability", descending: true)
+
         //.where("Shop Rating", isGreaterThanOrEqualTo: 4)
         //.orderBy("Shop Rating", descending: true)
         .get()
@@ -116,6 +124,7 @@ class _easysearchbarState extends State<easysearchbar> {
               }
             } else if (searchshopslist.isNotEmpty) {
               if (mounted) {
+                _loading = false;
                 setState(() {});
               }
             }
@@ -123,7 +132,7 @@ class _easysearchbarState extends State<easysearchbar> {
         });
   }
 
-  String searchValue = '';
+  // String searchValue = '';
   final List<String> _suggestions = [
     'electrical',
     'mechanical',
@@ -133,6 +142,7 @@ class _easysearchbarState extends State<easysearchbar> {
     'denting and painting',
     'wheel alignment',
     'air conditioner',
+    'battery',
     'wash'
   ];
 
@@ -149,12 +159,13 @@ class _easysearchbarState extends State<easysearchbar> {
     return Scaffold(
         appBar: EasySearchBar(
             backgroundColor: Colors.white,
-            title: Text(""),
+            title: const Text(""),
             onSearch: (value) => setState(() {
-                  searchValue = value;
+                  _searchController.text = value;
                   shoplist();
+
                   _pressed = true;
-                  setState(() {});
+                  //setState(() {});
                 }),
             asyncSuggestions: (value) async => await _fetchSuggestions(value)),
         body: ListView(
@@ -202,150 +213,164 @@ class _easysearchbarState extends State<easysearchbar> {
                       ),
                       Text(
                         '#${searchshopslist.length}',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
                   )
-                : Text(""),
+                : const Text(""),
             const SizedBox(
               height: 5,
             ),
-            record
-                ? const Center(child: const Text("no record found"))
-                : ListView.builder(
-                    physics: const ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: searchshopslist.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        padding: const EdgeInsets.all(4),
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 5, right: 5),
-                          height: 90,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.black,
-                                width: 1.0,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.transparent,
+            record == true
+                ? const Center(child: Text("no record found"))
+                : _loading == true
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ListView.builder(
+                        physics: const ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: searchshopslist.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            padding: const EdgeInsets.all(4),
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 5, right: 5),
+                              height: 90,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.transparent,
 
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //     color: Colors.grey.withOpacity(0.5),
-                            //     spreadRadius: 3,
-                            //     blurRadius: 5,
-                            //     offset: const Offset(
-                            //         0, 3), // changes position of shadow
-                            //   ),
-                            // ]
-                          ),
-                          child: Row(
-                            //mainAxisAlignment: MainAxisAlignment.,
-                            children: [
-                              const SizedBox(
-                                width: 20,
+                                // boxShadow: [
+                                //   BoxShadow(
+                                //     color: Colors.grey.withOpacity(0.5),
+                                //     spreadRadius: 3,
+                                //     blurRadius: 5,
+                                //     offset: const Offset(
+                                //         0, 3), // changes position of shadow
+                                //   ),
+                                // ]
                               ),
-                              const Icon(Icons.home_work_sharp),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              SizedBox(
-                                width: 200.0,
-                                child: Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "${searchshopslist[index]["Shop Name"]}",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      softWrap: false,
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                              child: Row(
+                                //mainAxisAlignment: MainAxisAlignment.,
+                                children: [
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  const Icon(Icons.home_work_sharp),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 200.0,
+                                    child: Column(
                                       children: [
-                                        Text(
-                                          "Shop: ${searchshopslist[index]["type"]}",
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              color: const Color.fromARGB(
-                                                  255, 2, 145, 170),
-                                              fontWeight: FontWeight.bold),
+                                        const SizedBox(
+                                          height: 10,
                                         ),
                                         Text(
-                                          "Service: ${searchshopslist[index]["Service"]}",
+                                          "${searchshopslist[index]["Shop Name"]}",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: false,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text(
+                                              "Shop: ${searchshopslist[index]["type"]}",
+                                              style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: const Color.fromARGB(
+                                                      255, 2, 145, 170),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              "Service: ${searchshopslist[index]["Service"]}",
+                                              style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: const Color.fromARGB(
+                                                      255, 2, 145, 170),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          "Affordability: ${searchshopslist[index]["Shop Affordability"]}",
                                           style: const TextStyle(
                                               fontSize: 12,
-                                              color: const Color.fromARGB(
-                                                  255, 2, 145, 170),
+                                              color: Colors.blueGrey,
                                               fontWeight: FontWeight.bold),
+                                        ),
+                                        RatingBar.builder(
+                                          //glowColor: Colors.amber,
+                                          unratedColor: Colors.amber,
+                                          direction: Axis.horizontal,
+                                          itemCount: searchshopslist[index]
+                                              ['Shop Rating'],
+                                          itemSize: 18.0,
+                                          itemPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 1.0),
+                                          itemBuilder: (context, _) =>
+                                              const Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ),
+                                          onRatingUpdate: (rating) {
+                                            print(rating);
+                                          },
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 5,
+                                  ),
+                                  const Spacer(),
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.arrow_forward_ios_outlined,
+                                      size: 25,
                                     ),
-                                    Text(
-                                      "Affordability: ${searchshopslist[index]["Shop Affordability"]}",
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.blueGrey,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    RatingBar.builder(
-                                      //glowColor: Colors.amber,
-                                      unratedColor: Colors.amber,
-                                      direction: Axis.horizontal,
-                                      itemCount: searchshopslist[index]
-                                          ['Shop Rating'],
-                                      itemSize: 18.0,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 1.0),
-                                      itemBuilder: (context, _) => const Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                      },
-                                    ),
-                                  ],
-                                ),
+                                    color:
+                                        const Color.fromARGB(255, 2, 145, 170),
+                                    onPressed: () {
+                                      //print(affordableshopslist[index].id);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => detail_screen(
+                                                searchshopslist[index].id,
+                                                searchshopslist[index].data()),
+                                          ));
+                                    },
+                                  ),
+                                ],
                               ),
-                              const Spacer(),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_forward_ios_outlined,
-                                  size: 25,
-                                ),
-                                color: const Color.fromARGB(255, 2, 145, 170),
-                                onPressed: () {
-                                  //print(affordableshopslist[index].id);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => detail_screen(
-                                            searchshopslist[index].id,
-                                            searchshopslist[index].data()),
-                                      ));
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                            ),
+                          );
+                        },
+                      ),
+            const SizedBox(
+              height: 10,
+            ),
           ],
         ));
   }
+
+  // void dispose() {
+  //   _searchController.dispose();
+  // }
 }
