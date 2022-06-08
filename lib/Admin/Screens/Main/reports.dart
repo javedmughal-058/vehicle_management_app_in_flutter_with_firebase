@@ -99,13 +99,13 @@ class _reportsState extends State<reports> {
               loading == true
                   ? Center(
                       child: Container(
-                        width: 20,
-                        height: 20,
+                        height: 14,
+                        width: 14,
                         child: const CircularProgressIndicator(
-                          // backgroundColor: Colors.grey,
                           strokeWidth: 3,
+                          backgroundColor: Color.fromARGB(255, 247, 121, 3),
                           valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
                         ),
                       ),
                     )
@@ -161,15 +161,12 @@ class _reportsState extends State<reports> {
                   ),
                 ),
                 child: loading == true
-                    ? Center(
-                        child: Container(
-                          //width: 120,height: 120,
-                          child: const CircularProgressIndicator(
-                            // backgroundColor: Colors.grey,
-                            strokeWidth: 7,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.blue),
-                          ),
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          backgroundColor: Color.fromARGB(255, 247, 121, 3),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
                         ),
                       )
                     : ListView.builder(

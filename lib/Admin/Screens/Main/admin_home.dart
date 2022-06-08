@@ -29,7 +29,13 @@ class admin_home extends StatefulWidget {
 class _admin_homeState extends State<admin_home> {
   bool loading = true;
 
-  int car_m = 0, car_e = 0, car_O = 0, car_dp = 0, car_t = 0, car_s = 0;
+  int car_m = 0,
+      car_e = 0,
+      car_O = 0,
+      car_dp = 0,
+      car_t = 0,
+      car_s = 0,
+      car_air = 0;
   int bike_m = 0, bike_e = 0, bike_O = 0, bike_dp = 0, bike_t = 0, bike_s = 0;
   int battery = 0, wash = 0;
   final listOfServices = [
@@ -101,6 +107,15 @@ class _admin_homeState extends State<admin_home> {
     car_6.docs.forEach((res) {
       //print(res.data());
       car_s++;
+    });
+    var car_7 = await FirebaseFirestore.instance
+        .collection("shops")
+        .where("type", isEqualTo: "car")
+        .where("Service", isEqualTo: "spare parts")
+        .get();
+    car_7.docs.forEach((res) {
+      //print(res.data());
+      car_air++;
     });
 
     var b_1 = await FirebaseFirestore.instance
@@ -404,6 +419,29 @@ class _admin_homeState extends State<admin_home> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      children: [
+                                        //SizedBox(width: 20,),
+                                        Text(
+                                          "air conditioner",
+                                          style: GoogleFonts.merriweather(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const Spacer(),
+                                        Text(
+                                          "$car_air",
+                                          style: GoogleFonts.merriweather(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
@@ -665,7 +703,7 @@ class _admin_homeState extends State<admin_home> {
                         child: loading
                             ? tempWidget
                             : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const SizedBox(
                                     height: 10,

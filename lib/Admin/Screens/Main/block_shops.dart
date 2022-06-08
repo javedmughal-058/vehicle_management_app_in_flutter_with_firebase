@@ -82,12 +82,12 @@ class _block_shopsState extends State<block_shops> {
             loading == true
                 ? Center(
                     child: Container(
-                      width: 20,
-                      height: 20,
+                      height: 14,
+                      width: 14,
                       child: const CircularProgressIndicator(
-                        // backgroundColor: Colors.grey,
                         strokeWidth: 3,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        backgroundColor: Color.fromARGB(255, 247, 121, 3),
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                       ),
                     ),
                   )
@@ -144,15 +144,12 @@ class _block_shopsState extends State<block_shops> {
                   ),
                 ),
                 child: loading == true
-                    ? Center(
-                        child: Container(
-                          //width: 120,height: 120,
-                          child: const CircularProgressIndicator(
-                            // backgroundColor: Colors.grey,
-                            strokeWidth: 7,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.blue),
-                          ),
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          backgroundColor: Color.fromARGB(255, 247, 121, 3),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
                         ),
                       )
                     : ListView.builder(
