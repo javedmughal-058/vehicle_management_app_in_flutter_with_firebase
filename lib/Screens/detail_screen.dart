@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class detail_screen extends StatefulWidget {
   Map shop;
@@ -19,6 +21,71 @@ class detail_screen extends StatefulWidget {
 
 class _detail_screenState extends State<detail_screen> {
   _detail_screenState(this.shopkey, this.singlerecord) {}
+
+  String latitudeData = "";
+  String longitudeData = "";
+  var lat;
+  var lon;
+
+  static const _initial = CameraPosition(
+    target: LatLng(30.0309724, 72.3112265),
+    zoom: 11.5,
+  );
+  //late GoogleMapController _googlemapcontroller;
+  void dispose() {
+    // _googlemapcontroller.dispose();
+    super.dispose();
+  }
+
+  Future<dynamic> getCurrentlocation() async {
+    final geoposition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    if (mounted) {
+      setState(() {
+        latitudeData = '${geoposition.latitude}';
+        longitudeData = '${geoposition.longitude}';
+        lat = double.parse(latitudeData);
+        lon = double.parse(longitudeData);
+        print(latitudeData);
+        print(longitudeData);
+        _marker.add(const Marker(
+          markerId: MarkerId('id-1'),
+          position: LatLng(30.0309724, 72.3112265),
+          //icon: mapMarker,
+          infoWindow: InfoWindow(
+            title: 'COMSATS University Islamabad,\n Vehari Campus',
+            snippet: 'Education Place',
+          ),
+        ));
+        _marker.add(Marker(
+          markerId: const MarkerId('id-2'),
+          position: LatLng(lat, lon),
+          //icon: mapMarker,
+          infoWindow: const InfoWindow(
+            title: 'COMSATS University Islamabad,\n Vehari Campus',
+            snippet: 'Education Place',
+          ),
+        ));
+      });
+    }
+  }
+
+  void initState() {
+    super.initState();
+    getCurrentlocation();
+    //setCustomeMarker();
+  }
+
+  Set<Marker> _marker = {};
+  late BitmapDescriptor mapMarker;
+  void setCustomeMarker() async {
+    mapMarker = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), 'images/location.png');
+  }
+
+  void _onMapCreated(GoogleMapController _googlemapcontroller) {
+    setState(() {});
+  }
 
   late String reporter_name, complaint;
   late double reporter_contact;
@@ -46,10 +113,6 @@ class _detail_screenState extends State<detail_screen> {
 
   getcomplaint(complaintdetail) {
     this.complaint = complaintdetail;
-  }
-
-  void initState() {
-    super.initState();
   }
 
   submitcomplaint() async {
@@ -141,7 +204,7 @@ class _detail_screenState extends State<detail_screen> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             content: Stack(
-                              overflow: Overflow.visible,
+                              //overflow: Overflow.visible,
                               children: <Widget>[
                                 Positioned(
                                   right: -40.0,
@@ -186,13 +249,14 @@ class _detail_screenState extends State<detail_screen> {
                                           controller: r_contact,
                                           decoration: const InputDecoration(
                                             labelText: 'Contact',
+                                            hintText: 'Enter number without 0',
                                             icon: Icon(Icons.phone),
                                           ),
                                           autovalidateMode: AutovalidateMode
                                               .onUserInteraction,
                                           validator: (value) {
                                             String pattern =
-                                                r'(^(?:[+0]9)?[0-9]{11}$)';
+                                                r'(^(?:[+0]9)?[0-9]{10}$)';
                                             RegExp regExp = RegExp(pattern);
                                             if (value!.isEmpty) {
                                               return 'Please enter mobile number';
@@ -375,9 +439,17 @@ class _detail_screenState extends State<detail_screen> {
             ),
           ],
         ),
-        body: ListView(
+        body: Column(
           children: [
-            Image.asset("images/map.jpeg"),
+            Flexible(
+              child: GoogleMap(
+                myLocationButtonEnabled: false,
+                zoomControlsEnabled: false,
+                initialCameraPosition: _initial,
+                onMapCreated: _onMapCreated,
+                markers: _marker,
+              ),
+            ),
             Container(
               decoration: BoxDecoration(
                   // borderRadius: BorderRadius.circular(10),
@@ -421,7 +493,7 @@ class _detail_screenState extends State<detail_screen> {
                         onPressed: () {
                           //print(shopkey);
                           FlutterPhoneDirectCaller.callNumber(
-                              '${singlerecord['Contact']}');
+                              '0${singlerecord['Contact']}');
                         },
                         icon: const Icon(Icons.call_rounded),
                         color: Colors.green,
@@ -476,7 +548,7 @@ class _detail_screenState extends State<detail_screen> {
                       SizedBox(
                           width: 170,
                           child: Text(
-                            '${singlerecord['Contact']}',
+                            '0${singlerecord['Contact']}',
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
