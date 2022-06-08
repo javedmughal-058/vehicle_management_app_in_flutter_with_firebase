@@ -180,6 +180,14 @@ class _BikeRecordState extends State<BikeRecord> {
     "spare parts",
     "air conditioner"
   ];
+  final listOfServices2 = [
+    "mechanical",
+    "oil change",
+    "electrical",
+    "denting and painting",
+    "tire",
+    "spare parts",
+  ];
   final OutdoorServices = ["Yes", "No"];
   final Rating = ["1", "2", "3", "4", "5"];
   final Affordability = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -228,6 +236,7 @@ class _BikeRecordState extends State<BikeRecord> {
                   // getService=(service);
                   setState(() {
                     dropdownValue5 = newValueSelected!;
+                    dropdownValue = 'mechanical';
                   });
                 },
               ),
@@ -300,6 +309,7 @@ class _BikeRecordState extends State<BikeRecord> {
                   decoration: InputDecoration(
                       icon: const Icon(Icons.call),
                       labelText: 'Contact',
+                      hintText: 'Enter number without 0',
                       enabledBorder: OutlineInputBorder(
                         borderSide:
                             const BorderSide(width: 1, color: Colors.black),
@@ -312,7 +322,7 @@ class _BikeRecordState extends State<BikeRecord> {
                       )),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
-                    String pattern = r'(^(?:[+0]9)?[0-9]{11}$)';
+                    String pattern = r'(^(?:[+0]9)?[0-9]{10}$)';
                     RegExp regExp = RegExp(pattern);
                     if (value!.isEmpty) {
                       return 'Please enter mobile number';
@@ -357,97 +367,131 @@ class _BikeRecordState extends State<BikeRecord> {
                 ),
               ),
             ),
-            IgnorePointer(
-              ignoring: enable,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: DropdownButtonFormField(
-                  value: dropdownValue,
-                  icon: const Icon(Icons.keyboard_arrow_down_sharp),
-                  decoration: InputDecoration(
-                    labelText: "Select Service Once at a time",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  items: listOfServices.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? service) {
-                    getdropdownValue(service);
-                    // getService=(service);
-                    setState(() {
-                      dropdownValue = service!;
-                    });
-                  },
-                ),
-              ),
-            ),
-            IgnorePointer(
-              ignoring: enable,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: DropdownButtonFormField(
-                  value: dropdownValue2,
-                  icon: const Icon(Icons.keyboard_arrow_down_sharp),
-                  decoration: InputDecoration(
-                    labelText: "Outdoor Service",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  items: OutdoorServices.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? Outservice) {
-                    getdropdownValue2(Outservice);
-                    // getService=(service);
-                    setState(() {
-                      dropdownValue2 = Outservice!;
-                    });
-                  },
-                ),
-              ),
-            ),
-            IgnorePointer(
-              ignoring: enable,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Center(
-                  child: TextFormField(
-                    controller: price_controller,
+            if (dropdownValue5 == 'car')
+              IgnorePointer(
+                ignoring: enable,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: DropdownButtonFormField(
+                    value: dropdownValue,
+                    icon: const Icon(Icons.keyboard_arrow_down_sharp),
                     decoration: InputDecoration(
-                        icon: const Icon(Icons.currency_rupee),
-                        labelText: 'Rs/km',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(width: 1, color: Colors.black),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(width: 1, color: Colors.blue),
-                          borderRadius: BorderRadius.circular(15),
-                        )),
-                    validator: (value) {
-                      if (enable == false && value!.isEmpty) {
-                        return 'Enter Rs/km';
-                      }
-                      return null;
+                      labelText: "Select Service Once at a time",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    items: listOfServices.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? service) {
+                      getdropdownValue(service);
+                      // getService=(service);
+                      setState(() {
+                        dropdownValue = service!;
+                      });
                     },
-                    onChanged: (String rate) {
-                      getPrice(rate);
+                  ),
+                ),
+              )
+            else if (dropdownValue5 == 'bike')
+              IgnorePointer(
+                ignoring: enable,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: DropdownButtonFormField(
+                    value: dropdownValue,
+                    icon: const Icon(Icons.keyboard_arrow_down_sharp),
+                    decoration: InputDecoration(
+                      labelText: "Select Service Once at a time",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    items: listOfServices2.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? service) {
+                      getdropdownValue(service);
+                      // getService=(service);
+                      setState(() {
+                        dropdownValue = service!;
+                      });
                     },
                   ),
                 ),
               ),
-            ),
+            if (dropdownValue5 == 'bike' || dropdownValue5 == 'car')
+              IgnorePointer(
+                ignoring: enable,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: DropdownButtonFormField(
+                    value: dropdownValue2,
+                    icon: const Icon(Icons.keyboard_arrow_down_sharp),
+                    decoration: InputDecoration(
+                      labelText: "Outdoor Service",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    items: OutdoorServices.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? Outservice) {
+                      getdropdownValue2(Outservice);
+                      // getService=(service);
+                      setState(() {
+                        dropdownValue2 = Outservice!;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            if (dropdownValue5 == 'bike' || dropdownValue5 == 'car')
+              IgnorePointer(
+                ignoring: enable,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Center(
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: price_controller,
+                      decoration: InputDecoration(
+                          icon: const Icon(Icons.currency_rupee),
+                          labelText: 'Rs/km',
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(width: 1, color: Colors.black),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(width: 1, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(15),
+                          )),
+                      validator: (value) {
+                        if (enable == false && value!.isEmpty) {
+                          return 'Enter Rs/km';
+                        }
+                        return null;
+                      },
+                      onChanged: (String rate) {
+                        getPrice(rate);
+                      },
+                    ),
+                  ),
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: DropdownButtonFormField(
