@@ -8,6 +8,8 @@ import 'package:vehicle_maintainance/Screens/detail_screen.dart';
 import 'package:vehicle_maintainance/Screens/view_screen.dart';
 import 'bike.dart';
 import 'car.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 class home extends StatefulWidget {
@@ -388,11 +390,9 @@ class _homeState extends State<home> {
                     ? Center(
                         child: Container(
                           //width: 120,height: 120,
-                          child: const CircularProgressIndicator(
-                            // backgroundColor: Colors.grey,
-                            strokeWidth: 7,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.blue),
+                          child: const SpinKitFadingFour(
+                            color: Color.fromARGB(255, 2, 145, 170),
+                            size: 50.0,
                           ),
                         ),
                       )

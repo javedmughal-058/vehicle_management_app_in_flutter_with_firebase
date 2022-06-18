@@ -19,14 +19,42 @@ class _admin_profileState extends State<admin_profile> {
   final user = FirebaseAuth.instance.currentUser;
   List blockedlist = [];
   List complaintlist = [];
+  List adminRecord = [];
+  Map? admin;
   @override
   void initState() {
     super.initState();
     blockedshoplist();
     complaintshoplist();
+    //fetchadmin();
+  }
+
+  fetchadmin() async {
+    var useremail = user!.email.toString() + " ";
+
+    List admindata = [];
+    await FirebaseFirestore.instance
+        .collection("admin")
+        .where("admin_email", isEqualTo: useremail)
+        .get()
+        .then((value) {
+      value.docs.forEach((Element) {
+        //print(Element.data());
+        admindata.add(Element.data());
+        //print(admindata);
+        if (admindata.isNotEmpty) {
+          first = false;
+          adminRecord = admindata;
+          print(adminRecord);
+        } else {
+          //first = true;
+        }
+      });
+    });
   }
 
   blockedshoplist() async {
+    //print(user!.email);
     List lisofitem = [];
     dynamic newresult = await FirebaseFirestore.instance
         .collection("shops")
@@ -39,6 +67,8 @@ class _admin_profileState extends State<admin_profile> {
       });
     });
     if (lisofitem.isNotEmpty) {
+      first = false;
+
       if (this.mounted) {
         setState(() {});
       }
@@ -61,6 +91,8 @@ class _admin_profileState extends State<admin_profile> {
     });
     if (lisofcomplaint.isNotEmpty) {
       color = true;
+      first = false;
+
       if (this.mounted) {
         setState(() {});
       }
@@ -83,6 +115,7 @@ class _admin_profileState extends State<admin_profile> {
     if (first) {
       complaintshoplist();
       blockedshoplist();
+      fetchadmin();
     }
     return Column(
       // crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +139,7 @@ class _admin_profileState extends State<admin_profile> {
                   height: 30,
                 ),
                 Text(
-                  "Admin Name",
+                  "NAME",
                   style: GoogleFonts.merriweather(
                       fontWeight: FontWeight.bold, fontSize: 18),
                 ),

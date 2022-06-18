@@ -1,20 +1,25 @@
 import 'package:advance_notification/advance_notification.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vehicle_maintainance/Admin/Screens/Authentication/utils.dart';
 import 'package:vehicle_maintainance/Admin/Screens/login/login.dart';
 import 'package:vehicle_maintainance/Admin/components/background.dart';
 import 'package:email_validator/email_validator.dart';
+import '../Main/main_page.dart';
 
 class RegisterScreen extends StatelessWidget {
   final _key = GlobalKey<FormState>();
   final navigatorkey = GlobalKey<NavigatorState>();
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
+  TextEditingController contact = TextEditingController();
   TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    _saveadmin() {}
+
     Future _signup() async {
       // showDialog(
       //     context: context,
@@ -25,6 +30,18 @@ class RegisterScreen extends StatelessWidget {
       try {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: email.text.trim(), password: password.text.trim());
+        String? id;
+        final user = FirebaseAuth.instance.currentUser;
+        DocumentReference dc =
+            FirebaseFirestore.instance.collection("admin").doc(user!.uid);
+        Map<String, dynamic> adminRecord = {
+          "admin_name": name.text,
+          "admin_contact": contact.text,
+          "admin_email": email.text,
+        };
+        dc
+            .set(adminRecord)
+            .whenComplete(() => print("${name.text} Registered"));
       } on FirebaseAuthException catch (e) {
         print(e);
         //Utils.showSnackBar(e.message);
@@ -43,89 +60,108 @@ class RegisterScreen extends StatelessWidget {
               isIcon: true)
           .show(context);
 
-      // navigatorkey.currentState!.popUntil((route) => route.isFirst);
+      //navigatorkey.currentState?.popUntil((route) => route.isFirst);
     }
 
     Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: Background(
-        child: Form(
-          key: _key,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: size.height * 0.01),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: const Text(
-                  "REGISTER",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF2661FA),
-                      fontSize: 36),
-                  textAlign: TextAlign.left,
+    return SafeArea(
+      child: Scaffold(
+        body: Background(
+          child: Form(
+            key: _key,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(height: 10),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: const Text(
+                    "REGISTER",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF2661FA),
+                        fontSize: 36),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-              ),
-              SizedBox(height: size.height * 0.03),
-              Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(horizontal: 40),
-                child: TextFormField(
-                  controller: name,
-                  decoration: const InputDecoration(labelText: "Name"),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Name can\'t be empty';
-                    }
-                    return null;
-                  },
+                const SizedBox(height: 10),
+                Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  child: TextFormField(
+                    controller: name,
+                    decoration: const InputDecoration(labelText: "Name"),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Name can\'t be empty';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-              ),
-              SizedBox(height: size.height * 0.03),
-              Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(horizontal: 40),
-                child: TextFormField(
-                    controller: email,
-                    decoration: const InputDecoration(labelText: "Email"),
-                    validator: (email) =>
-                        email != null && EmailValidator.validate(email)
-                            ? 'Enter a valid email'
-                            : null),
-              ),
-              SizedBox(height: size.height * 0.03),
-              Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(horizontal: 40),
-                child: TextFormField(
-                  controller: password,
-                  decoration: const InputDecoration(labelText: "Password"),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) => value != null && value.length < 6
-                      ? 'Enter atlest 6 characters'
-                      : null,
-                  obscureText: true,
+                const SizedBox(height: 10),
+                Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  child: TextFormField(
+                      controller: email,
+                      decoration: const InputDecoration(labelText: "Email"),
+                      validator: (email) =>
+                          email != null && EmailValidator.validate(email)
+                              ? 'Enter a valid email'
+                              : null),
                 ),
-              ),
-              SizedBox(height: size.height * 0.05),
-              Container(
-                alignment: Alignment.centerRight,
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: RaisedButton(
+                const SizedBox(height: 10),
+                Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  child: TextFormField(
+                    controller: contact,
+                    decoration: const InputDecoration(
+                      labelText: "Contact",
+                      hintText: 'Enter number without 0',
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      String pattern = r'(^(?:[+0]9)?[0-9]{10}$)';
+                      RegExp regExp = RegExp(pattern);
+                      if (value!.isEmpty) {
+                        return 'Please enter mobile number';
+                      } else if (!regExp.hasMatch(value)) {
+                        return 'Please enter valid mobile number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  child: TextFormField(
+                    controller: password,
+                    decoration: const InputDecoration(labelText: "Password"),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) => value != null && value.length < 6
+                        ? 'Enter atlest 6 characters'
+                        : null,
+                    obscureText: true,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                RaisedButton(
                   onPressed: () async {
                     if (_key.currentState!.validate()) {
-                      _signup();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()));
+                      await _signup();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => main_page()));
                       name.clear();
                       email.clear();
                       password.clear();
+                      contact.clear();
                     }
                   },
                   shape: RoundedRectangleBorder(
@@ -150,12 +186,10 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
-              Container(
-                alignment: Alignment.centerRight,
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                child: GestureDetector(
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
                   onTap: () => {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => LoginScreen()))
@@ -167,9 +201,9 @@ class RegisterScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF2661FA)),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

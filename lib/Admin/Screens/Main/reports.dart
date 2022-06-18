@@ -291,7 +291,10 @@ class _reportsState extends State<reports> {
                                                                 Colors.amber,
                                                             direction:
                                                                 Axis.horizontal,
-                                                            itemCount: 5,
+                                                            itemCount:
+                                                                complaintlist[
+                                                                        index][
+                                                                    'Shop Rating'],
                                                             itemSize: 18.0,
                                                             itemPadding:
                                                                 const EdgeInsets
@@ -306,9 +309,7 @@ class _reportsState extends State<reports> {
                                                                   Colors.amber,
                                                             ),
                                                             onRatingUpdate:
-                                                                (rating) {
-                                                              print(rating);
-                                                            },
+                                                                (rating) {},
                                                           ),
                                                         ),
                                                         IconButton(

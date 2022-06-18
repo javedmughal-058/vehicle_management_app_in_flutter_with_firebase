@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'category.dart';
 import 'detail.dart';
@@ -73,21 +74,14 @@ class _carState extends State<car> {
 
   @override
   Widget build(BuildContext context) {
-    Widget tempWidget = const CircularProgressIndicator(
-      strokeWidth: 3,
-      backgroundColor: Color.fromARGB(255, 247, 121, 3),
-      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+    Widget loadingWidget = const SpinKitFadingFour(
+      color: Color.fromARGB(255, 2, 145, 170),
+      size: 50.0,
     );
     if (loading) {
-      tempWidget = const Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 3,
-          backgroundColor: Color.fromARGB(255, 247, 121, 3),
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-        ),
-      );
+      loadingWidget;
     } else {
-      tempWidget = const Center(); //EmptyWidget
+      loadingWidget = const Center(); //EmptyWidget
     }
     return Scaffold(
       appBar: AppBar(
@@ -455,7 +449,7 @@ class _carState extends State<car> {
           SizedBox(
             height: 270,
             child: loading == true
-                ? tempWidget
+                ? loadingWidget
                 : ListView.builder(
                     scrollDirection: Axis.horizontal,
                     physics: const ClampingScrollPhysics(),
@@ -574,7 +568,7 @@ class _carState extends State<car> {
             height: 15,
           ),
           loading == true
-              ? tempWidget
+              ? loadingWidget
               : ListView.builder(
                   physics: const ClampingScrollPhysics(),
                   shrinkWrap: true,

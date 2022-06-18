@@ -29,13 +29,16 @@ class _LoginScreenState extends State<LoginScreen> {
     password.dispose();
   }
 
+  bool loading = true;
+
   Future _login() async {
-    // showDialog(
-    //     context: context,
-    //     barrierDismissible: false,
-    //     builder: (context) => const Center(
-    //           child: CircularProgressIndicator(),
-    //         ));
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text.trim(), password: password.text.trim());
@@ -46,7 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
       print(e);
       //Utils.showSnackBar(e.message);
     }
-    //navigatorkey.currentState!.popUntil((route) => route.isFirst);
+
+    navigatorkey.currentState?.popUntil((route) => route.isFirst);
   }
 
   @override

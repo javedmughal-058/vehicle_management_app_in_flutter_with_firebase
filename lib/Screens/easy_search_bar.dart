@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'detail_screen.dart';
 
@@ -225,7 +226,10 @@ class _easysearchbarState extends State<easysearchbar> {
                 ? const Center(child: Text("no record found"))
                 : _loading == true
                     ? const Center(
-                        child: CircularProgressIndicator(),
+                        child: SpinKitFadingFour(
+                          color: Color.fromARGB(255, 2, 145, 170),
+                          size: 50.0,
+                        ),
                       )
                     : ListView.builder(
                         physics: const ClampingScrollPhysics(),

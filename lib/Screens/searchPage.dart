@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'detail_screen.dart';
 
@@ -458,14 +459,13 @@ class _SearchPageState extends State<SearchPage> {
           color: Colors.white,
         ),
         padding: const EdgeInsets.all(0),
-        child: SizedBox(
-            height: 16,
-            width: 16,
-            child: CircularProgressIndicator(
-              backgroundColor: Color.fromARGB(255, 247, 121, 3),
-              valueColor: new AlwaysStoppedAnimation<Color>(
-                const Color.fromARGB(255, 2, 145, 170),
-              ),
-            )));
+        child: const SizedBox(
+          height: 16,
+          width: 16,
+          child: SpinKitFadingFour(
+            color: Color.fromARGB(255, 2, 145, 170),
+            size: 50.0,
+          ),
+        ));
   }
 }

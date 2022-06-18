@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vehicle_maintainance/Screens/easy_search_bar.dart';
 import 'package:vehicle_maintainance/Screens/searchPage.dart';
@@ -79,11 +80,10 @@ class viewState extends State<view> {
         backgroundColor: const Color.fromARGB(255, 2, 145, 170),
       ),
       body: loading == true
-          ? Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 3,
-                backgroundColor: Color.fromARGB(255, 247, 121, 3),
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+          ? const Center(
+              child: SpinKitFadingFour(
+                color: Color.fromARGB(255, 2, 145, 170),
+                size: 50.0,
               ),
             )
           : ListView(
