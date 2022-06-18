@@ -22,13 +22,16 @@ class detail_screen extends StatefulWidget {
 class _detail_screenState extends State<detail_screen> {
   _detail_screenState(this.shopkey, this.singlerecord) {}
 
+  Set<Marker> _marker = {};
+  late BitmapDescriptor mapMarker, mapMarker2;
+
   String latitudeData = "";
   String longitudeData = "";
-  var lat;
-  var lon;
+  var _cuurentlat, shoplat;
+  var _currentlon, shoplon;
 
   static const _initial = CameraPosition(
-    target: LatLng(30.0309724, 72.3112265),
+    target: LatLng(30.0309724, 72.3412265),
     zoom: 11.5,
   );
   //late GoogleMapController _googlemapcontroller;
@@ -40,30 +43,39 @@ class _detail_screenState extends State<detail_screen> {
   Future<dynamic> getCurrentlocation() async {
     final geoposition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+
+    split = '${singlerecord["Location"]}';
+    var position = split.split(",");
+    print(position);
+
     if (mounted) {
       setState(() {
+        //Current location
         latitudeData = '${geoposition.latitude}';
         longitudeData = '${geoposition.longitude}';
-        lat = double.parse(latitudeData);
-        lon = double.parse(longitudeData);
-        print(latitudeData);
-        print(longitudeData);
-        _marker.add(const Marker(
+        _cuurentlat = double.parse(latitudeData);
+        _currentlon = double.parse(longitudeData);
+        //Shop location
+        shoplat = double.parse(position[0]);
+        shoplon = double.parse(position[1]);
+        // print(latitudeData);
+        // print(longitudeData);
+        _marker.add(Marker(
           markerId: MarkerId('id-1'),
-          position: LatLng(30.0309724, 72.3112265),
-          //icon: mapMarker,
-          infoWindow: InfoWindow(
-            title: 'COMSATS University Islamabad,\n Vehari Campus',
-            snippet: 'Education Place',
+          position: LatLng(shoplat, shoplon),
+          icon: mapMarker2,
+          infoWindow: const InfoWindow(
+            title: 'Shop Location',
+            snippet: 'Destination Place',
           ),
         ));
         _marker.add(Marker(
           markerId: const MarkerId('id-2'),
-          position: LatLng(lat, lon),
-          //icon: mapMarker,
+          position: LatLng(_cuurentlat, _currentlon),
+          icon: mapMarker,
           infoWindow: const InfoWindow(
-            title: 'COMSATS University Islamabad,\n Vehari Campus',
-            snippet: 'Education Place',
+            title: 'Current Location',
+            snippet: 'Place',
           ),
         ));
       });
@@ -73,14 +85,15 @@ class _detail_screenState extends State<detail_screen> {
   void initState() {
     super.initState();
     getCurrentlocation();
-    //setCustomeMarker();
+    setCustomeMarker();
+    //_position();
   }
 
-  Set<Marker> _marker = {};
-  late BitmapDescriptor mapMarker;
   void setCustomeMarker() async {
     mapMarker = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), 'images/location.png');
+        const ImageConfiguration(), 'images/location_map.png');
+    mapMarker2 = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), 'images/location_m.png');
   }
 
   void _onMapCreated(GoogleMapController _googlemapcontroller) {
@@ -150,6 +163,7 @@ class _detail_screenState extends State<detail_screen> {
     });
   }
 
+  late String split;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -204,7 +218,7 @@ class _detail_screenState extends State<detail_screen> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             content: Stack(
-                              //overflow: Overflow.visible,
+                              overflow: Overflow.visible,
                               children: <Widget>[
                                 Positioned(
                                   right: -40.0,
@@ -441,7 +455,8 @@ class _detail_screenState extends State<detail_screen> {
         ),
         body: Column(
           children: [
-            Flexible(
+            Container(
+              constraints: const BoxConstraints(minHeight: 100, maxHeight: 350),
               child: GoogleMap(
                 myLocationButtonEnabled: false,
                 zoomControlsEnabled: false,
@@ -505,9 +520,9 @@ class _detail_screenState extends State<detail_screen> {
               ),
             ),
             Container(
-              color: Colors.black12,
-              padding: const EdgeInsets.all(30),
-              child: Column(
+              padding: const EdgeInsets.all(15),
+              constraints: const BoxConstraints(minHeight: 100, maxHeight: 290),
+              child: ListView(
                 children: [
                   Row(
                     children: [
@@ -523,7 +538,7 @@ class _detail_screenState extends State<detail_screen> {
                           '${singlerecord['Shop Name']}',
                           softWrap: false,
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
+                          maxLines: 4,
                         ),
                       )
                     ],
@@ -721,6 +736,30 @@ class _detail_screenState extends State<detail_screen> {
                           width: 170,
                           child: Text(
                             '${singlerecord['Shop Affordability']}',
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ))
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Divider(
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Location",
+                        style: GoogleFonts.abel(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      const Spacer(),
+                      SizedBox(
+                          width: 170,
+                          child: Text(
+                            '${singlerecord['Location']}',
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
