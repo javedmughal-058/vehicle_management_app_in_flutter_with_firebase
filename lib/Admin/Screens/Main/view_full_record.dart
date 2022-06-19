@@ -688,23 +688,6 @@ class _view_full_recordState extends State<view_full_record> {
                                             fontFamily: 'Shrikhand',
                                           ),
                                         ),
-                                  // shopslist[index]['Shop status'] == status
-                                  //     ? const Text(
-                                  //         "Status: unblocked",
-                                  //         style: TextStyle(
-                                  //           color: Colors.black,
-                                  //           fontSize: 12,
-                                  //           fontFamily: 'Shrikhand',
-                                  //         ),
-                                  //       )
-                                  //     : const Text(
-                                  //         "Status: blocked",
-                                  //         style: TextStyle(
-                                  //           color: Colors.black,
-                                  //           fontSize: 12,
-                                  //           fontFamily: 'Shrikhand',
-                                  //         ),
-                                  //       )
                                 ],
                               ),
                               const Spacer(),

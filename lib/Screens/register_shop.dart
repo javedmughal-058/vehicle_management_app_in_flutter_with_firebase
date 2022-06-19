@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'SendEmail.dart';
 
 class register_shop extends StatefulWidget {
   const register_shop({Key? key}) : super(key: key);
@@ -26,7 +29,7 @@ class _register_shopState extends State<register_shop> {
         .then((QuerySnapshot) {
       QuerySnapshot.docs.forEach((result) {
         // print(result.data());
-        lisofrecord.add(result.data());
+        lisofrecord.add(result);
         if (lisofrecord.isNotEmpty) {
           first == false;
           loading = false;
@@ -132,7 +135,24 @@ class _register_shopState extends State<register_shop> {
                                 Text("${adminlist[index]["admin_email"]}"),
                                 const Spacer(),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    final url =
+                                        'mailto: ${adminlist[index]["admin_email"]}';
+                                    final Uri link = Uri.parse(url);
+
+                                    if (await canLaunchUrl(link)) {
+                                      await launch(url);
+                                    }
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //       builder: (context) => SendEmail(
+                                    //           adminlist[index].id,
+                                    //           adminlist[index].data()
+
+                                    //           ),
+                                    //     ));
+                                  },
                                   icon: const Icon(Icons.mail),
                                   color: Colors.green,
                                   iconSize: 25,
