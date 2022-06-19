@@ -1,119 +1,150 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class register_shop extends StatelessWidget {
+class register_shop extends StatefulWidget {
   const register_shop({Key? key}) : super(key: key);
 
   @override
+  State<register_shop> createState() => _register_shopState();
+}
+
+class _register_shopState extends State<register_shop> {
+  void initState() {
+    super.initState();
+    fetchadmindetail();
+  }
+
+  List adminlist = [];
+  fetchadmindetail() async {
+    List lisofrecord = [];
+    await FirebaseFirestore.instance
+        .collection("admin")
+        .get()
+        .then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((result) {
+        // print(result.data());
+        lisofrecord.add(result.data());
+        if (lisofrecord.isNotEmpty) {
+          first == false;
+          loading = false;
+          if (mounted) {
+            setState(() {});
+          }
+          adminlist = lisofrecord;
+        } else {
+          first = true;
+          if (mounted) {
+            setState(() {});
+          }
+        }
+      });
+    });
+  }
+
+  @override
+  bool first = true;
+  bool loading = true;
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(15),
-      //mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(
-          height: 30,
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          //color:Color(0xFF37474F),
-          height: 40,
-          //color: Colors.amber[100],
-          child: Text(
-            "Register Your Shops",
-            textAlign: TextAlign.center,
-            style: GoogleFonts.merriweather(
-                color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(20),
-          color: Colors.black12,
-          child: Column(
+    if (first) {
+      fetchadmindetail();
+    }
+    return loading == true
+        ? const Center(
+            child: SpinKitFadingFour(
+              color: Color.fromARGB(255, 2, 145, 170),
+              size: 50.0,
+            ),
+          )
+        : ListView(
+            padding: const EdgeInsets.all(15),
+            //mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("Contact Number"),
-              const SizedBox(height: 10),
-              const Divider(
-                thickness: 1,
+              // const SizedBox(
+              //   height: 30,
+              // ),
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                //color:Color(0xFF37474F),
+                height: 40,
+                //color: Colors.amber[100],
+                child: Text(
+                  "Register Your Shops",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.merriweather(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-              Row(
-                children: [
-                  const Icon(Icons.contact_phone_outlined),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text("Muhammad Abdullah"),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      FlutterPhoneDirectCaller.callNumber("03062834710");
-                    },
-                    icon: const Icon(Icons.call_rounded),
-                    color: Colors.green,
-                    iconSize: 25,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(Icons.contact_phone_outlined),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text("Muhammad Javed"),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      FlutterPhoneDirectCaller.callNumber("03024716341");
-                    },
-                    icon: const Icon(Icons.call_rounded),
-                    color: Colors.green,
-                    iconSize: 25,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              const Divider(
-                thickness: 1,
-              ),
-              const SizedBox(height: 10),
-              const Text("E-mail us"),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  const Icon(Icons.contact_mail_outlined),
-                  const SizedBox(width: 10),
-                  const Text("chabdullah7650@gmail.com"),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.mail),
-                    color: Colors.green,
-                    iconSize: 25,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(Icons.contact_mail_outlined),
-                  const SizedBox(width: 10),
-                  const Text("javedmughal609@gmail.com"),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.mail),
-                    color: Colors.green,
-                    iconSize: 25,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
+              Container(
+                //padding: const EdgeInsets.all(10),
+                constraints: const BoxConstraints(
+                    minHeight: 100, minWidth: double.infinity, maxHeight: 570),
+                child: ListView.builder(
+                    itemCount: adminlist.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.black,
+                              width: 1.0,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.transparent,
+                        ),
+                        padding: const EdgeInsets.all(5),
+                        margin: EdgeInsets.all(5),
+                        // color: Colors.black12,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.person),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text("${adminlist[index]["admin_name"]}"),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: () {
+                                    FlutterPhoneDirectCaller.callNumber(
+                                        "0${adminlist[index]["admin_contact"]}");
+                                  },
+                                  icon: const Icon(Icons.call_rounded),
+                                  color: Colors.green,
+                                  iconSize: 25,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            const Text(
+                              "E-mail us",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 5),
+                            Row(
+                              children: [
+                                const Icon(Icons.contact_mail_outlined),
+                                const SizedBox(width: 5),
+                                Text("${adminlist[index]["admin_email"]}"),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.mail),
+                                  color: Colors.green,
+                                  iconSize: 25,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
               ),
             ],
-          ),
-        )
-      ],
-    );
+          );
   }
 }
