@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -136,22 +137,22 @@ class _register_shopState extends State<register_shop> {
                                 const Spacer(),
                                 IconButton(
                                   onPressed: () async {
-                                    final url =
-                                        'mailto: ${adminlist[index]["admin_email"]}';
-                                    final Uri link = Uri.parse(url);
+                                    // final url =
+                                    //     'mailto: ${adminlist[index]["admin_email"]}';
+                                    // final Uri link = Uri.parse(url);
 
-                                    if (await canLaunchUrl(link)) {
-                                      await launch(url);
-                                    }
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //       builder: (context) => SendEmail(
-                                    //           adminlist[index].id,
-                                    //           adminlist[index].data()
-
-                                    //           ),
-                                    //     ));
+                                    // if (await canLaunchUrl(link)) {
+                                    //   await launch(url);
+                                    // } else {
+                                    //   debugPrint("Error, Email not fetched");
+                                    // }
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SendEmail(
+                                              adminlist[index].id,
+                                              adminlist[index].data()),
+                                        ));
                                   },
                                   icon: const Icon(Icons.mail),
                                   color: Colors.green,

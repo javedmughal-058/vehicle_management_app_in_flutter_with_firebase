@@ -22,17 +22,31 @@ class _SendEmailState extends State<SendEmail> {
     required String subject,
     required String message,
   }) async {
-    final Uri mail = Uri.parse(toEmail);
+    // final Uri mail = Uri.parse(toEmail);
 
-    final Uri subdata = Uri.parse(subject);
-    final Uri messagedata = Uri.parse(message);
+    // final Uri subdata = Uri.parse(subject);
+    // final Uri messagedata = Uri.parse(message);
 
-    final url = 'mailto: $mail?subject=$subdata&body=$messagedata';
-    final Uri link = Uri.parse(url);
+    // final url = 'mailto: $mail?subject=$subdata&body=$messagedata';
 
-    if (await canLaunchUrl(link)) {
-      await launch(url);
+    final Uri email = Uri(
+      scheme: 'mailto',
+      path: singleadmin["admin_email"],
+      query: 'subject=' +
+          Uri.encodeComponent(subject) +
+          'message' +
+          Uri.encodeComponent(message),
+    );
+    if (await canLaunchUrl(email)) {
+      await launchUrl(email);
+    } else {
+      debugPrint("Error, Email not fetched");
     }
+    // final Uri link = Uri.parse(url);
+
+    // if (await canLaunchUrl(link)) {
+    //   await launch(url);
+    // }
   }
 
   @override
@@ -107,17 +121,51 @@ class _SendEmailState extends State<SendEmail> {
                     primary: const Color.fromARGB(255, 2, 145, 170),
                     minimumSize: const Size.fromHeight(40),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      SendMail(
-                        toEmail: singleadmin["admin_email"],
-                        subject: subject.text,
-                        message: message.text,
+                      String subjectdata = subject.text;
+                      String messagedata = message.text;
+                      final Uri email = Uri(
+                        scheme: 'mailto',
+                        path: singleadmin["admin_email"],
+                        query: 'subject=' +
+                            Uri.encodeComponent(subjectdata) +
+                            'message' +
+                            Uri.encodeComponent(messagedata),
                       );
+                      if (await canLaunchUrl(email)) {
+                        await launchUrl(email);
+                      } else {
+                        debugPrint("Error, Email not fetched");
+                      }
+                      // SendMail(
+                      //   toEmail: singleadmin["admin_email"],
+                      //   subject: subject.text,
+                      //   message: message.text,
+                      // );
                     }
                   },
                   child: const Text(
-                    "Send",
+                    "Send E-mail",
+                    style: TextStyle(fontSize: 20),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color.fromARGB(255, 2, 145, 170),
+                    minimumSize: const Size.fromHeight(40),
+                  ),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      String mess = message.text;
+                      launch(
+                          'sms: 0$singleadmin["admin_contact"]?body=${Uri.encodeComponent(mess)}');
+                    }
+                  },
+                  child: const Text(
+                    "Send SMS",
                     style: TextStyle(fontSize: 20),
                   )),
             ),
