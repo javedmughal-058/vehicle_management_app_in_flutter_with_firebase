@@ -1,6 +1,7 @@
 import 'package:advance_notification/advance_notification.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -139,6 +140,24 @@ class _view_full_recordState extends State<view_full_record> {
         .doc(shopkey)
         .delete()
         .then((_) {
+      const AdvanceSnackBar(
+              message: "Successfully deleted record",
+              duration: Duration(seconds: 2),
+              child: Padding(
+                padding: EdgeInsets.only(left: 2),
+                child: Icon(
+                  Icons.all_inbox,
+                  color: Colors.red,
+                  size: 25,
+                ),
+              ),
+              isIcon: true)
+          .show(context);
+    }).catchError((error) => print('Delete failed: $error'));
+  }
+
+  void _deleteAll() {
+    FirebaseFirestore.instance.collection("shops").doc().delete().then((_) {
       //print("success!");
     }).catchError((error) => print('Delete failed: $error'));
   }
@@ -223,23 +242,6 @@ class _view_full_recordState extends State<view_full_record> {
             );
           },
         ),
-        actions: [
-          PopupMenuButton(
-            icon: const Icon(
-                Icons.more_vert), //don't specify icon if you want 3 dot menu
-            color: Colors.white,
-            itemBuilder: (context) => [
-              const PopupMenuItem<int>(
-                value: 0,
-                child: Text(
-                  "Delete all record",
-                  style: TextStyle(color: Colors.indigo),
-                ),
-              ),
-            ],
-            onSelected: (item) {},
-          ),
-        ],
         title: Row(
           children: [
             Text("$record_name records"),
@@ -1240,26 +1242,58 @@ class _view_full_recordState extends State<view_full_record> {
                                 color: Colors.red,
                                 onPressed: () {
                                   //print(shopslist[index]);
-
-                                  setState(() {
-                                    loading = true;
-                                    _delete(shopkeys[index]);
-                                    loading == false
-                                        ? Center(
-                                            child: Container(
-                                              //width: 120,height: 120,
-                                              child:
-                                                  const CircularProgressIndicator(
-                                                // backgroundColor: Colors.grey,
-                                                strokeWidth: 7,
-                                                valueColor:
-                                                    AlwaysStoppedAnimation<
-                                                        Color>(Colors.blue),
-                                              ),
-                                            ),
-                                          )
-                                        : fetchdatalist();
-                                  });
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                            title: const Text("Delete shop"),
+                                            content: const Text(
+                                                "Do you want to delete this shop",
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                            actions: [
+                                              FlatButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text("No",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.white))),
+                                              FlatButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      loading = true;
+                                                      _delete(shopkeys[index]);
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      loading == false
+                                                          ? Center(
+                                                              child: Container(
+                                                                //width: 120,height: 120,
+                                                                child:
+                                                                    const CircularProgressIndicator(
+                                                                  // backgroundColor: Colors.grey,
+                                                                  strokeWidth:
+                                                                      7,
+                                                                  valueColor: AlwaysStoppedAnimation<
+                                                                          Color>(
+                                                                      Colors
+                                                                          .blue),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : fetchdatalist();
+                                                    });
+                                                  },
+                                                  child: const Text("Yes",
+                                                      style: TextStyle(
+                                                          color: Colors.red))),
+                                            ],
+                                            elevation: 24.0,
+                                            backgroundColor: Colors.indigo);
+                                      });
 
                                   //Navigator.push(context, MaterialPageRoute(builder: (context)=> detail(type,"Electrical"),));
                                 },

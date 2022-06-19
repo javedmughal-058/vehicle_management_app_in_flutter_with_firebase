@@ -17,6 +17,12 @@ class _view_recordState extends State<view_record> {
   int batteryshops = 0;
   bool first = true;
   bool loading = true;
+  void _deleteAll() {
+    FirebaseFirestore.instance.collection("shops").doc().delete().then((_) {
+      print("Deleted success!");
+    }).catchError((error) => print('Delete failed: $error'));
+  }
+
   void counter() async {
     carshops = 0;
     bikeshops = 0;
@@ -105,6 +111,36 @@ class _view_recordState extends State<view_record> {
             );
           },
         ),
+        actions: [
+          PopupMenuButton(
+            //  color: Colors.yellowAccent,
+            elevation: 20,
+
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: [
+                    const Icon(
+                      Icons.report_problem,
+                      color: Colors.redAccent,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text("Delete All Record"),
+                  ],
+                ),
+                value: 1,
+              ),
+            ],
+            onSelected: (value) async {
+              _deleteAll();
+              setState(() {});
+            },
+          ),
+        ],
       ),
       body: loading == true
           ? tempWidget
