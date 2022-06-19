@@ -34,7 +34,7 @@ class _bikeState extends State<bike> {
         .collection("shops")
         .where("type", isEqualTo: type)
         .where("Shop status", isEqualTo: true)
-        .where("Shop Rating", whereIn: [4, 5])
+        .where("Shop Rating", whereIn: [5])
         //.orderBy("Shop Rating", descending: true)
         .get()
         .then((querySnapshot) {

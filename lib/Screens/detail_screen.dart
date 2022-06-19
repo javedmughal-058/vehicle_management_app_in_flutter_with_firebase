@@ -32,7 +32,7 @@ class _detail_screenState extends State<detail_screen> {
 
   static const _initial = CameraPosition(
     target: LatLng(30.0309724, 72.3412265),
-    zoom: 11.5,
+    zoom: 10.5,
   );
   //late GoogleMapController _googlemapcontroller;
   void dispose() {
@@ -313,13 +313,24 @@ class _detail_screenState extends State<detail_screen> {
                                         child: Row(
                                           children: [
                                             RaisedButton(
-                                                child: const Text("Cancel"),
+                                                color: Colors.red,
+                                                child: const Text(
+                                                  "Cancel",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                 }),
                                             const Spacer(),
                                             RaisedButton(
-                                              child: const Text("Submit"),
+                                              child: const Text(
+                                                "Submit",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              color: const Color.fromARGB(
+                                                  255, 2, 145, 170),
                                               onPressed: () {
                                                 if (_formKey.currentState!
                                                     .validate()) {
@@ -418,6 +429,8 @@ class _detail_screenState extends State<detail_screen> {
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: RaisedButton(
+                                            color: const Color.fromARGB(
+                                                255, 2, 145, 170),
                                             child: const Text("Submit"),
                                             onPressed: () {
                                               Navigator.of(context).pop();
@@ -541,33 +554,6 @@ class _detail_screenState extends State<detail_screen> {
                           maxLines: 4,
                         ),
                       )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Divider(
-                    thickness: 1,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Contact",
-                        style: GoogleFonts.abel(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      const Spacer(),
-                      SizedBox(
-                          width: 170,
-                          child: Text(
-                            '0${singlerecord['Contact']}',
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ))
                     ],
                   ),
                   const SizedBox(
@@ -736,30 +722,6 @@ class _detail_screenState extends State<detail_screen> {
                           width: 170,
                           child: Text(
                             '${singlerecord['Shop Affordability']}',
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ))
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Divider(
-                    thickness: 1,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Location",
-                        style: GoogleFonts.abel(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      const Spacer(),
-                      SizedBox(
-                          width: 170,
-                          child: Text(
-                            '${singlerecord['Location']}',
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,

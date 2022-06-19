@@ -36,22 +36,13 @@ class _mapState extends State<map> {
         lon = double.parse(longitudeData);
         print(latitudeData);
         print(longitudeData);
-        _marker.add(const Marker(
-          markerId: MarkerId('id-1'),
-          position: LatLng(30.0309724, 72.3112265),
-          //icon: mapMarker,
-          infoWindow: InfoWindow(
-            title: 'COMSATS University Islamabad,\n Vehari Campus',
-            snippet: 'Education Place',
-          ),
-        ));
         _marker.add(Marker(
-          markerId: const MarkerId('id-2'),
+          markerId: const MarkerId('id-1'),
           position: LatLng(lat, lon),
-          //icon: mapMarker,
+          icon: mapMarker,
           infoWindow: const InfoWindow(
-            title: 'COMSATS University Islamabad,\n Vehari Campus',
-            snippet: 'Education Place',
+            title: 'Your Current Location',
+            snippet: 'Place',
           ),
         ));
       });
@@ -61,14 +52,16 @@ class _mapState extends State<map> {
   void initState() {
     super.initState();
     getCurrentlocation();
-    //setCustomeMarker();
+    setCustomeMarker();
   }
 
   Set<Marker> _marker = {};
-  late BitmapDescriptor mapMarker;
+  late BitmapDescriptor mapMarker, mapMarker2;
   void setCustomeMarker() async {
     mapMarker = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), 'images/location.png');
+        const ImageConfiguration(), 'images/location_map.png');
+    mapMarker2 = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), 'images/location_m.png');
   }
 
   void _onMapCreated(GoogleMapController _googlemapcontroller) {
