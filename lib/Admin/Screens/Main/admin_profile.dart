@@ -20,7 +20,7 @@ class _admin_profileState extends State<admin_profile> {
   List blockedlist = [];
   List complaintlist = [];
   List adminRecord = [];
-  Map? admin;
+  //Map admin={};
   @override
   void initState() {
     super.initState();
@@ -29,7 +29,7 @@ class _admin_profileState extends State<admin_profile> {
     //fetchadmin();
   }
 
-  fetchadmin() async {
+  Future<bool> fetchadmin() async {
     var useremail = user!.email.toString() + " ";
 
     List admindata = [];
@@ -51,6 +51,7 @@ class _admin_profileState extends State<admin_profile> {
         }
       });
     });
+    return true;
   }
 
   blockedshoplist() async {
@@ -115,186 +116,202 @@ class _admin_profileState extends State<admin_profile> {
     if (first) {
       complaintshoplist();
       blockedshoplist();
-      fetchadmin();
     }
-    return Column(
-      // crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.black12,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Image.asset("images/admin.png"),
-                  )),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+    return FutureBuilder(
+        future: fetchadmin(),
+        builder: ((context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      child: CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.black12,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.asset("images/admin.png"),
+                          )),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "${adminRecord[0]["admin_name"]}",
+                          style: GoogleFonts.merriweather(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        FlatButton(
+                          onPressed: () => {},
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            // ignore: prefer_const_literals_to_create_immutables
+                            children: [
+                              Text("Login as"),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Text("${user!.email}"),
+                const Divider(
+                  thickness: 2,
+                ),
                 const SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
-                Text(
-                  "NAME",
-                  style: GoogleFonts.merriweather(
-                      fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                FlatButton(
-                  onPressed: () => {},
+                Container(
+                  padding: const EdgeInsets.all(15),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      Text("Login as"),
+                      FlatButton(
+                          onPressed: () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (c) => const block_shops())),
+                              },
+                          child: Row(
+                            children: [
+                              const Icon(Icons.block_rounded),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Row(
+                                children: [
+                                  const Text("Blocked"),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "(${blockedlist.length})",
+                                    style: const TextStyle(
+                                        color: Colors.indigo,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              const Icon(Icons.navigate_next)
+                            ],
+                          )),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      FlatButton(
+                          onPressed: () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (c) => const reports())),
+                              },
+                          child: Row(
+                            children: [
+                              color == true
+                                  ? Stack(
+                                      children: [
+                                        Icon(
+                                          Icons.notifications_active_outlined,
+                                          color: Colors.red,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                                color: Colors.red,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20))),
+                                            //padding: EdgeInsets.fromLTRB(4, 0,1, 0),
+                                            child: Center(
+                                              child: Text(
+                                                "${complaintlist.length}",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ),
+                                            height: 14,
+                                            width: 14,
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  : const Icon(
+                                      Icons.notifications_active_outlined),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              const Text("Requests"),
+                              const Spacer(),
+                              const Icon(Icons.navigate_next)
+                            ],
+                          )),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      FlatButton(
+                          onPressed: () => {},
+                          child: Row(
+                            // ignore: prefer_const_literals_to_create_immutables
+                            children: [
+                              const Icon(Icons.settings),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              const Text("Setting"),
+                              const Spacer(),
+                              const Icon(Icons.navigate_next)
+                            ],
+                          )),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      FlatButton(
+                          onPressed: () => {
+                                FirebaseAuth.instance.signOut(),
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LoginScreen(),
+                                    ))
+                              },
+                          child: Row(
+                            children: [
+                              const Icon(Icons.logout),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              const Text("Logout"),
+                              const Spacer(),
+                              const Icon(Icons.navigate_next)
+                            ],
+                          )),
+                      const Divider(
+                        thickness: 1,
+                      ),
                     ],
                   ),
-                ),
+                )
               ],
-            ),
-          ],
-        ),
-        Text("${user!.email}"),
-        const Divider(
-          thickness: 2,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            children: [
-              FlatButton(
-                  onPressed: () => {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (c) => const block_shops())),
-                      },
-                  child: Row(
-                    children: [
-                      const Icon(Icons.block_rounded),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Row(
-                        children: [
-                          const Text("Blocked"),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "(${blockedlist.length})",
-                            style: const TextStyle(
-                                color: Colors.indigo,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      const Icon(Icons.navigate_next)
-                    ],
-                  )),
-              const Divider(
-                thickness: 1,
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 3,
+                backgroundColor: Color.fromARGB(255, 247, 121, 3),
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
               ),
-              FlatButton(
-                  onPressed: () => {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (c) => const reports())),
-                      },
-                  child: Row(
-                    children: [
-                      color == true
-                          ? Stack(
-                              children: [
-                                Icon(
-                                  Icons.notifications_active_outlined,
-                                  color: Colors.red,
-                                ),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))),
-                                    //padding: EdgeInsets.fromLTRB(4, 0,1, 0),
-                                    child: Center(
-                                      child: Text(
-                                        "${complaintlist.length}",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ),
-                                    height: 14,
-                                    width: 14,
-                                  ),
-                                )
-                              ],
-                            )
-                          : const Icon(Icons.notifications_active_outlined),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      const Text("Requests"),
-                      const Spacer(),
-                      const Icon(Icons.navigate_next)
-                    ],
-                  )),
-              const Divider(
-                thickness: 1,
-              ),
-              FlatButton(
-                  onPressed: () => {},
-                  child: Row(
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: [
-                      const Icon(Icons.settings),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      const Text("Setting"),
-                      const Spacer(),
-                      const Icon(Icons.navigate_next)
-                    ],
-                  )),
-              const Divider(
-                thickness: 1,
-              ),
-              FlatButton(
-                  onPressed: () => {
-                        FirebaseAuth.instance.signOut(),
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
-                            ))
-                      },
-                  child: Row(
-                    children: [
-                      const Icon(Icons.logout),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      const Text("Logout"),
-                      const Spacer(),
-                      const Icon(Icons.navigate_next)
-                    ],
-                  )),
-              const Divider(
-                thickness: 1,
-              ),
-            ],
-          ),
-        )
-      ],
-    );
+            );
+          }
+        }));
   }
 }
