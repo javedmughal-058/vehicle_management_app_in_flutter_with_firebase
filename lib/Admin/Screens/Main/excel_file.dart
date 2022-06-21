@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:advance_notification/advance_notification.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,12 +28,119 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _loading = false;
+  bool uploaded = false;
+
   final dbRef = FirebaseDatabase.instance.reference().child("Admin");
   String fileType = 'All';
   var fileTypeList = ['json'];
   FilePickerResult? result;
   PlatformFile? file;
   final String f = "";
+  void readExcel(String path) {
+    var list = [];
+    var file = path;
+    var bytes = File(file).readAsBytesSync();
+    var excel = Excel.decodeBytes(bytes);
+
+    for (var table in excel.tables.keys) {
+      print(table); //sheet Name
+      print(excel.tables[table]!.maxCols);
+      print(excel.tables[table]!.maxRows);
+      excel.tables[table]!.removeRow(0);
+      for (var row in excel.tables[table]!.rows) {
+        var items = [];
+        for (var item in row) {
+          try {
+            items.add(item!.value);
+          } catch (e) {}
+        }
+        if (items.isNotEmpty && items[2].toString().length == 10) {
+          list.add(items);
+        }
+      }
+    }
+    upload(list);
+    //print("");
+  }
+
+  void upload(var list) async {
+    var existingShops = [];
+    final ref = FirebaseFirestore.instance;
+
+    await ref.collection('shops').get().then((value) {
+      for (var item in value.docs) {
+        String cont = item['Contact'].toString();
+        String service = item['Service'].toString().toLowerCase();
+        existingShops.add(cont + service);
+      }
+    });
+    //print('abc');
+    int count = 0;
+    for (List item in list) {
+      if (existingShops.isNotEmpty) {
+        String cont = item[2].toString();
+        String service = item[4].toString().toLowerCase();
+        if (!existingShops.contains(cont + service)) {
+          try {
+            await ref.collection('shops').add({
+              'Owner Name': item[0],
+              'Shop Name': item[1],
+              'Contact': item[2],
+              'Location': item[3],
+              'Service': item[4],
+              'Outdoor Services': item[5],
+              'Rate': item[6],
+              'Shop Rating': item[7],
+              'Shop Affordability': item[8],
+              'Shop status': item[9],
+              'type': item[10],
+            });
+            count++;
+            print(count);
+          } catch (e) {
+            print('Error Occured 1');
+          }
+        }
+      } else {
+        try {
+          await ref.collection('shops').add({
+            'Owner Name': item[0],
+            'Shop Name': item[1],
+            'Contact': item[2],
+            'Location': item[3],
+            'Service': item[4],
+            'Outdoor Services': item[5],
+            'Rate': item[6],
+            'Shop Rating': item[7],
+            'Shop Affordability': item[8],
+            'Shop status': item[9],
+            'type': item[10],
+          });
+          count++;
+          print(count);
+        } catch (e) {
+          print('Error Occured 2');
+        }
+      }
+    }
+    setState(() {
+      _loading = false;
+    });
+    const AdvanceSnackBar(
+            message: "Successfully upload excel record",
+            duration: Duration(seconds: 2),
+            child: Padding(
+              padding: EdgeInsets.only(left: 2),
+              child: Icon(
+                Icons.all_inbox,
+                color: Colors.red,
+                size: 25,
+              ),
+            ),
+            isIcon: true)
+        .show(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,37 +202,71 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               if (file != null) fileDetails(file!),
               if (file != null)
-                ElevatedButton(
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(65),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.indigo,
+                      minimumSize: Size.fromHeight(45),
+                      shape: StadiumBorder(),
+                    ),
                     onPressed: () {
-                      const AdvanceSnackBar(
-                              message: "Successfully upload excel record",
-                              duration: Duration(seconds: 5),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 2),
-                                child: Icon(
-                                  Icons.all_inbox,
-                                  color: Colors.red,
-                                  size: 25,
-                                ),
-                              ),
-                              isIcon: true)
-                          .show(context);
-                      Customer.readExcel(file!.path as String);
-                      const AdvanceSnackBar(
-                              message: "Successfully upload excel record",
-                              duration: Duration(seconds: 5),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 2),
-                                child: Icon(
-                                  Icons.all_inbox,
-                                  color: Colors.red,
-                                  size: 25,
-                                ),
-                              ),
-                              isIcon: true)
-                          .show(context);
+                      uploaded = true;
+                      if (_loading) return;
+                      setState(() {
+                        _loading = true;
+                      });
+                      // const AdvanceSnackBar(
+                      //         message: "Successfully upload excel record",
+                      //         duration: Duration(seconds: 5),
+                      //         child: Padding(
+                      //           padding: EdgeInsets.only(left: 2),
+                      //           child: Icon(
+                      //             Icons.all_inbox,
+                      //             color: Colors.red,
+                      //             size: 25,
+                      //           ),
+                      //         ),
+                      //         isIcon: true)
+                      //     .show(context);
+                      readExcel(file!.path as String);
                     },
-                    child: Text('Upload File')),
+                    child: _loading == true
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 25,
+                                width: 25,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 3,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 247, 121, 3),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.blue),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                "Please wait...",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          )
+                        : uploaded == true
+                            ? Text(
+                                'Uploaded',
+                                style: TextStyle(fontSize: 16),
+                              )
+                            : Text(
+                                'Upload File',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                  ),
+                ),
             ],
           ),
         ),
