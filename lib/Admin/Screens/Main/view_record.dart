@@ -17,10 +17,19 @@ class _view_recordState extends State<view_record> {
   int batteryshops = 0;
   bool first = true;
   bool loading = true;
-  void _deleteAll() {
-    FirebaseFirestore.instance.collection("shops").doc().delete().then((_) {
-      print("Deleted success!");
-    }).catchError((error) => print('Delete failed: $error'));
+  void _deleteAll() async {
+    await FirebaseFirestore.instance.collection('shops').get().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
+    // await FirebaseFirestore.instance
+    //     .collection("shops")
+    //     .doc()
+    //     .delete()
+    //     .then((_) {
+    //   print("Deleted success!");
+    // }).catchError((error) => print('Delete failed: $error'));
   }
 
   void counter() async {
@@ -136,8 +145,71 @@ class _view_recordState extends State<view_record> {
               ),
             ],
             onSelected: (value) async {
-              _deleteAll();
-              setState(() {});
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Icon(
+                              Icons.warning,
+                              color: Colors.red,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Alert",
+                                style: TextStyle(color: Colors.black)),
+                          ],
+                        ),
+                        content: const Text(
+                            "Do you want to delete all Records?",
+                            style: TextStyle(color: Colors.black)),
+                        actions: [
+                          FlatButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("No",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black))),
+                          FlatButton(
+                              onPressed: () {
+                                setState(() {
+                                  //loading = true;
+                                  _deleteAll();
+                                  Navigator.of(context).pop();
+                                  // loading == false
+                                  //     ? Center(
+                                  //         child: Container(
+                                  //           //width: 120,height: 120,
+                                  //           child:
+                                  //               const CircularProgressIndicator(
+                                  //             // backgroundColor: Colors.grey,
+                                  //             strokeWidth: 7,
+                                  //             valueColor:
+                                  //                 AlwaysStoppedAnimation<Color>(
+                                  //                     Colors.blue),
+                                  //           ),
+                                  //         ),
+                                  //       )
+                                  //     :
+                                  counter();
+                                });
+                              },
+                              child: const Text("Yes",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red))),
+                        ],
+                        elevation: 24.0,
+                        backgroundColor: Colors.white);
+                  });
             },
           ),
         ],

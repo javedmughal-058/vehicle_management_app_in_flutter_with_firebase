@@ -156,11 +156,11 @@ class _view_full_recordState extends State<view_full_record> {
     }).catchError((error) => print('Delete failed: $error'));
   }
 
-  void _deleteAll() {
-    FirebaseFirestore.instance.collection("shops").doc().delete().then((_) {
-      //print("success!");
-    }).catchError((error) => print('Delete failed: $error'));
-  }
+  // void _deleteAll() {
+  //   FirebaseFirestore.instance.collection("shops").doc().delete().then((_) {
+  //     //print("success!");
+  //   }).catchError((error) => print('Delete failed: $error'));
+  // }
 
   List singleshop = [];
   Future<void> singlerecord(String shopkey) async {
@@ -218,6 +218,11 @@ class _view_full_recordState extends State<view_full_record> {
   //      return false;
   //    }
   // }
+
+  Future<void> _refresh() async {
+    await fetchdatalist();
+  }
+
   bool count = true;
   bool value = true;
   bool pressed = false;
@@ -600,690 +605,739 @@ class _view_full_recordState extends State<view_full_record> {
                               const AlwaysStoppedAnimation<Color>(Colors.blue),
                         ),
                       )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        itemCount: shopslist.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.fromLTRB(13, 5, 13, 13),
-                            height: 85,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
-                                  spreadRadius: 2,
-                                  blurRadius: 7,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Row(children: [
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Text(
-                                "${shopslist[index]['Shop Rating']}",
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 14,
-                                  fontFamily: 'Shrikhand',
-                                ),
-                              ),
-                              const SizedBox(width: 15),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    height: 20,
+                    : RefreshIndicator(
+                        triggerMode: RefreshIndicatorTriggerMode.onEdge,
+                        color: Colors.white,
+                        backgroundColor: Colors.indigo,
+                        //displacement: 100,
+                        strokeWidth: 2,
+                        edgeOffset: 20,
+                        onRefresh: _refresh,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                          itemCount: shopslist.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: const EdgeInsets.fromLTRB(13, 5, 13, 13),
+                              height: 85,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 7,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
                                   ),
-                                  Text(
-                                    "${shopslist[index]['Owner Name']}",
-                                    style: const TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                      fontFamily: 'Shrikhand',
+                                ],
+                              ),
+                              child: Row(children: [
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  "${shopslist[index]['Shop Rating']}",
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 14,
+                                    fontFamily: 'Shrikhand',
+                                  ),
+                                ),
+                                const SizedBox(width: 15),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 20,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 175,
-                                    child: Text(
-                                      "${shopslist[index]['Shop Name']}",
-                                      overflow: TextOverflow.ellipsis,
-                                      softWrap: false,
-                                      maxLines: 1,
+                                    Text(
+                                      "${shopslist[index]['Owner Name']}",
+                                      style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        fontFamily: 'Shrikhand',
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 175,
+                                      child: Text(
+                                        "${shopslist[index]['Shop Name']}",
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: false,
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontFamily: 'Shrikhand',
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      "Service: ${shopslist[index]['Service']}",
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 12,
                                         fontFamily: 'Shrikhand',
                                       ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Service: ${shopslist[index]['Service']}",
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontFamily: 'Shrikhand',
-                                    ),
-                                  ),
-                                  shopslist[index]["Shop status"] == status
-                                      ? const Text(
-                                          "Shop status: Unblocked",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 12,
-                                            fontFamily: 'Shrikhand',
+                                    shopslist[index]["Shop status"] == status
+                                        ? const Text(
+                                            "Shop status: Unblocked",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 12,
+                                              fontFamily: 'Shrikhand',
+                                            ),
+                                          )
+                                        : const Text(
+                                            "Shop status: blocked",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 12,
+                                              fontFamily: 'Shrikhand',
+                                            ),
                                           ),
-                                        )
-                                      : const Text(
-                                          "Shop status: blocked",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 12,
-                                            fontFamily: 'Shrikhand',
-                                          ),
-                                        ),
-                                ],
-                              ),
-                              const Spacer(),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.edit,
-                                  size: 20,
+                                  ],
                                 ),
-                                color: Colors.indigo,
-                                onPressed: () async {
-                                  await singlerecord(shopkeys[index]);
-                                  record = singleshop[0];
+                                const Spacer(),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    size: 20,
+                                  ),
+                                  color: Colors.indigo,
+                                  onPressed: () async {
+                                    await singlerecord(shopkeys[index]);
+                                    record = singleshop[0];
 
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          content: Stack(
-                                            overflow: Overflow.visible,
-                                            children: <Widget>[
-                                              Positioned(
-                                                right: -40.0,
-                                                top: -40.0,
-                                                child: InkResponse(
-                                                  onTap: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const CircleAvatar(
-                                                    child: Icon(Icons.close),
-                                                    backgroundColor: Colors.red,
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            content: Stack(
+                                              overflow: Overflow.visible,
+                                              children: <Widget>[
+                                                Positioned(
+                                                  right: -40.0,
+                                                  top: -40.0,
+                                                  child: InkResponse(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const CircleAvatar(
+                                                      child: Icon(Icons.close),
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              Form(
-                                                key: _formKey,
-                                                autovalidateMode:
-                                                    AutovalidateMode
-                                                        .onUserInteraction,
-                                                child: ListView(
-                                                  // mainAxisSize:
-                                                  //     MainAxisSize.min,
-                                                  children: <Widget>[
-                                                    TextFormField(
-                                                        //controller: _shopname,
-                                                        initialValue:
-                                                            '${record["Shop Name"]}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText:
-                                                              'Shop Name',
-                                                          // icon: Icon(
-                                                          //     Icons.person),
-                                                        ),
-                                                        onSaved: (val) {
-                                                          record["Shop Name"] =
-                                                              val;
-                                                          //print(val);
-                                                        }
-
-                                                        // onChanged: (String
-                                                        //     repotername) {
-                                                        //   getreporterName(
-                                                        //       repotername);
-                                                        // },
-                                                        ),
-                                                    TextFormField(
-                                                        //controller: _ownername,
-                                                        initialValue:
-                                                            '${record["Owner Name"]}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText:
-                                                              'Owner Name',
-                                                          // icon:
-                                                          //     Icon(Icons.phone),
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Enter Name';
+                                                Form(
+                                                  key: _formKey,
+                                                  autovalidateMode:
+                                                      AutovalidateMode
+                                                          .onUserInteraction,
+                                                  child: ListView(
+                                                    // mainAxisSize:
+                                                    //     MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      TextFormField(
+                                                          //controller: _shopname,
+                                                          initialValue:
+                                                              '${record["Shop Name"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Shop Name',
+                                                            // icon: Icon(
+                                                            //     Icons.person),
+                                                          ),
+                                                          onSaved: (val) {
+                                                            record["Shop Name"] =
+                                                                val;
+                                                            //print(val);
                                                           }
-                                                          return null;
-                                                        },
-                                                        onSaved: (val) {
-                                                          record["Owner Name"] =
-                                                              val;
-                                                          //print(val);
-                                                        }
 
-                                                        // onChanged: (String
-                                                        //     reportercontact) {
-                                                        //   getreporterContact(
-                                                        //       reportercontact);
-                                                        // },
-                                                        ),
-                                                    TextFormField(
-
-                                                        // controller: _contact,
-                                                        initialValue:
-                                                            '${record["Contact"]}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText:
-                                                              'Owner Contact',
-                                                          hintText:
-                                                              'Enter number without 0',
-                                                          // icon: Icon(Icons
-                                                          //     .message_outlined),
-                                                        ),
-                                                        validator: (value) {
-                                                          String pattern =
-                                                              r'(^(?:[+0]9)?[0-9]{10}$)';
-                                                          RegExp regExp =
-                                                              RegExp(pattern);
-                                                          if (value!.isEmpty) {
-                                                            return 'Please enter mobile number';
-                                                          } else if (!regExp
-                                                              .hasMatch(
-                                                                  value)) {
-                                                            return 'Please enter valid mobile number';
+                                                          // onChanged: (String
+                                                          //     repotername) {
+                                                          //   getreporterName(
+                                                          //       repotername);
+                                                          // },
+                                                          ),
+                                                      TextFormField(
+                                                          //controller: _ownername,
+                                                          initialValue:
+                                                              '${record["Owner Name"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Owner Name',
+                                                            // icon:
+                                                            //     Icon(Icons.phone),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Enter Name';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["Owner Name"] =
+                                                                val;
+                                                            //print(val);
                                                           }
-                                                          return null;
-                                                        },
-                                                        onSaved: (val) {
-                                                          record["Contact"] =
-                                                              val;
-                                                          //print(val);
-                                                        }
-                                                        // onChanged: (String
-                                                        //     complaintdetail) {
-                                                        //   getcomplaint(
-                                                        //       complaintdetail);
-                                                        // },
-                                                        ),
-                                                    TextFormField(
-                                                        //controller: _location,
-                                                        initialValue:
-                                                            '${record["Location"]}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText: 'Location',
-                                                          // icon: Icon(Icons
-                                                          //     .message_outlined),
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'location';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        onSaved: (val) {
-                                                          record["Location"] =
-                                                              val;
-                                                          //print(val);
-                                                        }
 
-                                                        // onChanged: (String
-                                                        //     complaintdetail) {
-                                                        //   getcomplaint(
-                                                        //       complaintdetail);
-                                                        // },
+                                                          // onChanged: (String
+                                                          //     reportercontact) {
+                                                          //   getreporterContact(
+                                                          //       reportercontact);
+                                                          // },
+                                                          ),
+                                                      TextFormField(
+
+                                                          // controller: _contact,
+                                                          initialValue:
+                                                              '${record["Contact"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Owner Contact',
+                                                            hintText:
+                                                                'Enter number without 0',
+                                                            // icon: Icon(Icons
+                                                            //     .message_outlined),
+                                                          ),
+                                                          validator: (value) {
+                                                            String pattern =
+                                                                r'(^(?:[+0]9)?[0-9]{10}$)';
+                                                            RegExp regExp =
+                                                                RegExp(pattern);
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Please enter mobile number';
+                                                            } else if (!regExp
+                                                                .hasMatch(
+                                                                    value)) {
+                                                              return 'Please enter valid mobile number';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["Contact"] =
+                                                                val;
+                                                            //print(val);
+                                                          }
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
+                                                      TextFormField(
+                                                          //controller: _location,
+                                                          initialValue:
+                                                              '${record["Location"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Location',
+                                                            // icon: Icon(Icons
+                                                            //     .message_outlined),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'location';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["Location"] =
+                                                                val;
+                                                            //print(val);
+                                                          }
+
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
+                                                      TextFormField(
+                                                          readOnly: true,
+
+                                                          //controller: _shoptype,
+                                                          initialValue:
+                                                              '${record["type"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText:
+                                                                'Shop Type',
+                                                            // icon: Icon(Icons
+                                                            //     .message_outlined),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Enter type';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["type"] =
+                                                                val;
+                                                            //print(val);
+                                                          }
+
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
+                                                      const SizedBox(
+                                                        height: 15,
+                                                      ),
+                                                      if (record["type"] ==
+                                                          'bike')
+                                                        DropdownButtonFormField(
+                                                          value:
+                                                              '${record["Service"]}',
+                                                          icon: const Icon(Icons
+                                                              .keyboard_arrow_down_sharp),
+                                                          decoration:
+                                                              InputDecoration(
+                                                            labelText:
+                                                                "Select Service Once at a time",
+                                                            enabledBorder:
+                                                                OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0),
+                                                            ),
+                                                          ),
+                                                          items: listOfServices2
+                                                              .map((String
+                                                                  value) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              value: value,
+                                                              child:
+                                                                  Text(value),
+                                                            );
+                                                          }).toList(),
+                                                          onSaved: (val) {
+                                                            record["Service"] =
+                                                                val;
+                                                            //print(val);
+                                                          },
+                                                          onChanged: (String?
+                                                              service) {
+                                                            getdropdownValue(
+                                                                service);
+
+                                                            // getService=(service);
+                                                            setState(() {
+                                                              dropdownValue =
+                                                                  service!;
+                                                            });
+                                                          },
                                                         ),
-                                                    TextFormField(
+                                                      if (record["type"] ==
+                                                          'car')
+                                                        DropdownButtonFormField(
+                                                          value:
+                                                              '${record["Service"]}',
+                                                          icon: const Icon(Icons
+                                                              .keyboard_arrow_down_sharp),
+                                                          decoration:
+                                                              InputDecoration(
+                                                            labelText:
+                                                                "Select Service Once at a time",
+                                                            enabledBorder:
+                                                                OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0),
+                                                            ),
+                                                          ),
+                                                          items: listOfServices
+                                                              .map((String
+                                                                  value) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              value: value,
+                                                              child:
+                                                                  Text(value),
+                                                            );
+                                                          }).toList(),
+                                                          onSaved: (val) {
+                                                            record["Service"] =
+                                                                val;
+                                                            //print(val);
+                                                          },
+                                                          onChanged: (String?
+                                                              service) {
+                                                            getdropdownValue(
+                                                                service);
+                                                            // getService=(service);
+                                                            setState(() {
+                                                              dropdownValue =
+                                                                  service!;
+                                                            });
+                                                          },
+                                                        ),
+                                                      // Padding(
+                                                      //   padding: const EdgeInsets.all(10.0),
+                                                      //   child: DropdownButtonFormField(
+                                                      //     value: '${record["Outdoor Services"]}',
+                                                      //     icon: const Icon(Icons.keyboard_arrow_down_sharp),
+                                                      //     decoration: InputDecoration(
+                                                      //       labelText: "Outdoor Service",
+                                                      //       enabledBorder: OutlineInputBorder(
+                                                      //         borderRadius: BorderRadius.circular(10.0),
+                                                      //       ),
+                                                      //     ),
+                                                      //     items: OutdoorServices.map((String value) {
+                                                      //       return DropdownMenuItem<String>(
+                                                      //         value: value,
+                                                      //         child: Text(value),
+                                                      //       );
+                                                      //     }).toList(),
+                                                      //     onChanged: (String? Outservice) {
+                                                      //       getdropdownValue3(Outservice);
+                                                      //       // getService=(service);
+                                                      //       setState(() {
+                                                      //         dropdownValue2 = Outservice!;
+                                                      //       });
+                                                      //     },
+                                                      //   ),
+                                                      // ),
+
+                                                      TextFormField(
+                                                          //controller: _outdoor,
+                                                          initialValue:
+                                                              '${record["Outdoor Services"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            hintText: 'yes/no',
+                                                            labelText:
+                                                                'Outdoor Service',
+                                                            icon: Icon(Icons
+                                                                .message_outlined),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Mention yes/no';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["Outdoor Services"] =
+                                                                val;
+                                                            //print(val);
+                                                          }
+
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
+                                                      TextFormField(
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number,
+                                                          //controller: _rate,
+                                                          initialValue:
+                                                              '${record["Rate"]}',
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            labelText: 'Rs/km',
+                                                            icon: Icon(Icons
+                                                                .message_outlined),
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Rs/km';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          onSaved: (val) {
+                                                            record["Rate"] =
+                                                                val;
+                                                            //print(val);
+                                                          }
+
+                                                          // onChanged: (String
+                                                          //     complaintdetail) {
+                                                          //   getcomplaint(
+                                                          //       complaintdetail);
+                                                          // },
+                                                          ),
+                                                      TextFormField(
                                                         readOnly: true,
-
-                                                        //controller: _shoptype,
+                                                        //controller: _rating,
                                                         initialValue:
-                                                            '${record["type"]}',
+                                                            '${record["Shop Rating"]}',
                                                         decoration:
                                                             const InputDecoration(
+                                                          hintText: '(1-5)',
                                                           labelText:
-                                                              'Shop Type',
-                                                          // icon: Icon(Icons
-                                                          //     .message_outlined),
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Enter type';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        onSaved: (val) {
-                                                          record["type"] = val;
-                                                          //print(val);
-                                                        }
-
-                                                        // onChanged: (String
-                                                        //     complaintdetail) {
-                                                        //   getcomplaint(
-                                                        //       complaintdetail);
-                                                        // },
-                                                        ),
-                                                    const SizedBox(
-                                                      height: 15,
-                                                    ),
-                                                    if (record["type"] ==
-                                                        'bike')
-                                                      DropdownButtonFormField(
-                                                        value:
-                                                            '${record["Service"]}',
-                                                        icon: const Icon(Icons
-                                                            .keyboard_arrow_down_sharp),
-                                                        decoration:
-                                                            InputDecoration(
-                                                          labelText:
-                                                              "Select Service Once at a time",
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                          ),
-                                                        ),
-                                                        items: listOfServices2
-                                                            .map(
-                                                                (String value) {
-                                                          return DropdownMenuItem<
-                                                              String>(
-                                                            value: value,
-                                                            child: Text(value),
-                                                          );
-                                                        }).toList(),
-                                                        onSaved: (val) {
-                                                          record["Service"] =
-                                                              val;
-                                                          //print(val);
-                                                        },
-                                                        onChanged:
-                                                            (String? service) {
-                                                          getdropdownValue(
-                                                              service);
-
-                                                          // getService=(service);
-                                                          setState(() {
-                                                            dropdownValue =
-                                                                service!;
-                                                          });
-                                                        },
-                                                      ),
-                                                    if (record["type"] == 'car')
-                                                      DropdownButtonFormField(
-                                                        value:
-                                                            '${record["Service"]}',
-                                                        icon: const Icon(Icons
-                                                            .keyboard_arrow_down_sharp),
-                                                        decoration:
-                                                            InputDecoration(
-                                                          labelText:
-                                                              "Select Service Once at a time",
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                          ),
-                                                        ),
-                                                        items: listOfServices
-                                                            .map(
-                                                                (String value) {
-                                                          return DropdownMenuItem<
-                                                              String>(
-                                                            value: value,
-                                                            child: Text(value),
-                                                          );
-                                                        }).toList(),
-                                                        onSaved: (val) {
-                                                          record["Service"] =
-                                                              val;
-                                                          //print(val);
-                                                        },
-                                                        onChanged:
-                                                            (String? service) {
-                                                          getdropdownValue(
-                                                              service);
-                                                          // getService=(service);
-                                                          setState(() {
-                                                            dropdownValue =
-                                                                service!;
-                                                          });
-                                                        },
-                                                      ),
-                                                    // Padding(
-                                                    //   padding: const EdgeInsets.all(10.0),
-                                                    //   child: DropdownButtonFormField(
-                                                    //     value: '${record["Outdoor Services"]}',
-                                                    //     icon: const Icon(Icons.keyboard_arrow_down_sharp),
-                                                    //     decoration: InputDecoration(
-                                                    //       labelText: "Outdoor Service",
-                                                    //       enabledBorder: OutlineInputBorder(
-                                                    //         borderRadius: BorderRadius.circular(10.0),
-                                                    //       ),
-                                                    //     ),
-                                                    //     items: OutdoorServices.map((String value) {
-                                                    //       return DropdownMenuItem<String>(
-                                                    //         value: value,
-                                                    //         child: Text(value),
-                                                    //       );
-                                                    //     }).toList(),
-                                                    //     onChanged: (String? Outservice) {
-                                                    //       getdropdownValue3(Outservice);
-                                                    //       // getService=(service);
-                                                    //       setState(() {
-                                                    //         dropdownValue2 = Outservice!;
-                                                    //       });
-                                                    //     },
-                                                    //   ),
-                                                    // ),
-
-                                                    TextFormField(
-                                                        //controller: _outdoor,
-                                                        initialValue:
-                                                            '${record["Outdoor Services"]}',
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          hintText: 'yes/no',
-                                                          labelText:
-                                                              'Outdoor Service',
+                                                              'Shop Rating',
                                                           icon: Icon(Icons
                                                               .message_outlined),
                                                         ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Mention yes/no';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        onSaved: (val) {
-                                                          record["Outdoor Services"] =
-                                                              val;
-                                                          //print(val);
-                                                        }
 
                                                         // onChanged: (String
                                                         //     complaintdetail) {
                                                         //   getcomplaint(
                                                         //       complaintdetail);
                                                         // },
-                                                        ),
-                                                    TextFormField(
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        //controller: _rate,
+                                                      ),
+                                                      TextFormField(
+                                                        readOnly: true,
+                                                        //controller:_affordability,
                                                         initialValue:
-                                                            '${record["Rate"]}',
+                                                            '${record['Shop Affordability']}',
                                                         decoration:
                                                             const InputDecoration(
-                                                          labelText: 'Rs/km',
+                                                          hintText: '(1-10)',
+                                                          labelText:
+                                                              'Shop Affordability',
                                                           icon: Icon(Icons
                                                               .message_outlined),
                                                         ),
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return 'Rs/km';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        onSaved: (val) {
-                                                          record["Rate"] = val;
-                                                          //print(val);
-                                                        }
 
                                                         // onChanged: (String
                                                         //     complaintdetail) {
                                                         //   getcomplaint(
                                                         //       complaintdetail);
                                                         // },
+                                                      ),
+                                                      // Padding(
+                                                      //   padding:
+                                                      //       const EdgeInsets.all(
+                                                      //           10.0),
+                                                      //   child:
+                                                      //       DropdownButtonFormField(
+                                                      //     icon: const Icon(Icons
+                                                      //         .keyboard_arrow_down_sharp),
+                                                      //     decoration:
+                                                      //         InputDecoration(
+                                                      //       labelText:
+                                                      //           "Shop Status",
+                                                      //       enabledBorder:
+                                                      //           OutlineInputBorder(
+                                                      //         borderRadius:
+                                                      //             BorderRadius
+                                                      //                 .circular(
+                                                      //                     10.0),
+                                                      //       ),
+                                                      //     ),
+                                                      //     items: shop_status.map(
+                                                      //         (String value) {
+                                                      //       return DropdownMenuItem<
+                                                      //           String>(
+                                                      //         value: value,
+                                                      //         child: Text(value),
+                                                      //       );
+                                                      //     }).toList(),
+                                                      //     onChanged: (String?
+                                                      //         shopstatus) {
+                                                      //       getdropdownValue2(
+                                                      //           shopstatus);
+                                                      //       // getService=(service);
+                                                      //       setState(() {
+                                                      //         record["Shop status"] =
+                                                      //             shopstatus!;
+                                                      //       });
+                                                      //     },
+                                                      //   ),
+                                                      // ),
+                                                      TextFormField(
+                                                        readOnly: true,
+                                                        // controller: _status,
+                                                        initialValue:
+                                                            '${record['Shop status']}',
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          hintText:
+                                                              'true/false',
+                                                          labelText:
+                                                              'Shop Status',
+                                                          icon: Icon(Icons
+                                                              .message_outlined),
                                                         ),
-                                                    TextFormField(
-                                                      readOnly: true,
-                                                      //controller: _rating,
-                                                      initialValue:
-                                                          '${record["Shop Rating"]}',
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        hintText: '(1-5)',
-                                                        labelText:
-                                                            'Shop Rating',
-                                                        icon: Icon(Icons
-                                                            .message_outlined),
+                                                        // validator: (value) {
+                                                        //   if (value!.isEmpty) {
+                                                        //     return 'Enter status';
+                                                        //   }
+                                                        //   return null;
+                                                        // },
+                                                        // onSaved: (val) {
+                                                        //   record["Shop status"] =
+                                                        //       val;
+                                                        //   //print(val);
+                                                        // },
                                                       ),
-
-                                                      // onChanged: (String
-                                                      //     complaintdetail) {
-                                                      //   getcomplaint(
-                                                      //       complaintdetail);
-                                                      // },
-                                                    ),
-                                                    TextFormField(
-                                                      readOnly: true,
-                                                      //controller:_affordability,
-                                                      initialValue:
-                                                          '${record['Shop Affordability']}',
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        hintText: '(1-10)',
-                                                        labelText:
-                                                            'Shop Affordability',
-                                                        icon: Icon(Icons
-                                                            .message_outlined),
+                                                      const SizedBox(
+                                                        height: 10,
                                                       ),
-
-                                                      // onChanged: (String
-                                                      //     complaintdetail) {
-                                                      //   getcomplaint(
-                                                      //       complaintdetail);
-                                                      // },
-                                                    ),
-                                                    // Padding(
-                                                    //   padding:
-                                                    //       const EdgeInsets.all(
-                                                    //           10.0),
-                                                    //   child:
-                                                    //       DropdownButtonFormField(
-                                                    //     icon: const Icon(Icons
-                                                    //         .keyboard_arrow_down_sharp),
-                                                    //     decoration:
-                                                    //         InputDecoration(
-                                                    //       labelText:
-                                                    //           "Shop Status",
-                                                    //       enabledBorder:
-                                                    //           OutlineInputBorder(
-                                                    //         borderRadius:
-                                                    //             BorderRadius
-                                                    //                 .circular(
-                                                    //                     10.0),
-                                                    //       ),
-                                                    //     ),
-                                                    //     items: shop_status.map(
-                                                    //         (String value) {
-                                                    //       return DropdownMenuItem<
-                                                    //           String>(
-                                                    //         value: value,
-                                                    //         child: Text(value),
-                                                    //       );
-                                                    //     }).toList(),
-                                                    //     onChanged: (String?
-                                                    //         shopstatus) {
-                                                    //       getdropdownValue2(
-                                                    //           shopstatus);
-                                                    //       // getService=(service);
-                                                    //       setState(() {
-                                                    //         record["Shop status"] =
-                                                    //             shopstatus!;
-                                                    //       });
-                                                    //     },
-                                                    //   ),
-                                                    // ),
-                                                    TextFormField(
-                                                      readOnly: true,
-                                                      // controller: _status,
-                                                      initialValue:
-                                                          '${record['Shop status']}',
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        hintText: 'true/false',
-                                                        labelText:
-                                                            'Shop Status',
-                                                        icon: Icon(Icons
-                                                            .message_outlined),
-                                                      ),
-                                                      // validator: (value) {
-                                                      //   if (value!.isEmpty) {
-                                                      //     return 'Enter status';
-                                                      //   }
-                                                      //   return null;
-                                                      // },
-                                                      // onSaved: (val) {
-                                                      //   record["Shop status"] =
-                                                      //       val;
-                                                      //   //print(val);
-                                                      // },
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        RaisedButton(
-                                                            color: Colors.red,
+                                                      Row(
+                                                        children: [
+                                                          RaisedButton(
+                                                              color: Colors.red,
+                                                              child: const Text(
+                                                                "Cancel",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              }),
+                                                          const Spacer(),
+                                                          RaisedButton(
+                                                            color:
+                                                                Colors.indigo,
                                                             child: const Text(
-                                                              "Cancel",
+                                                              "Update",
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .white),
                                                             ),
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            }),
-                                                        const Spacer(),
-                                                        RaisedButton(
-                                                          color: Colors.indigo,
-                                                          child: const Text(
-                                                            "Update",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                          onPressed: () async {
-                                                            final form = _formKey
-                                                                .currentState;
-                                                            if (form!
-                                                                .validate()) {
-                                                              form.save();
+                                                            onPressed:
+                                                                () async {
+                                                              final form = _formKey
+                                                                  .currentState;
+                                                              if (form!
+                                                                  .validate()) {
+                                                                form.save();
 
-                                                              await _update(
-                                                                  shopkeys[
-                                                                      index]);
-                                                              //print(singlerecord.keys);
-                                                              setState(() {
-                                                                fetchdatalist();
-                                                              });
-                                                            }
-                                                          },
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
+                                                                await _update(
+                                                                    shopkeys[
+                                                                        index]);
+                                                                //print(singlerecord.keys);
+                                                                setState(() {
+                                                                  fetchdatalist();
+                                                                });
+                                                              }
+                                                            },
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      });
-                                },
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.delete,
-                                  size: 20,
+                                              ],
+                                            ),
+                                          );
+                                        });
+                                  },
                                 ),
-                                color: Colors.red,
-                                onPressed: () {
-                                  //print(shopslist[index]);
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                            title: const Text("Delete shop"),
-                                            content: const Text(
-                                                "Do you want to delete this shop",
-                                                style: TextStyle(
-                                                    color: Colors.white)),
-                                            actions: [
-                                              FlatButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text("No",
-                                                      style: TextStyle(
-                                                          color:
-                                                              Colors.white))),
-                                              FlatButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      loading = true;
-                                                      _delete(shopkeys[index]);
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    size: 20,
+                                  ),
+                                  color: Colors.red,
+                                  onPressed: () {
+                                    //print(shopslist[index]);
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                              title: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const [
+                                                  Icon(
+                                                    Icons.warning,
+                                                    color: Colors.red,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text("Delete shop"),
+                                                ],
+                                              ),
+                                              content: const Text(
+                                                  "Do you want to delete this shop?",
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                              actions: [
+                                                FlatButton(
+                                                    onPressed: () {
                                                       Navigator.of(context)
                                                           .pop();
-                                                      loading == false
-                                                          ? Center(
-                                                              child: Container(
-                                                                //width: 120,height: 120,
+                                                    },
+                                                    child: const Text("No",
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.white))),
+                                                FlatButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        loading = true;
+                                                        _delete(
+                                                            shopkeys[index]);
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        loading == false
+                                                            ? Center(
                                                                 child:
-                                                                    const CircularProgressIndicator(
-                                                                  // backgroundColor: Colors.grey,
-                                                                  strokeWidth:
-                                                                      7,
-                                                                  valueColor: AlwaysStoppedAnimation<
-                                                                          Color>(
-                                                                      Colors
-                                                                          .blue),
+                                                                    Container(
+                                                                  //width: 120,height: 120,
+                                                                  child:
+                                                                      const CircularProgressIndicator(
+                                                                    // backgroundColor: Colors.grey,
+                                                                    strokeWidth:
+                                                                        7,
+                                                                    valueColor: AlwaysStoppedAnimation<
+                                                                            Color>(
+                                                                        Colors
+                                                                            .blue),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            )
-                                                          : fetchdatalist();
-                                                    });
-                                                  },
-                                                  child: const Text("Yes",
-                                                      style: TextStyle(
-                                                          color: Colors.red))),
-                                            ],
-                                            elevation: 24.0,
-                                            backgroundColor: Colors.indigo);
-                                      });
+                                                              )
+                                                            : fetchdatalist();
+                                                      });
+                                                    },
+                                                    child: const Text("Yes",
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.red))),
+                                              ],
+                                              elevation: 24.0,
+                                              backgroundColor: Colors.indigo);
+                                        });
 
-                                  //Navigator.push(context, MaterialPageRoute(builder: (context)=> detail(type,"Electrical"),));
-                                },
-                              ),
-                            ]),
-                          );
-                        },
+                                    //Navigator.push(context, MaterialPageRoute(builder: (context)=> detail(type,"Electrical"),));
+                                  },
+                                ),
+                              ]),
+                            );
+                          },
+                        ),
                       ),
               ),
             ),
