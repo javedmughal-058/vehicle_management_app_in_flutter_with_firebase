@@ -222,151 +222,148 @@ class _easysearchbarState extends State<easysearchbar> {
             const SizedBox(
               height: 5,
             ),
-            record == true
-                ? const Center(child: Text("no record found"))
-                : _loading == true
-                    ? const Center(
+            _loading == true
+                ? record == true
+                    ? const Center(child: Text("no record found"))
+                    : const Center(
                         child: SpinKitFadingFour(
                           color: Color.fromARGB(255, 2, 145, 170),
                           size: 50.0,
                         ),
                       )
-                    : ListView.builder(
-                        physics: const ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: searchshopslist.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            padding: const EdgeInsets.all(4),
-                            child: Container(
-                              margin: const EdgeInsets.only(left: 5, right: 5),
-                              height: 90,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.black,
-                                    width: 1.0,
-                                    style: BorderStyle.solid),
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.transparent,
+                : ListView.builder(
+                    physics: const ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: searchshopslist.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding: const EdgeInsets.all(4),
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 5, right: 5),
+                          height: 90,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.black,
+                                width: 1.0,
+                                style: BorderStyle.solid),
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.transparent,
 
-                                // boxShadow: [
-                                //   BoxShadow(
-                                //     color: Colors.grey.withOpacity(0.5),
-                                //     spreadRadius: 3,
-                                //     blurRadius: 5,
-                                //     offset: const Offset(
-                                //         0, 3), // changes position of shadow
-                                //   ),
-                                // ]
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.5),
+                            //     spreadRadius: 3,
+                            //     blurRadius: 5,
+                            //     offset: const Offset(
+                            //         0, 3), // changes position of shadow
+                            //   ),
+                            // ]
+                          ),
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.,
+                            children: [
+                              const SizedBox(
+                                width: 20,
                               ),
-                              child: Row(
-                                //mainAxisAlignment: MainAxisAlignment.,
-                                children: [
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  const Icon(Icons.home_work_sharp),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  SizedBox(
-                                    width: 200.0,
-                                    child: Column(
+                              const Icon(Icons.home_work_sharp),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              SizedBox(
+                                width: 200.0,
+                                child: Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "${searchshopslist[index]["Shop Name"]}",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
                                         Text(
-                                          "${searchshopslist[index]["Shop Name"]}",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                              "Shop: ${searchshopslist[index]["type"]}",
-                                              style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: const Color.fromARGB(
-                                                      255, 2, 145, 170),
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              "Service: ${searchshopslist[index]["Service"]}",
-                                              style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: const Color.fromARGB(
-                                                      255, 2, 145, 170),
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          "Affordability: ${searchshopslist[index]["Shop Affordability"]}",
+                                          "Shop: ${searchshopslist[index]["type"]}",
                                           style: const TextStyle(
                                               fontSize: 12,
-                                              color: Colors.blueGrey,
+                                              color: const Color.fromARGB(
+                                                  255, 2, 145, 170),
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        RatingBar.builder(
-                                          //glowColor: Colors.amber,
-                                          unratedColor: Colors.amber,
-                                          direction: Axis.horizontal,
-                                          itemCount: searchshopslist[index]
-                                              ['Shop Rating'],
-                                          itemSize: 18.0,
-                                          itemPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 1.0),
-                                          itemBuilder: (context, _) =>
-                                              const Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                          ),
-                                          onRatingUpdate: (rating) {
-                                            print(rating);
-                                          },
+                                        Text(
+                                          "Service: ${searchshopslist[index]["Service"]}",
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              color: const Color.fromARGB(
+                                                  255, 2, 145, 170),
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                      size: 25,
+                                    const SizedBox(
+                                      height: 5,
                                     ),
-                                    color:
-                                        const Color.fromARGB(255, 2, 145, 170),
-                                    onPressed: () {
-                                      //print(affordableshopslist[index].id);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => detail_screen(
-                                                searchshopslist[index].id,
-                                                searchshopslist[index].data()),
-                                          ));
-                                    },
-                                  ),
-                                ],
+                                    Text(
+                                      "Affordability: ${searchshopslist[index]["Shop Affordability"]}",
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.blueGrey,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    RatingBar.builder(
+                                      //glowColor: Colors.amber,
+                                      unratedColor: Colors.amber,
+                                      direction: Axis.horizontal,
+                                      itemCount: searchshopslist[index]
+                                          ['Shop Rating'],
+                                      itemSize: 18.0,
+                                      itemPadding: const EdgeInsets.symmetric(
+                                          horizontal: 1.0),
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      onRatingUpdate: (rating) {
+                                        print(rating);
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                              const Spacer(),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.arrow_forward_ios_outlined,
+                                  size: 25,
+                                ),
+                                color: const Color.fromARGB(255, 2, 145, 170),
+                                onPressed: () {
+                                  //print(affordableshopslist[index].id);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => detail_screen(
+                                            searchshopslist[index].id,
+                                            searchshopslist[index].data()),
+                                      ));
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
             const SizedBox(
               height: 10,
             ),
