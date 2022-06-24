@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vehicle_maintainance/Admin/Screens/Main/reports.dart';
-import 'package:vehicle_maintainance/Admin/Screens/login/login.dart';
+import 'package:vehicle_maintainance/Admin/Screens/Startup/login.dart';
 
 import 'block_shops.dart';
 
@@ -30,12 +30,12 @@ class _admin_profileState extends State<admin_profile> {
   }
 
   Future<bool> fetchadmin() async {
-    var useremail = user!.email.toString() + " ";
+    //var useremail = user!.email.toString() + " ";
 
     List admindata = [];
     await FirebaseFirestore.instance
         .collection("admin")
-        .where("admin_email", isEqualTo: useremail)
+        .where("admin_email", isEqualTo: user!.email)
         .get()
         .then((value) {
       value.docs.forEach((Element) {
@@ -48,6 +48,7 @@ class _admin_profileState extends State<admin_profile> {
           print(adminRecord);
         } else {
           //first = true;
+
         }
       });
     });
@@ -125,43 +126,67 @@ class _admin_profileState extends State<admin_profile> {
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
+                  //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      child: CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.black12,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: Image.asset("images/admin.png"),
-                          )),
-                    ),
+                    // Container(
+                    //   padding: const EdgeInsets.all(20),
+                    //   child: CircleAvatar(
+                    //       radius: 30,
+                    //       backgroundColor: Colors.black12,
+                    //       child: ClipRRect(
+                    //         borderRadius: BorderRadius.circular(50),
+                    //         child: Image.asset("images/admin.png"),
+                    //       )),
+                    // ),
+
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const SizedBox(
                           height: 30,
                         ),
-                        Text(
-                          "${adminRecord[0]["admin_name"]}",
-                          style: GoogleFonts.merriweather(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                        Row(
+                          children: [
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "${adminRecord[0]["admin_name"]}",
+                              style: GoogleFonts.merriweather(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              softWrap: true,
+                            ),
+                          ],
                         ),
-                        FlatButton(
-                          onPressed: () => {},
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              Text("Login as"),
-                            ],
-                          ),
+                        const SizedBox(
+                          height: 20,
                         ),
+                        Text("Login as"),
                       ],
                     ),
                   ],
                 ),
+                const SizedBox(
+                  height: 8,
+                ),
                 Text("${user!.email}"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text(
+                      "Update your profile",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.indigo,
+                        )),
+                  ],
+                ),
                 const Divider(
                   thickness: 2,
                 ),
