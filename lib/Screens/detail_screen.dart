@@ -458,6 +458,8 @@ class _detail_screenState extends State<detail_screen> {
           builder: ((context, snapshot) {
             if (snapshot.hasData) {
               return ListView(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
                 children: [
                   Container(
                     constraints:
