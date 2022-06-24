@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -57,39 +58,61 @@ class _mapState extends State<map> {
     super.initState();
     getCurrentlocation();
     setCustomeMarker();
-    fetchdata();
+    //fetchdata();
   }
 
   Set<String> service = {};
   List fetchshopslist = [];
-  void fetchdata() async {
-    dynamic newresult = FirebaseFirestore.instance
-        .collection("shops")
-        .where("Shop status", isEqualTo: true)
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        //print(result.data());
+  List<String> Services = [
+    'electrical',
+    'mechanical',
+    'oil change',
+    'air conditioner',
+    'spare parts',
+    'denting and painting',
+    'battery',
+    'tire',
+    'wash'
+  ];
+  // void fetchdata() async {
+  //   dynamic newresult = FirebaseFirestore.instance
+  //       .collection("shops")
+  //       .where("Shop status", isEqualTo: true)
+  //       .get()
+  //       .then((querySnapshot) {
+  //     querySnapshot.docs.forEach((result) {
+  //       //print(result.data());
 
-        fetchshopslist.add(result.data());
-        service.add(result.data()['Service']);
-        print(fetchshopslist.length);
-        if (fetchshopslist.isEmpty) {
-          record = true;
-          if (mounted) {
-            setState(() {
-              searchshopslist = [];
-            });
-          }
-        } else if (fetchshopslist.isNotEmpty) {
-          record = false;
-          _loading = false;
-          setState(() {});
-        }
-      });
-    });
-  }
+  //       fetchshopslist.add(result.data());
+  //       service.add(result.data()['Service']);
+  //       print(fetchshopslist.length);
+  //       if (fetchshopslist.isEmpty) {
+  //         record = true;
+  //         if (mounted) {
+  //           setState(() {
+  //             searchshopslist = [];
+  //           });
+  //         }
+  //         CoolAlert.show(
+  //           context: context,
+  //           type: CoolAlertType.info,
+  //           text: "No Shop found",
+  //         );
+  //       } else if (fetchshopslist.isNotEmpty) {
+  //         record = false;
+  //         _loading = false;
+  //         setState(() {});
+  //         if (fetchshopslist.length > 9) {
+  //           count = true;
+  //         } else {
+  //           count = false;
+  //         }
+  //       }
+  //     });
+  //   });
+  // }
 
+  bool count = true;
   Set<Marker> _marker = {};
   late BitmapDescriptor mapMarker, mapMarker2;
   void setCustomeMarker() async {
@@ -115,20 +138,21 @@ class _mapState extends State<map> {
     'battery',
     'wash'
   ];
+
   List searchshopslist = [];
-  bool record = false;
-  bool _pressed = false;
-  bool _loading = false;
+
   late String split;
   var shoplat, shoplon;
 
   Future<dynamic> shoplist(String value) async {
+    searchshopslist = [];
     String searchtxt = _searchController.text.trim();
     setState(() {
       searchtxt = searchtxt.toLowerCase();
     });
-
-    _loading = true;
+    if (searchtxt.isNotEmpty) {
+      value = searchtxt;
+    }
     dynamic newresult = await FirebaseFirestore.instance
         .collection("shops")
         .where("Service", isEqualTo: value)
@@ -139,11 +163,19 @@ class _mapState extends State<map> {
       _marker.clear();
 
       querySnapshot.docs.forEach((result) {
+        searchshopslist.add(result.data());
+        if (searchshopslist.isEmpty) {
+        } else {
+          if (searchshopslist.length > 99) {
+            count = true;
+          } else {
+            count = false;
+          }
+        }
         Mid++;
         split = '${result.data()["Location"]}';
         var position = split.split(",");
-        record = false;
-        _loading = false;
+
         if (mounted) {
           setState(() {
             shoplat = double.parse(position[0]);
@@ -191,7 +223,7 @@ class _mapState extends State<map> {
                   );
                 } else {
                   return const Center(
-                    child: SpinKitFadingFour(
+                    child: SpinKitFadingCircle(
                       color: Color.fromARGB(255, 2, 145, 170),
                       size: 50.0,
                     ),
@@ -218,44 +250,45 @@ class _mapState extends State<map> {
               color: Colors.white,
               child: Row(
                 children: <Widget>[
-                  IconButton(
-                    splashColor: Colors.grey,
-                    icon: const Icon(Icons.menu),
-                    onPressed: () {},
-                  ),
-                  const Expanded(
-                    child: TextField(
+                  if (_searchController.text.isEmpty)
+                    IconButton(
+                      splashColor: Colors.grey,
+                      icon: const Icon(Icons.menu),
+                      onPressed: () {},
+                    ),
+                  if (_searchController.text.isNotEmpty)
+                    IconButton(
+                      splashColor: Colors.grey,
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _searchController.clear();
+                      },
+                    ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _searchController,
                       cursorColor: Colors.black,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.go,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: InputBorder.none,
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 15),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 15),
                           hintText: "Search..."),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(right: 8.0),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const CircleAvatar(
-                        backgroundColor: Color.fromARGB(255, 2, 145, 170),
-                        child: Text(
-                          'Search',
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: IconButton(
+                          onPressed: () async {
+                            await shoplist(_searchController.text);
+                          },
+                          icon: const Icon(Icons.arrow_right))),
                 ],
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 55),
+            padding: const EdgeInsets.only(top: 48),
             child: SizedBox(
               height: 60,
               //width: 200,
@@ -265,11 +298,11 @@ class _mapState extends State<map> {
                     scrollDirection: Axis.horizontal,
                     physics: const ClampingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: service.length,
+                    itemCount: Services.length,
                     itemBuilder: (context, index) => TextButton(
                       onPressed: () async {
                         setState(() {});
-                        await shoplist(fetchshopslist[index]["Service"]);
+                        await shoplist(Services[index]);
                       },
                       child: Container(
                         // color: Colors.red,
@@ -289,7 +322,7 @@ class _mapState extends State<map> {
                             color: Colors.white),
                         child: Center(
                           child: Text(
-                            "${fetchshopslist[index]["Service"]}",
+                            Services[index],
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.black,
@@ -303,6 +336,53 @@ class _mapState extends State<map> {
                   )),
             ),
           ),
+
+          // _loading == true
+          //     ? Center(
+          //         child: Container(
+          //           height: 14,
+          //           width: 14,
+          //           child: const CircularProgressIndicator(
+          //             strokeWidth: 3,
+          //             backgroundColor: Color.fromARGB(255, 247, 121, 3),
+          //             valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+          //           ),
+          //         ),
+          //       )
+          //     : count == false
+          //         ? Padding(
+          //             padding: const EdgeInsets.only(top: 25),
+          //             child: SizedBox(
+          //               height: 70,
+          //               child: Container(
+          //                 //alignment: Alignment.topRight,
+          //                 padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
+          //                 decoration: const BoxDecoration(
+          //                     //color: Colors.white,
+          //                     borderRadius:
+          //                         BorderRadius.all(Radius.circular(20))),
+          //                 child: Text(
+          //                   "Shops=${searchshopslist.length}",
+          //                   style: const TextStyle(
+          //                     fontSize: 15,
+          //                     color: Colors.indigo,
+          //                   ),
+          //                 ),
+          //               ),
+          //             ),
+          //           )
+          //         : Container(
+          //             padding: const EdgeInsets.fromLTRB(3, 0, 3, 0),
+          //             decoration: const BoxDecoration(
+          //                 color: Colors.white,
+          //                 borderRadius: BorderRadius.all(Radius.circular(20))),
+          //             child: const Text(
+          //               "99+",
+          //               style: TextStyle(
+          //                 fontSize: 15,
+          //                 color: Colors.indigo,
+          //               ),
+          //             )),
         ],
       ),
 

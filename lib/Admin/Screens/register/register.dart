@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vehicle_maintainance/Admin/Screens/Authentication/utils.dart';
-import 'package:vehicle_maintainance/Admin/Screens/login/login.dart';
+import 'package:vehicle_maintainance/Admin/Screens/Startup/AdminMainPage.dart';
+import 'package:vehicle_maintainance/Admin/Screens/Startup/login.dart';
 import 'package:vehicle_maintainance/Admin/components/background.dart';
 import 'package:email_validator/email_validator.dart';
 import '../Main/main_page.dart';
@@ -21,6 +22,12 @@ class RegisterScreen extends StatelessWidget {
     _saveadmin() {}
 
     Future _signup() async {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ));
       // showDialog(
       //     context: context,
       //     barrierDismissible: false,
@@ -33,7 +40,7 @@ class RegisterScreen extends StatelessWidget {
         String? id;
         final user = FirebaseAuth.instance.currentUser;
         DocumentReference dc =
-            FirebaseFirestore.instance.collection("admin").doc(user!.uid);
+            FirebaseFirestore.instance.collection("admin").doc(id);
         Map<String, dynamic> adminRecord = {
           "admin_name": name.text,
           "admin_contact": contact.text,
@@ -46,19 +53,8 @@ class RegisterScreen extends StatelessWidget {
         print(e);
         //Utils.showSnackBar(e.message);
       }
-      const AdvanceSnackBar(
-              message: "Successfully register ",
-              duration: Duration(seconds: 3),
-              child: Padding(
-                padding: EdgeInsets.only(left: 2),
-                child: Icon(
-                  Icons.all_inbox,
-                  color: Colors.red,
-                  size: 25,
-                ),
-              ),
-              isIcon: true)
-          .show(context);
+
+      navigatorkey.currentState?.popUntil((route) => route.isFirst);
 
       //navigatorkey.currentState?.popUntil((route) => route.isFirst);
     }
@@ -73,10 +69,9 @@ class RegisterScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const SizedBox(height: 10),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: const Text(
                     "REGISTER",
                     style: TextStyle(
@@ -107,12 +102,21 @@ class RegisterScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   margin: const EdgeInsets.symmetric(horizontal: 40),
                   child: TextFormField(
-                      controller: email,
-                      decoration: const InputDecoration(labelText: "Email"),
-                      validator: (email) =>
-                          email != null && EmailValidator.validate(email)
-                              ? 'Enter a valid email'
-                              : null),
+                    controller: email,
+                    decoration: const InputDecoration(labelText: "Email"),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      String pattern =
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                      RegExp regExp = RegExp(pattern);
+                      if (value!.isEmpty) {
+                        return 'Please enter email';
+                      } else if (!regExp.hasMatch(value)) {
+                        return 'Please enter valid email Address';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Container(
@@ -151,13 +155,15 @@ class RegisterScreen extends StatelessWidget {
                     obscureText: true,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 RaisedButton(
                   onPressed: () async {
                     if (_key.currentState!.validate()) {
                       await _signup();
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => main_page()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AdminMainPage()));
                       name.clear();
                       email.clear();
                       password.clear();

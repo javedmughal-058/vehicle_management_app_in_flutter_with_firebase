@@ -21,6 +21,7 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   late String record_name;
   List shopslist = [];
+  int _currentIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -77,6 +78,13 @@ class _homeState extends State<home> {
               height: 200,
               autoPlay: true,
               enlargeCenterPage: true,
+              onPageChanged: (index, reason) {
+                setState(
+                  () {
+                    _currentIndex = index;
+                  },
+                );
+              },
             ),
             items: _imagesource.map(
               (imagepath) {
@@ -85,13 +93,34 @@ class _homeState extends State<home> {
                     return Container(
                       width: MediaQuery.of(context).size.width,
                       margin: const EdgeInsets.symmetric(horizontal: 0),
-                      child: Image.asset(imagepath),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: SizedBox.fromSize(
+                              size: Size.fromRadius(100),
+                              child: Image.asset(imagepath))),
                     );
                   },
                 );
               },
             ).toList(),
           ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _imagesource.map((urlOfItem) {
+            int index = _imagesource.indexOf(urlOfItem);
+            return Container(
+              width: 10.0,
+              height: 10.0,
+              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _currentIndex == index
+                    ? Color.fromARGB(255, 2, 145, 170)
+                    : Color.fromRGBO(0, 0, 0, 0.3),
+              ),
+            );
+          }).toList(),
         ),
         Container(
           padding: const EdgeInsets.all(10),

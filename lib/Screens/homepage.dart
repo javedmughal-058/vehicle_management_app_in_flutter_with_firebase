@@ -1,8 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:vehicle_maintainance/Admin/Screens/login/login.dart';
 import 'package:vehicle_maintainance/Screens/map.dart';
-import 'package:vehicle_maintainance/Screens/profile.dart';
 import 'package:vehicle_maintainance/Screens/register_shop.dart';
 import 'package:vehicle_maintainance/Screens/searchPage.dart';
 
@@ -23,14 +21,14 @@ class main_pageState extends State<main_page> {
     easysearchbar(),
     const map(),
     const register_shop(),
-    const profile(),
+    //const profile(),
   ];
   final item = [
     Icon(Icons.home, size: 30),
     Icon(Icons.search, size: 30),
     Icon(Icons.location_on, size: 30),
     Icon(Icons.how_to_reg, size: 30),
-    Icon(Icons.admin_panel_settings_outlined, size: 30),
+    //Icon(Icons.admin_panel_settings_outlined, size: 30),
   ];
   @override
   Widget build(BuildContext context) {

@@ -56,11 +56,18 @@ class _register_shopState extends State<register_shop> {
       fetchadmindetail();
     }
     return loading == true
-        ? const Center(
-            child: SpinKitFadingFour(
-              color: Color.fromARGB(255, 2, 145, 170),
-              size: 50.0,
-            ),
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text("no admin exists"),
+              SizedBox(
+                height: 30,
+              ),
+              SpinKitThreeBounce(
+                color: Color.fromARGB(255, 2, 145, 170),
+                size: 50.0,
+              ),
+            ],
           )
         : ListView(
             padding: const EdgeInsets.all(15),

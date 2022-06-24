@@ -735,7 +735,7 @@ class _detail_screenState extends State<detail_screen> {
               );
             } else {
               return const Center(
-                child: SpinKitFadingFour(
+                child: SpinKitFadingCircle(
                   color: Color.fromARGB(255, 2, 145, 170),
                   size: 50.0,
                 ),

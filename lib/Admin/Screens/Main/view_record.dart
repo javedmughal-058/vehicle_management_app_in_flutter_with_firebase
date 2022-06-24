@@ -15,6 +15,7 @@ class _view_recordState extends State<view_record> {
   int bikeshops = 0;
   int washshops = 0;
   int batteryshops = 0;
+  int washshops1 = 0;
   bool first = true;
   bool loading = true;
   void _deleteAll() async {
@@ -37,6 +38,7 @@ class _view_recordState extends State<view_record> {
     bikeshops = 0;
     washshops = 0;
     batteryshops = 0;
+    washshops1 = 0;
     var car_result = await FirebaseFirestore.instance
         .collection("shops")
         .where("type", isEqualTo: "car")
@@ -61,6 +63,17 @@ class _view_recordState extends State<view_record> {
     wash_result.docs.forEach((res) {
       washshops++;
     });
+    loading = false;
+    var wash_result1 = await FirebaseFirestore.instance
+        .collection("shops")
+        .where("type", isEqualTo: "car")
+        .where("Service", isEqualTo: "wash")
+        .get();
+    wash_result.docs.forEach((res) {
+      washshops1++;
+    });
+    washshops = washshops + washshops1;
+
     loading = false;
 
     var battery_result = await FirebaseFirestore.instance

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:vehicle_maintainance/Admin/Screens/Startup/login.dart';
 import 'Screens/homepage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -92,7 +93,7 @@ class SplashScreenOneState extends State<SplashScreenOne> {
   }
 
   onDoneLoading() async {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => main_page()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 }

@@ -74,7 +74,7 @@ class _bikeState extends State<bike> {
 
   @override
   Widget build(BuildContext context) {
-    Widget loadingWidget = const SpinKitFadingFour(
+    Widget loadingWidget = const SpinKitFadingCircle(
       color: Color.fromARGB(255, 2, 145, 170),
       size: 50.0,
     );

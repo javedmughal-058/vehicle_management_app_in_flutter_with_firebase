@@ -85,7 +85,7 @@ class detailState extends State<detail> {
       ),
       body: loading == true
           ? const Center(
-              child: SpinKitFadingFour(
+              child: SpinKitFadingCircle(
                 color: Color.fromARGB(255, 2, 145, 170),
                 size: 50.0,
               ),
