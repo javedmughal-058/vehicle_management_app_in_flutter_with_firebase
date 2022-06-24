@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vehicle_maintainance/Admin/Screens/Authentication/utils.dart';
+import 'package:vehicle_maintainance/Admin/Screens/Main/ResetPassword.dart';
 import 'package:vehicle_maintainance/Admin/Screens/register/register.dart';
 import 'package:vehicle_maintainance/Admin/components/background.dart';
 
@@ -30,6 +31,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool loading = true;
+  bool _obscureText = true;
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   Future _login() async {
     showDialog(
@@ -85,14 +92,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: size.height * 0.03),
                         Container(
                           alignment: Alignment.center,
-                          margin: const EdgeInsets.symmetric(horizontal: 40),
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
                           child: TextFormField(
                             controller: email,
-                            decoration:
-                                const InputDecoration(labelText: "Email"),
+                            decoration: const InputDecoration(
+                                icon: Padding(
+                                    padding: EdgeInsets.only(top: 15.0),
+                                    child: Icon(Icons.email)),
+                                labelText: "Email"),
                             validator: (value) {
+                              String pattern =
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                              RegExp regExp = RegExp(pattern);
                               if (value!.isEmpty) {
-                                return 'Email can\'t be empty';
+                                return 'Please enter email';
+                              } else if (!regExp.hasMatch(value)) {
+                                return 'Please enter valid email Address';
                               }
                               return null;
                             },
@@ -101,29 +116,58 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: size.height * 0.03),
                         Container(
                           alignment: Alignment.center,
-                          margin: const EdgeInsets.symmetric(horizontal: 40),
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
                           child: TextFormField(
                             controller: password,
-                            decoration:
-                                const InputDecoration(labelText: "Password"),
+                            decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                    onPressed: _toggle,
+                                    icon: _obscureText
+                                        ? const Icon(
+                                            Icons.visibility_off,
+                                            color: Colors.grey,
+                                          )
+                                        : const Icon(
+                                            Icons.visibility,
+                                          )),
+                                icon: const Padding(
+                                    padding: EdgeInsets.only(top: 15.0),
+                                    child: Icon(Icons.lock)),
+                                labelText: "Password"),
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Password can\'t be empty';
                               }
                               return null;
                             },
-                            obscureText: true,
+                            obscureText: _obscureText,
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.centerRight,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 10),
-                          child: const Text(
-                            "Forgot your password?",
-                            style: TextStyle(
-                                fontSize: 12, color: Color(0XFF2661FA)),
-                          ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              child: const Text(
+                                "Forgot your password?",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0XFF2661FA),
+                                    decoration: TextDecoration.underline),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ResetPassword()));
+                              },
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                          ],
                         ),
                         SizedBox(height: size.height * 0.05),
                         Container(
