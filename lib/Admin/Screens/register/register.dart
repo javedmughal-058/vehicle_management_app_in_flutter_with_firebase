@@ -9,13 +9,29 @@ import 'package:vehicle_maintainance/Admin/components/background.dart';
 import 'package:email_validator/email_validator.dart';
 import '../Main/main_page.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final _key = GlobalKey<FormState>();
+
   final navigatorkey = GlobalKey<NavigatorState>();
+
   TextEditingController name = TextEditingController();
+
   TextEditingController email = TextEditingController();
+
   TextEditingController contact = TextEditingController();
+
   TextEditingController password = TextEditingController();
+  bool _obscureText = true;
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +56,7 @@ class RegisterScreen extends StatelessWidget {
         String? id;
         final user = FirebaseAuth.instance.currentUser;
         DocumentReference dc =
-            FirebaseFirestore.instance.collection("admin").doc(id);
+            FirebaseFirestore.instance.collection("admin").doc(user!.email);
         Map<String, dynamic> adminRecord = {
           "admin_name": name.text,
           "admin_contact": contact.text,
@@ -84,10 +100,11 @@ class RegisterScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
-                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFormField(
                     controller: name,
-                    decoration: const InputDecoration(labelText: "Name"),
+                    decoration: const InputDecoration(
+                        icon: Icon(Icons.person), labelText: "Name"),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -100,10 +117,11 @@ class RegisterScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
-                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFormField(
                     controller: email,
-                    decoration: const InputDecoration(labelText: "Email"),
+                    decoration: const InputDecoration(
+                        icon: Icon(Icons.email), labelText: "Email"),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       String pattern =
@@ -121,10 +139,11 @@ class RegisterScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
-                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFormField(
                     controller: contact,
                     decoration: const InputDecoration(
+                      icon: Icon(Icons.phone),
                       labelText: "Contact",
                       hintText: 'Enter number without 0',
                     ),
@@ -144,15 +163,27 @@ class RegisterScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
-                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFormField(
+                    obscureText: _obscureText,
                     controller: password,
-                    decoration: const InputDecoration(labelText: "Password"),
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                            onPressed: _toggle,
+                            icon: _obscureText
+                                ? const Icon(
+                                    Icons.visibility_off,
+                                    color: Colors.grey,
+                                  )
+                                : const Icon(
+                                    Icons.visibility,
+                                  )),
+                        labelText: "Password"),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) => value != null && value.length < 6
                         ? 'Enter atlest 6 characters'
                         : null,
-                    obscureText: true,
                   ),
                 ),
                 const SizedBox(height: 10),
