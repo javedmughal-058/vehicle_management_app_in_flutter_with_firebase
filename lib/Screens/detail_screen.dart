@@ -490,19 +490,24 @@ class _detail_screenState extends State<detail_screen> {
                       children: [
                         Row(
                           children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              radius: 30.0,
-                              child: Image.asset(
-                                "images/admin.png",
-                                height: 70,
-                              ),
+                            Text(
+                              'Shop Owner ',
+                              style: GoogleFonts.merriweather(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
                             ),
+                            // CircleAvatar(
+                            //   backgroundColor: Colors.grey,
+                            //   radius: 30.0,
+                            //   child: Image.asset(
+                            //     "images/admin.png",
+                            //     height: 70,
+                            //   ),
+                            // ),
                             const SizedBox(
                               width: 20,
                             ),
                             SizedBox(
-                              width: 200,
+                              width: 150,
                               child: Text(
                                 '${singlerecord['Owner Name']}',
                                 overflow: TextOverflow.ellipsis,

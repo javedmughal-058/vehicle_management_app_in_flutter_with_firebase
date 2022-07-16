@@ -379,8 +379,7 @@ class _homeState extends State<home> {
                         const SizedBox(
                           height: 5,
                         ),
-                        Image.asset("images/battery.png",
-                            height: 55, width: 70),
+                        Image.asset("images/ac.png", height: 60, width: 60),
                         const SizedBox(
                           height: 5,
                         ),

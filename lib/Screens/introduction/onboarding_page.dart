@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:vehicle_maintainance/Screens/homepage.dart';
 
@@ -13,6 +14,13 @@ class OnBoardingPage extends StatelessWidget {
                 body:
                     'User can search shop on map and find the exact location of shop.',
                 image: buildImage('images/googlemap.jfif'),
+                decoration: getPageDecoration(),
+              ),
+              PageViewModel(
+                title: 'Rating and Affordability.',
+                body:
+                    'User can search shops by rating filter or affordability filter. With help of these filters users can filtered their results according to need.',
+                image: buildImage('images/affordable.png'),
                 decoration: getPageDecoration(),
               ),
               PageViewModel(
@@ -79,16 +87,21 @@ class OnBoardingPage extends StatelessWidget {
   DotsDecorator getDotDecoration() => DotsDecorator(
         color: Color(0xFFBDBDBD),
         activeColor: Color.fromARGB(255, 2, 145, 170),
-        size: Size(10, 10),
-        activeSize: Size(22, 10),
+        size: Size(8, 8),
+        activeSize: Size(16, 10),
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
       );
 
-  PageDecoration getPageDecoration() => const PageDecoration(
-        titleTextStyle: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-        bodyTextStyle: TextStyle(fontSize: 20),
+  PageDecoration getPageDecoration() => PageDecoration(
+        titleTextStyle: GoogleFonts.oswald(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+        ),
+        bodyTextStyle: GoogleFonts.courgette(
+          fontSize: 20,
+        ),
         bodyPadding: EdgeInsets.all(24),
         imagePadding: EdgeInsets.all(24),
         pageColor: Colors.white,

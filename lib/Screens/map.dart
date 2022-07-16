@@ -213,7 +213,7 @@ class _mapState extends State<map> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     const Text(
-                                      "Complainted shop details",
+                                      "Shop details",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -236,11 +236,19 @@ class _mapState extends State<map> {
                                     Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                            "Shop Type: ${result.data()['Shop Type']}")),
+                                            "Shop Type: ${result.data()['type']}")),
                                     Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                            "Service: ${result.data()['Shop Service']}")),
+                                            "Service: ${result.data()['Service']}")),
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                            "Outdoor Service: ${result.data()['Outdoor Services']}")),
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                            "Outdoor Service Rate: ${result.data()['Rate']}")),
                                     Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
@@ -265,7 +273,7 @@ class _mapState extends State<map> {
                                     IconButton(
                                       onPressed: () {
                                         FlutterPhoneDirectCaller.callNumber(
-                                            '0${result.data()['Owner Contact']}');
+                                            '0${result.data()['Contact']}');
                                       },
                                       icon: const Icon(Icons.call_rounded),
                                       color: Colors.green,

@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:vehicle_maintainance/Screens/map.dart';
 import 'package:vehicle_maintainance/Screens/register_shop.dart';
 import 'package:vehicle_maintainance/Screens/searchPage.dart';
@@ -33,17 +34,18 @@ class main_pageState extends State<main_page> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromARGB(255, 199, 117, 11),
+      //color: Color.fromARGB(255, 199, 117, 11),
       child: SafeArea(
-        top: false,
+        //top: false,
         child: ClipRect(
           child: Scaffold(
+              //extendBodyBehindAppBar: true,
               //extendBody: true,
-              // backgroundColor: Colors.blue,
-              appBar: AppBar(
-                  title: const Text('Vehicle Maintenance'),
-                  backgroundColor: Color.fromARGB(255, 2, 145, 170),
-                  leading: Image.asset("images/app_icon.png")),
+              //backgroundColor: Colors.blue,
+              // appBar: AppBar(
+              //     title: const Text('Vehicle Maintenance'),
+              //     backgroundColor: Color.fromARGB(255, 2, 145, 170),
+              //     leading: Image.asset("images/app_icon.png")),
               body: screens[_currentIndex],
               bottomNavigationBar: Theme(
                 data: Theme.of(context).copyWith(
