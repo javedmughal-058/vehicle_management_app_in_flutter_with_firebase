@@ -66,9 +66,9 @@ class _detail_screenState extends State<detail_screen> {
           markerId: MarkerId('id-1'),
           position: LatLng(shoplat, shoplon),
           icon: mapMarker2,
-          infoWindow: const InfoWindow(
-            title: 'Shop Location',
-            snippet: 'Destination Place',
+          infoWindow: InfoWindow(
+            title: '${singlerecord["Shop Name"]}',
+            snippet: 'Service: ${singlerecord["Service"]}',
           ),
         ));
         _marker.add(Marker(

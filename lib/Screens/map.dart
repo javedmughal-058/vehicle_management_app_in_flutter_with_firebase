@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cool_alert/cool_alert.dart';
-import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -183,11 +183,101 @@ class _mapState extends State<map> {
             _marker.add(Marker(
               markerId: MarkerId("$Mid"),
               position: LatLng(shoplat, shoplon),
+              //onTap: _onMarkerTapped(),
               icon: mapMarker2,
-              infoWindow: const InfoWindow(
-                title: 'Shop Location',
-                snippet: 'Destination Place',
-              ),
+              infoWindow: InfoWindow(
+                  title: '${result.data()["Shop Name"]}',
+                  snippet: 'Rating: ${result.data()["Shop Rating"]}',
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Stack(
+                              overflow: Overflow.visible,
+                              children: <Widget>[
+                                Positioned(
+                                  right: -40.0,
+                                  top: -40.0,
+                                  child: InkResponse(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const CircleAvatar(
+                                      child: Icon(Icons.close),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    const Text(
+                                      "Complainted shop details",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const Text(
+                                      "------------------------------",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SizedBox(
+                                          width: 250,
+                                          child: Text(
+                                            "Owner Name: ${result.data()['Owner Name']}",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            softWrap: false,
+                                          ),
+                                        )),
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                            "Shop Type: ${result.data()['Shop Type']}")),
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                            "Service: ${result.data()['Shop Service']}")),
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                            "Affordability: ${result.data()['Shop Affordability']}")),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: RatingBar.builder(
+                                        //glowColor: Colors.amber,
+                                        unratedColor: Colors.amber,
+                                        direction: Axis.horizontal,
+                                        itemCount: result.data()['Shop Rating'],
+                                        itemSize: 18.0,
+                                        itemPadding: const EdgeInsets.symmetric(
+                                            horizontal: 1.0),
+                                        itemBuilder: (context, _) => const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (rating) {},
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        FlutterPhoneDirectCaller.callNumber(
+                                            '0${result.data()['Owner Contact']}');
+                                      },
+                                      icon: const Icon(Icons.call_rounded),
+                                      color: Colors.green,
+                                      iconSize: 35,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        });
+                  }),
             ));
           });
         }
