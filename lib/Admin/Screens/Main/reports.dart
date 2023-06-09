@@ -210,7 +210,8 @@ class _reportsState extends State<reports> {
                                             builder: (BuildContext context) {
                                               return AlertDialog(
                                                 content: Stack(
-                                                  overflow: Overflow.visible,
+                                                  clipBehavior: Clip.none,
+                                                  // overflow: Overflow.visible,
                                                   children: <Widget>[
                                                     Positioned(
                                                       right: -40.0,

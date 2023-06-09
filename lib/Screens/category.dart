@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:vehicle_maintainance/Screens/searchPage.dart';
 
@@ -59,8 +59,8 @@ class categoryState extends State<category> {
                     offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ]),
-            child: FlatButton(
-              onPressed: () {
+            child: GestureDetector(
+              onTap: (){
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -123,8 +123,8 @@ class categoryState extends State<category> {
                     offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ]),
-            child: FlatButton(
-              onPressed: () {
+            child: GestureDetector(
+              onTap: (){
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -185,8 +185,8 @@ class categoryState extends State<category> {
                     offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ]),
-            child: FlatButton(
-              onPressed: () {
+            child: GestureDetector(
+              onTap: (){
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -249,8 +249,8 @@ class categoryState extends State<category> {
                     offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ]),
-            child: FlatButton(
-              onPressed: () {
+            child: GestureDetector(
+              onTap: (){
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -315,8 +315,8 @@ class categoryState extends State<category> {
                     offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ]),
-            child: FlatButton(
-              onPressed: () {
+            child: GestureDetector(
+              onTap: (){
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -379,8 +379,8 @@ class categoryState extends State<category> {
                     offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ]),
-            child: FlatButton(
-              onPressed: () {
+            child: GestureDetector(
+              onTap: (){
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -443,8 +443,8 @@ class categoryState extends State<category> {
                     offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ]),
-            child: FlatButton(
-              onPressed: () {
+            child: GestureDetector(
+              onTap: (){
                 Navigator.push(
                     context,
                     MaterialPageRoute(

@@ -181,8 +181,8 @@ class _view_recordState extends State<view_record> {
                             "Do you want to delete all Records?",
                             style: TextStyle(color: Colors.black)),
                         actions: [
-                          FlatButton(
-                              onPressed: () {
+                          GestureDetector(
+                              onTap:(){
                                 Navigator.of(context).pop();
                               },
                               child: const Text("No",
@@ -190,30 +190,30 @@ class _view_recordState extends State<view_record> {
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black))),
-                          FlatButton(
-                              onPressed: () {
-                                setState(() {
-                                  //loading = true;
-                                  _deleteAll();
-                                  Navigator.of(context).pop();
-                                  // loading == false
-                                  //     ? Center(
-                                  //         child: Container(
-                                  //           //width: 120,height: 120,
-                                  //           child:
-                                  //               const CircularProgressIndicator(
-                                  //             // backgroundColor: Colors.grey,
-                                  //             strokeWidth: 7,
-                                  //             valueColor:
-                                  //                 AlwaysStoppedAnimation<Color>(
-                                  //                     Colors.blue),
-                                  //           ),
-                                  //         ),
-                                  //       )
-                                  //     :
-                                  counter();
-                                });
-                              },
+                          GestureDetector(
+                             onTap:(){
+                               setState(() {
+                                 //loading = true;
+                                 _deleteAll();
+                                 Navigator.of(context).pop();
+                                 // loading == false
+                                 //     ? Center(
+                                 //         child: Container(
+                                 //           //width: 120,height: 120,
+                                 //           child:
+                                 //               const CircularProgressIndicator(
+                                 //             // backgroundColor: Colors.grey,
+                                 //             strokeWidth: 7,
+                                 //             valueColor:
+                                 //                 AlwaysStoppedAnimation<Color>(
+                                 //                     Colors.blue),
+                                 //           ),
+                                 //         ),
+                                 //       )
+                                 //     :
+                                 counter();
+                               });
+                             },
                               child: const Text("Yes",
                                   style: TextStyle(
                                       fontSize: 14,

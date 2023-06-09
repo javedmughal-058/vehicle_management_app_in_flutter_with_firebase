@@ -246,7 +246,8 @@ class _admin_profileState extends State<admin_profile> {
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     content: Stack(
-                                      overflow: Overflow.visible,
+                                      clipBehavior: Clip.none,
+                                      // overflow: Overflow.visible,
                                       children: <Widget>[
                                         Positioned(
                                           right: -40.0,
@@ -322,8 +323,8 @@ class _admin_profileState extends State<admin_profile> {
                                                     const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: [
-                                                    RaisedButton(
-                                                        color: Colors.red,
+                                                    TextButton(
+                                                        // color: Colors.red,
                                                         child: const Text(
                                                           "Cancel",
                                                           style: TextStyle(
@@ -335,14 +336,14 @@ class _admin_profileState extends State<admin_profile> {
                                                               .pop();
                                                         }),
                                                     const Spacer(),
-                                                    RaisedButton(
+                                                    TextButton(
                                                       child: const Text(
                                                         "Submit",
                                                         style: TextStyle(
                                                             color:
                                                                 Colors.white),
                                                       ),
-                                                      color: Colors.indigo,
+                                                      // color: Colors.indigo,
                                                       onPressed: () async {
                                                         if (_formKey
                                                             .currentState!
@@ -380,13 +381,13 @@ class _admin_profileState extends State<admin_profile> {
                     padding: const EdgeInsets.all(15),
                     child: Column(
                       children: [
-                        FlatButton(
-                            onPressed: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (c) => const block_shops())),
-                                },
+                        GestureDetector(
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (c) => const block_shops()));
+                            },
                             child: Row(
                               children: [
                                 const Icon(Icons.block_rounded),
@@ -414,13 +415,13 @@ class _admin_profileState extends State<admin_profile> {
                         const Divider(
                           thickness: 1,
                         ),
-                        FlatButton(
-                            onPressed: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (c) => const reports())),
-                                },
+                        GestureDetector(
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (c) => const reports()));
+                            },
                             child: Row(
                               children: [
                                 color == true
@@ -467,13 +468,13 @@ class _admin_profileState extends State<admin_profile> {
                         const Divider(
                           thickness: 1,
                         ),
-                        FlatButton(
-                            onPressed: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (c) => PrivacyPage())),
-                                },
+                        GestureDetector(
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (c) => PrivacyPage()));
+                            },
                             child: Row(
                               // ignore: prefer_const_literals_to_create_immutables
                               children: [
@@ -489,24 +490,24 @@ class _admin_profileState extends State<admin_profile> {
                         const Divider(
                           thickness: 1,
                         ),
-                        FlatButton(
-                            onPressed: () => {
-                                  FirebaseAuth.instance.signOut(),
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => LoginScreen(),
-                                      ))
-                                },
+                        GestureDetector(
+                            onTap: (){
+                              FirebaseAuth.instance.signOut();
+                              Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                              ));
+                            },
                             child: Row(
-                              children: [
-                                const Icon(Icons.logout),
-                                const SizedBox(
+                              children: const [
+                                Icon(Icons.logout),
+                                SizedBox(
                                   width: 20,
                                 ),
-                                const Text("Logout"),
-                                const Spacer(),
-                                const Icon(Icons.navigate_next)
+                                Text("Logout"),
+                                Spacer(),
+                                Icon(Icons.navigate_next)
                               ],
                             )),
                         const Divider(

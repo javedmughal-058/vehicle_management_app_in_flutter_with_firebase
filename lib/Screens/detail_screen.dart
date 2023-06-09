@@ -221,7 +221,8 @@ class _detail_screenState extends State<detail_screen> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           content: Stack(
-                            overflow: Overflow.visible,
+                            clipBehavior: Clip.none,
+                            // overflow: Overflow.visible,
                             children: <Widget>[
                               Positioned(
                                 right: -40.0,
@@ -314,8 +315,7 @@ class _detail_screenState extends State<detail_screen> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
                                         children: [
-                                          RaisedButton(
-                                              color: Colors.red,
+                                          TextButton(
                                               child: const Text(
                                                 "Cancel",
                                                 style: TextStyle(
@@ -325,14 +325,13 @@ class _detail_screenState extends State<detail_screen> {
                                                 Navigator.of(context).pop();
                                               }),
                                           const Spacer(),
-                                          RaisedButton(
+                                          TextButton(
                                             child: const Text(
                                               "Submit",
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
-                                            color: const Color.fromARGB(
-                                                255, 2, 145, 170),
+
                                             onPressed: () {
                                               if (_formKey.currentState!
                                                   .validate()) {
@@ -361,7 +360,8 @@ class _detail_screenState extends State<detail_screen> {
                           content: Container(
                             height: 200,
                             child: Stack(
-                              overflow: Overflow.visible,
+                              clipBehavior: Clip.none,
+                              // overflow: Overflow.visible,
                               children: <Widget>[
                                 Positioned(
                                   right: -40.0,
@@ -416,9 +416,9 @@ class _detail_screenState extends State<detail_screen> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: RaisedButton(
-                                          color: const Color.fromARGB(
-                                              255, 2, 145, 170),
+                                        child: TextButton(
+                                          // color: const Color.fromARGB(
+                                          //     255, 2, 145, 170),
                                           child: const Text("Submit"),
                                           onPressed: () {
                                             Navigator.of(context).pop();

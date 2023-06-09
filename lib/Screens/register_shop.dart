@@ -5,6 +5,7 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vehicle_maintainance/Admin/Screens/Startup/login.dart';
 
 import 'SendEmail.dart';
 
@@ -82,18 +83,23 @@ class _register_shopState extends State<register_shop> {
                 // const SizedBox(
                 //   height: 30,
                 // ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  //color:Color(0xFF37474F),
-                  height: 40,
-                  //color: Colors.amber[100],
-                  child: Text(
-                    "Register Your Shops",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.merriweather(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                GestureDetector(
+                  onLongPress: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (c)=> LoginScreen()));
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    //color:Color(0xFF37474F),
+                    height: 40,
+                    //color: Colors.amber[100],
+                    child: Text(
+                      "Register Your Shops",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.merriweather(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 Container(
@@ -106,7 +112,7 @@ class _register_shopState extends State<register_shop> {
                     onRefresh: _refresh,
                     triggerMode: RefreshIndicatorTriggerMode.onEdge,
                     color: Colors.white,
-                    backgroundColor: Color.fromARGB(255, 2, 145, 170),
+                    backgroundColor: const Color.fromARGB(255, 2, 145, 170),
                     //displacement: 100,
                     strokeWidth: 2,
                     edgeOffset: 20,

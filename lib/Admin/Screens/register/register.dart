@@ -187,8 +187,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                RaisedButton(
-                  onPressed: () async {
+                GestureDetector(
+                  onTap:() async{
                     if (_key.currentState!.validate()) {
                       await _signup();
                       Navigator.push(
@@ -201,10 +201,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       contact.clear();
                     }
                   },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(80.0)),
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.all(0),
+                  // shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(80.0)),
+                  // textColor: Colors.white,
+                  // padding: const EdgeInsets.all(0),
                   child: Container(
                     alignment: Alignment.center,
                     height: 40.0,

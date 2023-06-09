@@ -1,14 +1,21 @@
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:vehicle_maintainance/Screens/introduction/onboarding_page.dart';
-import 'Screens/homepage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+
+Future<void> _backgroundHandler(RemoteMessage message) async {
+  print(message.data);
+  if(message.notification != null){
+    print(message.notification!.title);
+  }
+}
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
   return runApp(
     const MaterialApp(
       title: ' SplashScreen ',

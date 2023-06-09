@@ -174,16 +174,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           alignment: Alignment.centerRight,
                           margin: const EdgeInsets.symmetric(
                               horizontal: 40, vertical: 10),
-                          child: RaisedButton(
-                            onPressed: () async {
-                              if (_key.currentState!.validate()) {
-                                _login();
-                              }
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(80.0)),
-                            textColor: Colors.white,
-                            padding: const EdgeInsets.all(0),
+                          child: GestureDetector(
+                           onTap:(){
+                             if (_key.currentState!.validate()) {
+                               _login();
+                             }
+                           },
+                            // shape: RoundedRectangleBorder(
+                            //     borderRadius: BorderRadius.circular(80.0)),
+                            // textColor: Colors.white,
+                            // padding: const EdgeInsets.all(0),
                             child: Container(
                               alignment: Alignment.center,
                               height: 50.0,

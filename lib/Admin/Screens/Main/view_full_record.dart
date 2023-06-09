@@ -719,7 +719,8 @@ class _view_full_recordState extends State<view_full_record> {
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             content: Stack(
-                                              overflow: Overflow.visible,
+                                              clipBehavior: Clip.none,
+                                              // overflow: Overflow.visible,
                                               children: <Widget>[
                                                 Positioned(
                                                   right: -40.0,
@@ -1195,8 +1196,8 @@ class _view_full_recordState extends State<view_full_record> {
                                                       ),
                                                       Row(
                                                         children: [
-                                                          RaisedButton(
-                                                              color: Colors.red,
+                                                          TextButton(
+                                                              // color: Colors.red,
                                                               child: const Text(
                                                                 "Cancel",
                                                                 style: TextStyle(
@@ -1209,9 +1210,8 @@ class _view_full_recordState extends State<view_full_record> {
                                                                     .pop();
                                                               }),
                                                           const Spacer(),
-                                                          RaisedButton(
-                                                            color:
-                                                                Colors.indigo,
+                                                          TextButton(
+                                                            // color: Colors.indigo,
                                                             child: const Text(
                                                               "Update",
                                                               style: TextStyle(
@@ -1279,8 +1279,8 @@ class _view_full_recordState extends State<view_full_record> {
                                                   style: TextStyle(
                                                       color: Colors.white)),
                                               actions: [
-                                                FlatButton(
-                                                    onPressed: () {
+                                                GestureDetector(
+                                                    onTap:(){
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
@@ -1291,8 +1291,8 @@ class _view_full_recordState extends State<view_full_record> {
                                                                 FontWeight.bold,
                                                             color:
                                                                 Colors.white))),
-                                                FlatButton(
-                                                    onPressed: () {
+                                                GestureDetector(
+                                                    onTap:(){
                                                       setState(() {
                                                         loading = true;
                                                         _delete(
@@ -1301,21 +1301,21 @@ class _view_full_recordState extends State<view_full_record> {
                                                             .pop();
                                                         loading == false
                                                             ? Center(
-                                                                child:
-                                                                    Container(
-                                                                  //width: 120,height: 120,
-                                                                  child:
-                                                                      const CircularProgressIndicator(
-                                                                    // backgroundColor: Colors.grey,
-                                                                    strokeWidth:
-                                                                        7,
-                                                                    valueColor: AlwaysStoppedAnimation<
-                                                                            Color>(
-                                                                        Colors
-                                                                            .blue),
-                                                                  ),
-                                                                ),
-                                                              )
+                                                          child:
+                                                          Container(
+                                                            //width: 120,height: 120,
+                                                            child:
+                                                            const CircularProgressIndicator(
+                                                              // backgroundColor: Colors.grey,
+                                                              strokeWidth:
+                                                              7,
+                                                              valueColor: AlwaysStoppedAnimation<
+                                                                  Color>(
+                                                                  Colors
+                                                                      .blue),
+                                                            ),
+                                                          ),
+                                                        )
                                                             : fetchdatalist();
                                                       });
                                                     },
